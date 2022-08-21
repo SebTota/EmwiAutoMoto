@@ -1,8 +1,10 @@
+from typing import List
+
 from fireo.models import Model
 from fireo.fields import TextField, NumberField, BooleanField, ListField
 
 
-class Motorcycle(Model):
+class MotorcycleController(Model):
     year: int = NumberField()
     make: str = TextField()
     model: str = TextField()
@@ -11,5 +13,5 @@ class Motorcycle(Model):
     price: int = NumberField()
     description: str = TextField()
     sold: bool = BooleanField()
-    images: [str] = ListField()
-    videos: [str] = ListField()
+    images: List[str] = ListField()
+    videos: List[str] = ListField()
