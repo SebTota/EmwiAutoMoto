@@ -35,6 +35,12 @@ def new_motorcycle(motorcycle: Motorcycle):
         return 'Added new motorcycle'
 
 
+@router.delete('/motorcycle')
+def delete_motorcycle(key: str):
+    MotorcycleController.collection.delete(key)
+    return "Deleted motorcycle"
+
+
 def valid_motorcycle(motorcycle: Motorcycle) -> bool:
     """
     Validate that a new motorcycle request provided information within set limits.
