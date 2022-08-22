@@ -9,7 +9,7 @@ router = APIRouter(tags=["Store"])
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
 def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: str = None):
-    motorcycles_controller = motorcycles = MotorcycleController.collection
+    motorcycles_controller = MotorcycleController.collection
     if not show_sold:
         motorcycles_controller = motorcycles_controller.filter(sold=False)
     motorcycles_controller = motorcycles_controller.fetch(limit)

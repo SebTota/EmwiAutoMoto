@@ -5,13 +5,13 @@ from fireo.fields import TextField, NumberField, BooleanField, ListField
 
 
 class MotorcycleController(Model):
-    year: int = NumberField()
-    make: str = TextField()
-    model: str = TextField()
-    km: int = NumberField()
-    color: str = TextField()
-    price: int = NumberField()
-    description: str = TextField()
-    sold: bool = BooleanField()
+    year: int = NumberField(required=True)
+    make: str = TextField(required=True)
+    model: str = TextField(required=True)
+    km: int = NumberField(required=True)
+    color: str = TextField(required=True)
+    price: int = NumberField(required=True)
+    description: str = TextField(required=True)
+    sold: bool = BooleanField(required=True)
     images: List[str] = ListField()
     videos: List[str] = ListField()
