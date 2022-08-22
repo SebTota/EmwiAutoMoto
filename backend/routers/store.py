@@ -1,4 +1,6 @@
-from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, HTTPException, Depends
+from fastapi_jwt_auth import AuthJWT
+
 from backend.models.controllers import MotorcycleController
 from backend.models.api import Motorcycle, MotorcycleListResponse
 
@@ -21,7 +23,9 @@ def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: 
 
 
 @router.post('/motorcycle')
-def new_motorcycle(motorcycle: Motorcycle):
+def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+
     if not valid_motorcycle(motorcycle):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
     m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key'}))
@@ -35,7 +39,9 @@ def new_motorcycle(motorcycle: Motorcycle):
 
 
 @router.delete('/motorcycle')
-def delete_motorcycle(key: str):
+def delete_motorcycle(key: str, Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+
     MotorcycleController.collection.delete(key)
     return "Deleted motorcycle"
 
