@@ -23,6 +23,9 @@ def login(user: AuthRequest, Authorize: AuthJWT = Depends()):
 
 @router.post('/register', response_model=LoggedInUser)
 def register(user: AuthRequest, Authorize: AuthJWT = Depends()):
+    # Since this is ONLY for admins, we don't want anyone to just create a new account for themselves
+    Authorize.jwt_required()
+
     hashed_pass, salt = Auth.hash_password(user.password)
     hashed_pass: str = hashed_pass
     salt: str = salt
