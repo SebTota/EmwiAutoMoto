@@ -1,4 +1,4 @@
 from .Motorcycle import Motorcycle
 from .MotorcycleListResponse import MotorcycleListResponse
-from .User import User
+from .AuthRequest import AuthRequest
 from .LoggedInUser import LoggedInUser

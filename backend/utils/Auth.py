@@ -1,12 +1,12 @@
 import bcrypt
 
-from backend.models.api import User
+from backend.models.api import AuthRequest
 from backend.models.controllers import UserController
 
 
 class Auth:
     @staticmethod
-    def verify_user(user: User) -> bool:
+    def verify_user(user: AuthRequest) -> bool:
         db_user: UserController = UserController.collection.filter(username=user.username).get()
 
         if db_user is None:
