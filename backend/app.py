@@ -1,3 +1,4 @@
+import fireo as fireo
 from fastapi import FastAPI, APIRouter
 from starlette.middleware.sessions import SessionMiddleware
 import os

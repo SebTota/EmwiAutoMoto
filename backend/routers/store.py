@@ -14,6 +14,7 @@ def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: 
 
     motorcycles = list(motorcycles_controller)
     for i, v in enumerate(motorcycles):
+        print(v)
         motorcycles[i] = Motorcycle.parse_obj(v.to_dict())
     return MotorcycleListResponse(num_items=len(motorcycles),
                                   items=motorcycles,
@@ -24,9 +25,14 @@ def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: 
 def new_motorcycle(motorcycle: Motorcycle):
     if not valid_motorcycle(motorcycle):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
-    m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict())
-    m.save()
-    return "OK"
+    m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key'}))
+
+    if motorcycle.key:
+        m.update(motorcycle.key)
+        return 'Updated existing motorcycle'
+    else:
+        m.save()
+        return 'Added new motorcycle'
 
 
 def valid_motorcycle(motorcycle: Motorcycle) -> bool:
@@ -35,4 +41,5 @@ def valid_motorcycle(motorcycle: Motorcycle) -> bool:
     """
     if motorcycle.price <= 0 or motorcycle.km <= 0 or motorcycle.year < 1000 or motorcycle.year > 9999:
         return False
+    return True
 
