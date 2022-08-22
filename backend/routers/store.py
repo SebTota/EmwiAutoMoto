@@ -14,7 +14,6 @@ def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: 
 
     motorcycles = list(motorcycles_controller)
     for i, v in enumerate(motorcycles):
-        print(v)
         motorcycles[i] = Motorcycle.parse_obj(v.to_dict())
     return MotorcycleListResponse(num_items=len(motorcycles),
                                   items=motorcycles,
