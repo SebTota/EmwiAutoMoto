@@ -8,6 +8,8 @@ import getMotorcycles from "../../controllers/StoreController";
 
 import "./styles.css"
 
+const numMotorcyclesPerRowExtraSmall = 1;
+const numMotorcyclesPerRowMedium = 2;
 const numMotorcyclesPerRow = 3;
 
 function mapMotorcyclesToRows(motorcycles) {
@@ -33,7 +35,7 @@ class ItemRow extends Component {
         }
 
         return (
-            <Row xs={1} md={2} lg={3} className="g-4">
+            <Row xs={numMotorcyclesPerRowExtraSmall} md={numMotorcyclesPerRowMedium} lg={numMotorcyclesPerRow} className="g-4">
                 {this.props.item.map((motorcycle =>
                     <Col><ListItem key={motorcycle.key} item={motorcycle}/></Col>))}
                 {emptyCols.map((emptyCol => <Col key={emptyCol}></Col>))}
