@@ -1,6 +1,13 @@
-/*.item {*/
-/*    height: 400px;*/
-/*    width: 100%;*/
-/*    background-color: #ddd;*/
-/*    margin-bottom: 10px;*/
-/*}*/
+.shop-item-card-title-col {
+    font-weight: 600;
+}
+
+.shop-item-card-price-col {
+    text-align: left;
+    font-weight: 600;
+}
+
+.shop-item-card-km-col {
+    text-align: right;
+    font-weight: 600;
+}

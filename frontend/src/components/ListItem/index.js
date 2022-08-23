@@ -9,19 +9,13 @@ class ListItem extends Component {
     render() {
         return(
             <Card>
-                <Card.Img variant="top" src="https://2yrh403fk8vd1hz9ro2n46dd-wpengine.netdna-ssl.com/wp-content/uploads/2020/03/2020-kawasaki-ninja-650-buyers-guide-specs-prices-4.jpg" />
-                <Card.Title>
+                <Card.Img variant="top" src="https://upload.wikimedia.org/wikipedia/commons/thumb/c/c2/2013_Kawasaki_Ninja_300_Seattle_Motorcycle_Show.jpg/1920px-2013_Kawasaki_Ninja_300_Seattle_Motorcycle_Show.jpg" />
+                <Card.Body className="shop-item-card">
+                    <Row><Col className="shop-item-card-title-col"><span>{this.props.item.year + ' ' + this.props.item.make + ' ' + this.props.item.model}</span></Col></Row>
                     <Row>
-                        <Col>
-                            {this.props.item.year + ' ' + this.props.item.make + ' ' + this.props.item.model}
-                        </Col>
-                        <Col>
-                            {this.props.item.price + "zł"}
-                        </Col>
+                        <Col className="shop-item-card-price-col"><span>{this.props.item.price + "zł"}</span></Col>
+                        <Col className="shop-item-card-km-col"><span>{this.props.item.km + "km"}</span></Col>
                     </Row>
-                </Card.Title>
-                <Card.Body>
-                    <p>Test</p>
                 </Card.Body>
             </Card>
         )
