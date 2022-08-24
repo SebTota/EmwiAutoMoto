@@ -2,6 +2,8 @@ import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import {Nav} from "react-bootstrap";
 
+import "./styles.css"
+
 function HeaderNavbar() {
   return (
       <div className="header">

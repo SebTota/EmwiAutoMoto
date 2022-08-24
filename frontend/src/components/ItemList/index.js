@@ -4,7 +4,7 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 
 import ListItem from "../ListItem";
-import getMotorcycles from "../../controllers/StoreController";
+import { getMotorcycles } from "../../controllers/StoreController";
 
 import "./styles.css"
 
@@ -45,7 +45,7 @@ class ItemRow extends Component {
 }
 
 
-class ItemPage extends Component {
+class ItemList extends Component {
     state = {
         motorcycles: null
     }
@@ -68,7 +68,6 @@ class ItemPage extends Component {
             return (<h3>Loading</h3>)
         } else {
             const rowMapping = mapMotorcyclesToRows(this.state.motorcycles);
-            console.log(this.state.motorcycles[0])
             let rowNum = 0;
 
             return (
@@ -82,4 +81,4 @@ class ItemPage extends Component {
     }
 }
 
-export default ItemPage;
+export default ItemList;

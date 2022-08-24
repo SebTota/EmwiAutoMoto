@@ -2,7 +2,7 @@ import {Motorcycle} from "../models/Motorcycle";
 import { HOST, ROUTES } from './constants'
 
 
-function getMotorcycles() {
+export function getMotorcycles() {
     return new Promise((resolve, _) => {
         fetch(HOST + ROUTES.GET_MOTORCYCLES).then(response => {
             return response.json()
@@ -18,8 +18,12 @@ function getMotorcycles() {
 }
 
 
-function getMotorcycle(id: String) {}
-
-
-
-export default getMotorcycles;
+export function getMotorcycle(id) {
+    return new Promise((resolve, _) => {
+        fetch(HOST + ROUTES.GET_MOTORCYCLE.replace('{id}', id)).then(response => {
+            return response.json()
+        }).then(data => {
+            resolve(new Motorcycle(data));
+        })
+    });
+}
