@@ -1,6 +1,6 @@
 import HeaderNavbar from "../components/navbar";
 
-export default function Motorcycle() {
+export default function ItemPage() {
   return (
       <div className="App">
           <HeaderNavbar />

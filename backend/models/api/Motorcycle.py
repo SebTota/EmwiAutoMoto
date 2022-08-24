@@ -3,7 +3,7 @@ from typing import List, Union
 
 
 class Motorcycle(BaseModel):
-    key: Union[str, None]
+    id: Union[str, None]
     year: int
     make: str
     model: str

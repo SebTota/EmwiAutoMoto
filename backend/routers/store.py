@@ -1,3 +1,5 @@
+from typing import Union
+
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
@@ -22,13 +24,22 @@ def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: 
                                   pagination_cursor=None)
 
 
+@router.get('/motorcycle/{item_id}')
+def get_motorcycle(item_id: str):
+    motorcycle: Union[MotorcycleController, None] = MotorcycleController.collection.get(f'motorcycle_controller/{item_id}')
+    if motorcycle is None:
+        raise HTTPException(status_code=404, detail='Invalid motorcycle id.')
+    else:
+        return Motorcycle.parse_obj(motorcycle.to_dict())
+
+
 @router.post('/motorcycle')
 def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
     if not valid_motorcycle(motorcycle):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
-    m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key'}))
+    m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key', 'id'}))
 
     if motorcycle.key:
         m.update(motorcycle.key)
@@ -53,4 +64,3 @@ def valid_motorcycle(motorcycle: Motorcycle) -> bool:
     if motorcycle.price <= 0 or motorcycle.km <= 0 or motorcycle.year < 1000 or motorcycle.year > 9999:
         return False
     return True
-

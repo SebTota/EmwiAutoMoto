@@ -8,7 +8,7 @@ function getMotorcycles() {
             return response.json()
         }).then(data => {
             let motorcycles = [];
-            for (let i = 0; i < data.num_items; i++) {
+            for (let i = 0; i < data.items.length; i++) {
                 motorcycles.push(new Motorcycle(data.items[i]));
             }
 
@@ -16,6 +16,10 @@ function getMotorcycles() {
         })
     });
 }
+
+
+function getMotorcycle(id: String) {}
+
 
 
 export default getMotorcycles;
