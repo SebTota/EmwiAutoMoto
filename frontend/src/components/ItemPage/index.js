@@ -14,7 +14,6 @@ class ItemPage extends Component {
     componentDidMount() {
         getMotorcycle(this.props.id).then(motorcycle => {
             this._asyncRequest = null;
-            console.log(motorcycle)
             this.setState({motorcycle})
         })
     }
@@ -30,7 +29,15 @@ class ItemPage extends Component {
     }
 
     getPrice = () => {
-        return `${this.state.motorcycle.price} zł`;
+        return `${this.state.motorcycle.price} pln`;
+    }
+
+    getOdometerReading = () => {
+        return `${this.state.motorcycle.km} km`
+    }
+
+    getListingDescription = () => {
+        return `${this.state.motorcycle.description}`
     }
 
     render() {
@@ -39,7 +46,7 @@ class ItemPage extends Component {
         }
 
         return (
-            <Row xs={1} sm={1} md={2}>
+            <Row xs={1} sm={1} md={2} className="detailedViewRowWrapper">
                 <Col>
 
                 </Col>
@@ -58,12 +65,15 @@ class ItemPage extends Component {
                         </div>
 
                         <h3 className="itemName">{this.getTitle()}</h3>
-                        <p className="itemCost frm">{this.getPrice()}</p>
-                        <p className="description">
-                            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ea nulla modi, odit explicabo hic
-                            doloremque commodi ab molestiae. Iure voluptatem labore et aliquid soluta inventore expedita
-                            quam vel a earum!
-                        </p>
+                        <Row>
+                            <Col>
+                                <h5 className="itemCost frm">{this.getPrice()}</h5>
+                            </Col>
+                            <Col className="textAlignRight">
+                                <p className="itemCost frm">{this.getOdometerReading()}</p>
+                            </Col>
+                        </Row>
+                        <p className="description">{this.getListingDescription()}</p>
                         <button className="normalBtn">Kontakt</button>
                     </div>
                 </Col>

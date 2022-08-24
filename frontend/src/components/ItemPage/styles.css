@@ -5,3 +5,14 @@
 .textAlignLeft {
     text-align: left;
 }
+
+.textAlignRight {
+    text-align: right;
+}
+
+
+.detailedViewRowWrapper {
+    padding-bottom: 30px;
+    margin-bottom: 20px;
+
+}
