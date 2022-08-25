@@ -1,3 +1,4 @@
+from datetime import datetime
 from typing import Union
 
 from fastapi import APIRouter, HTTPException, Depends
@@ -46,13 +47,12 @@ def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
 
     if not valid_motorcycle(motorcycle):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
-    m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key', 'id'}))
 
     if motorcycle.id:
-        m.update(f'motorcycle_controller/{motorcycle.id}')
+        MotorcycleController.update_motorcycle(motorcycle)
         return 'Updated existing motorcycle'
     else:
-        m.save()
+        MotorcycleController.add_motorcycle(motorcycle)
         return 'Added new motorcycle'
 
 
