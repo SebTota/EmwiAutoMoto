@@ -41,8 +41,8 @@ def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
     m: MotorcycleController = MotorcycleController.from_dict(motorcycle.dict(exclude={'key', 'id'}))
 
-    if motorcycle.key:
-        m.update(motorcycle.key)
+    if motorcycle.id:
+        m.update(f'motorcycle_controller/{motorcycle.id}')
         return 'Updated existing motorcycle'
     else:
         m.save()
@@ -53,6 +53,7 @@ def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
 def delete_motorcycle(key: str, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
+    # TODO: Delete all images related to the motorcycle being deleted
     MotorcycleController.collection.delete(key)
     return "Deleted motorcycle"
 

@@ -1,5 +1,7 @@
 from pydantic import BaseModel
 from typing import List, Union
+from .Image import Image
+from .Video import Video
 
 
 class Motorcycle(BaseModel):
@@ -12,5 +14,6 @@ class Motorcycle(BaseModel):
     price: int
     description: str
     sold: bool
-    images: Union[List[str], None]
-    videos: Union[List[str], None]
+    thumbnail: str
+    images: Union[List[Image], None]
+    videos: Union[List[Video], None]
