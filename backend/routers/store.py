@@ -10,18 +10,25 @@ router = APIRouter(tags=["Store"])
 
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
-def get_motorcycles(limit: int = 3, show_sold: bool = False, pagination_cursor: str = None):
+def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: str = None):
     motorcycles_controller = MotorcycleController.collection
-    if not show_sold:
+
+    if pagination_cursor:
+        motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
+    elif not show_sold:
         motorcycles_controller = motorcycles_controller.filter(sold=False)
+
     motorcycles_controller = motorcycles_controller.fetch(limit)
 
-    motorcycles = list(motorcycles_controller)
-    for i, v in enumerate(motorcycles):
-        motorcycles[i] = Motorcycle.parse_obj(v.to_dict())
+    motorcycles = [m.to_dict() for m in motorcycles_controller]
+    cursor = motorcycles_controller.cursor
+
+    if len(motorcycles) < limit or len(list(MotorcycleController.collection.cursor(cursor).fetch(1))) == 0:
+        cursor = None
+
     return MotorcycleListResponse(num_items=len(motorcycles),
                                   items=motorcycles,
-                                  pagination_cursor=None)
+                                  pagination_cursor=cursor)
 
 
 @router.get('/motorcycle/{item_id}')
