@@ -1,5 +1,5 @@
 .backToHomeLink {
-    color: inherit;
+    cursor: pointer;
 }
 
 .textAlignLeft {
@@ -10,9 +10,7 @@
     text-align: right;
 }
 
-
 .detailedViewRowWrapper {
     padding-bottom: 30px;
     margin-bottom: 20px;
-
 }
