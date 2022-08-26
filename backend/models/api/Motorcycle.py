@@ -4,6 +4,7 @@ from pydantic import BaseModel
 from typing import List, Union
 from .Image import Image
 from .Video import Video
+from backend.models.enums import OdometerMeasurementEnum
 
 
 class Motorcycle(BaseModel):
@@ -13,7 +14,9 @@ class Motorcycle(BaseModel):
     year: int
     make: str
     model: str
-    km: int
+    odometer: int
+    odometer_measurement: OdometerMeasurementEnum
+    km: Union[int, None]
     color: str
     price: int
     description: str
@@ -21,3 +24,6 @@ class Motorcycle(BaseModel):
     thumbnail: str
     images: Union[List[Image], None]
     videos: Union[List[Video], None]
+
+    class Config:
+        use_enum_values = True

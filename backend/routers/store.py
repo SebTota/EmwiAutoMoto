@@ -71,6 +71,6 @@ def valid_motorcycle(motorcycle: Motorcycle) -> bool:
     """
     Validate that a new motorcycle request provided information within set limits.
     """
-    if motorcycle.price <= 0 or motorcycle.km <= 0 or motorcycle.year < 1000 or motorcycle.year > 9999:
+    if motorcycle.price <= 0 or motorcycle.odometer <= 0 or motorcycle.year < 1000 or motorcycle.year > 9999:
         return False
     return True

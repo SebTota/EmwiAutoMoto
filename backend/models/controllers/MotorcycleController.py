@@ -5,6 +5,8 @@ from fireo.models import Model
 from fireo.fields import TextField, NumberField, BooleanField, ListField, DateTime
 
 from backend.models.api.Motorcycle import Motorcycle
+from backend.models.enums import OdometerMeasurementEnum
+from backend.utils.conversions import miles_to_kilometers
 
 EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP = {'key', 'id'}
 
@@ -25,6 +27,8 @@ class MotorcycleController(Model):
     year: int = NumberField(required=True)
     make: str = TextField(required=True)
     model: str = TextField(required=True)
+    odometer: int = NumberField(required=True)
+    odometer_measurement: str = TextField(required=True)
     km: int = NumberField(required=True)
     color: str = TextField(required=True)
     price: int = NumberField(required=True)
@@ -37,6 +41,8 @@ class MotorcycleController(Model):
     @staticmethod
     def update_motorcycle(motorcycle: Motorcycle) -> None:
         motorcycle.date_last_updated = datetime.utcnow()
+        motorcycle.km = motorcycle.odometer if motorcycle.odometer_measurement == OdometerMeasurementEnum.km else miles_to_kilometers(motorcycle.odometer)
+
         m: MotorcycleController = MotorcycleController.from_dict(
             motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP))
 
@@ -47,6 +53,8 @@ class MotorcycleController(Model):
     def add_motorcycle(motorcycle: Motorcycle) -> None:
         motorcycle.date_created = datetime.utcnow()
         motorcycle.date_last_updated = datetime.utcnow()
+        motorcycle.km = motorcycle.odometer if motorcycle.odometer_measurement == OdometerMeasurementEnum.km else miles_to_kilometers(motorcycle.odometer)
+
         m: MotorcycleController = MotorcycleController.from_dict(
             motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP))
         m.save()
