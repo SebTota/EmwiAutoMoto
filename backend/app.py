@@ -1,13 +1,17 @@
+from dotenv import load_dotenv
+load_dotenv()
+
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi_jwt_auth import AuthJWT
 from fastapi_jwt_auth.exceptions import AuthJWTException
 from pydantic.main import BaseModel
 
-from .routers import store, user
+from .routers import store, user, images
 
 app = FastAPI()
 app.include_router(store.router, prefix='/store')
+app.include_router(images.router, prefix='/store')
 app.include_router(user.router)
 
 
