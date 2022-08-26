@@ -2,9 +2,11 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import ImageGallery from 'react-image-gallery';
+import {getMotorcycle} from "../../controllers/StoreController";
 
 import "./styles.css"
-import {getMotorcycle} from "../../controllers/StoreController";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 export default function ItemPage(props) {
     const navigate = useNavigate();
@@ -36,18 +38,33 @@ export default function ItemPage(props) {
     }
 
     function getListingDescription() {
-        return `${motorcycle.description}`
+        return motorcycle.description
+    }
+
+    function getImages() {
+        let images = motorcycle.images;
+        images.map(image => {
+            if (image.hasOwnProperty('image')) {
+                image['original'] = image['image'];
+                delete image['image'];
+                return image;
+            }
+        })
+        console.log(images)
+        return images;
     }
 
     if (motorcycle === null) {
         return (<h3>Loading...</h3>)
     } else {
         return (
-            <Row xs={1} sm={1} md={2} className="detailedViewRowWrapper">
-                <Col>
-
+            <Row className="detailedViewRowWrapper">
+                <Col lg={8}>
+                    <div className="image-gallery-wrapper">
+                        <ImageGallery className="image-gallery-obj" items={getImages()} />
+                    </div>
                 </Col>
-                <Col>
+                <Col lg={4}>
                     <div className="textAlignLeft">
                         <div className="small mb-3">
                             <div className="backToHomeLink" onClick={() => {navigate(-1)}}>

@@ -14,3 +14,17 @@
     padding-bottom: 30px;
     margin-bottom: 20px;
 }
+
+.image-gallery-thumbnail {
+  width: 120px
+}
+
+.image-gallery-thumbnail img {
+  width: auto;
+  height: 75px;
+}
+
+.image-gallery-image {
+    max-width: 100%;
+    aspect-ratio: 4 /3;
+}
