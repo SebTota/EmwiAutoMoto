@@ -12,14 +12,12 @@ router = APIRouter(tags=["Store"])
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
 def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: str = None):
-    motorcycles_controller = MotorcycleController.collection
+    motorcycles_controller = MotorcycleController.collection.filter(sold=show_sold)
 
     if pagination_cursor:
         motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
     else:
         motorcycles_controller = motorcycles_controller.order('date_created')
-        if not show_sold:
-            motorcycles_controller = motorcycles_controller.filter(sold=False)
 
     motorcycles_controller = motorcycles_controller.fetch(limit)
 
