@@ -2,6 +2,7 @@ import React from 'react';
 import {useNavigate} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
+import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
 import {getMotorcycle} from "../../controllers/StoreController";
@@ -15,6 +16,7 @@ export default function ItemPage(props) {
     const [apiCall, setApiCall] = React.useState(false);
     const [isAdmin, setIsAdmin] = React.useState(true);
     const [isEditing, setIsEditing] = React.useState(false);
+    const [showBackNavigationWhileEditingAlert, setShowBackNavigationWhileEditingAlert] = React.useState(false);
 
     // componentDidMount()
     React.useEffect(() => {
@@ -31,6 +33,8 @@ export default function ItemPage(props) {
     function goBack() {
         if (!isEditing) {
             navigate(-1);
+        } else {
+            setShowBackNavigationWhileEditingAlert(true);
         }
     }
 
@@ -81,6 +85,17 @@ export default function ItemPage(props) {
         }
     }
 
+    let backNavigationWhileEditingAlert;
+    if (showBackNavigationWhileEditingAlert) {
+        backNavigationWhileEditingAlert =
+            <Alert variant="warning" onClose={() => setShowBackNavigationWhileEditingAlert(false)} dismissible>
+                <Alert.Heading>Make sure you save your changes before going back.</Alert.Heading>
+                <p>
+                  You are currently in an editing phase. Please save all changes before navigating back.
+                </p>
+            </Alert>
+    }
+
     if (motorcycle === null) {
         return (<h3>Loading...</h3>)
     } else {
@@ -104,6 +119,7 @@ export default function ItemPage(props) {
                                     </svg>
                                 </span> Wszystkie Motocykle
                                 </div>
+                                {backNavigationWhileEditingAlert}
                             </div>
 
                             <h3 className="itemName" contentEditable={isEditing} >{getTitle()}</h3>
