@@ -15,6 +15,10 @@
     margin-bottom: 20px;
 }
 
+.itemName {
+    margin-bottom: 1rem;
+}
+
 .image-gallery-thumbnail {
   width: 120px
 }
