@@ -73,13 +73,14 @@ export default function ItemPage(props) {
 
     function getOdometerMeasurement() {
         if (typeOfChange === changeUpdate) {
-            return motorcycle.odometerMeasurement;
+            console.log(motorcycle.odometer_measurement)
+            return motorcycle.odometer_measurement;
         }
     }
 
-    function getStatus() {
+    function getIsSold() {
         if (typeOfChange === changeUpdate) {
-            return motorcycle.forSale;
+            return motorcycle.sold;
         }
     }
 
@@ -125,17 +126,17 @@ export default function ItemPage(props) {
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer Measurement</Form.Label>
                                     <Form.Select id="odometerMeasurementSelect" defaultValue={getOdometerMeasurement()}>
-                                        <option>Miles</option>
-                                        <option>Kilometers</option>
+                                        <option value="mi">Miles</option>
+                                        <option value="km">Kilometers</option>
                                     </Form.Select>
                                 </Form.Group>
                             </Row>
                         </Form.Group>
                         <Form.Group as={Col} md={2} className="mb-3">
                             <Form.Label>Status</Form.Label>
-                            <Form.Select id="odometerMeasurementSelect" defaultValue={getStatus()}>
-                                <option>For Sale</option>
-                                <option>Sold</option>
+                            <Form.Select id="odometerMeasurementSelect" defaultValue={getIsSold()}>
+                                <option value="false">For Sale</option>
+                                <option value="true">Sold</option>
                             </Form.Select>
                         </Form.Group>
                     </Row>
