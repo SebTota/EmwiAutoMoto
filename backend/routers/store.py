@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
 from backend.models.controllers import MotorcycleController
-from backend.models.api import Motorcycle, MotorcycleListResponse
+from backend.models.api import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
 
 router = APIRouter(tags=["Store"])
 
@@ -40,27 +40,28 @@ def get_motorcycle(item_id: str):
         return Motorcycle.parse_obj(motorcycle.to_dict())
 
 
-@router.post('/motorcycle')
+@router.post('/motorcycle', status_code=201, response_description="id of the newly created item")
 def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
     if not valid_motorcycle(motorcycle):
         return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
 
-    if motorcycle.id:
-        MotorcycleController.update_motorcycle(motorcycle)
-        return 'Updated existing motorcycle'
-    else:
-        MotorcycleController.add_motorcycle(motorcycle)
-        return 'Added new motorcycle'
+    return MotorcycleController.add_motorcycle(motorcycle).id
 
 
-@router.delete('/motorcycle')
-def delete_motorcycle(key: str, Authorize: AuthJWT = Depends()):
+@router.post('/motorcycle/{item_id}', status_code=201, response_description="id of the updated item")
+def update_motorcycle(item_id: str, motorcycle: UpdateMotorcycle, Authorize: AuthJWT = Depends()):
+    Authorize.jwt_required()
+    return MotorcycleController.update_motorcycle(item_id, motorcycle, motorcycle.__fields_set__).id
+
+
+@router.delete('/motorcycle/{item_id}')
+def delete_motorcycle(item_id: str, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
     # TODO: Delete all images related to the motorcycle being deleted
-    MotorcycleController.collection.delete(key)
+    MotorcycleController.collection.delete(item_id)
     return "Deleted motorcycle"
 
 
