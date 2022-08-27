@@ -1,14 +1,13 @@
 from datetime import datetime
-from typing import List
+from typing import List, Set
 
 from fireo.models import Model
 from fireo.fields import TextField, NumberField, BooleanField, ListField, DateTime
 
-from backend.models.api.Motorcycle import Motorcycle
-from backend.models.enums import OdometerMeasurementEnum
-from backend.utils.conversions import miles_to_kilometers
+from backend.models.api.Motorcycle import Motorcycle, UpdateMotorcycle
 
-EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP = {'key', 'id'}
+EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_NEW = {'key', 'id'}
+EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE = {'key', 'id', 'date_created'}
 
 
 class ImageData(Model):
@@ -39,22 +38,19 @@ class MotorcycleController(Model):
     videos: List[VideoData] = ListField()
 
     @staticmethod
-    def update_motorcycle(motorcycle: Motorcycle) -> None:
+    def update_motorcycle(id: str, motorcycle: UpdateMotorcycle, update_keys: Set[str]) -> Model:
         motorcycle.date_last_updated = datetime.utcnow()
-        motorcycle.km = motorcycle.odometer if motorcycle.odometer_measurement == OdometerMeasurementEnum.km else miles_to_kilometers(motorcycle.odometer)
 
         m: MotorcycleController = MotorcycleController.from_dict(
-            motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP))
+            motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE, include=update_keys))
 
-        m._field_changed.remove('date_created')  # Do not update/remove the date_created field
-        m.update(f'motorcycle_controller/{motorcycle.id}')
+        return m.update(f'motorcycle_controller/{id}')
 
     @staticmethod
-    def add_motorcycle(motorcycle: Motorcycle) -> None:
+    def add_motorcycle(motorcycle: Motorcycle) -> Model:
         motorcycle.date_created = datetime.utcnow()
         motorcycle.date_last_updated = datetime.utcnow()
-        motorcycle.km = motorcycle.odometer if motorcycle.odometer_measurement == OdometerMeasurementEnum.km else miles_to_kilometers(motorcycle.odometer)
 
         m: MotorcycleController = MotorcycleController.from_dict(
-            motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP))
-        m.save()
+            motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_NEW))
+        return m.save()
