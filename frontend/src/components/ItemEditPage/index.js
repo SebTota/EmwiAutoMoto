@@ -24,10 +24,13 @@ export default function ItemEditPage(props) {
     const changeNew = "New";
     const [typeOfChange, setTypeOfChange] = React.useState(changeLoading); // TODO: Make this an Enum
 
+    const id = props.id;
+    const type = props.type;
+
     // componentDidMount()
     React.useEffect(() => {
-        if (props.type === 'edit') {
-            getMotorcycle(props.id).then(motorcycle => {
+        if (type === 'edit') {
+            getMotorcycle(id).then(motorcycle => {
                 setMotorcycle(motorcycle);
                 setTypeOfChange(changeUpdate);
             })
@@ -85,7 +88,6 @@ export default function ItemEditPage(props) {
     }
 
     function saveChanges() {
-        const id = props.id;
         const year = document.getElementById('year').value;
         const make = document.getElementById('make').value;
         const model = document.getElementById('model').value;
@@ -106,7 +108,7 @@ export default function ItemEditPage(props) {
             'sold': isSold
         }
 
-        console.log(changes);
+        console.log(`Updating ${id} with changes: `, changes);
 
         updateMotorcycle(id, changes).then((data) => {
             console.log(`Response from update motorcycle request: ${data}`);

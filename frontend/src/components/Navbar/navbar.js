@@ -13,8 +13,8 @@ function HeaderNavbar() {
     React.useEffect(() => {
         if (isSignedIn()) {
             setIsAdmin(true);
-            setIsCheckingAdmin(false);
         }
+        setIsCheckingAdmin(false);
     }, []);
 
     function isSignedIn() {

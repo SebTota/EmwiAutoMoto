@@ -1,5 +1,5 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
@@ -13,29 +13,24 @@ import "react-image-gallery/styles/css/image-gallery.css";
 export default function ItemPage(props) {
     const navigate = useNavigate();
     const [motorcycle, setMotorcycle] = React.useState(null);
-    const [apiCall, setApiCall] = React.useState(false);
-    const [isAdmin, setIsAdmin] = React.useState(true);
-    const [isEditing, setIsEditing] = React.useState(false);
-    const [showBackNavigationWhileEditingAlert, setShowBackNavigationWhileEditingAlert] = React.useState(false);
+    const [isAdmin, setIsAdmin] = React.useState(false);
 
     // componentDidMount()
     React.useEffect(() => {
-        console.log(apiCall)
-        if (apiCall === false) {
-            setApiCall(true)
-            getMotorcycle(props.id).then(motorcycle => {
-                setMotorcycle(motorcycle)
-            })
+        if (isSignedIn()) {
+            setIsAdmin(true);
         }
-
+        getMotorcycle(props.id).then(motorcycle => {
+            setMotorcycle(motorcycle)
+        })
     }, []);
 
+    function isSignedIn() {
+        return localStorage.getItem('emwi-auto-moto-username') !== null;
+    }
+
     function goBack() {
-        if (!isEditing) {
-            navigate(-1);
-        } else {
-            setShowBackNavigationWhileEditingAlert(true);
-        }
+        navigate(-1);
     }
 
     function getTitle() {
@@ -67,33 +62,12 @@ export default function ItemPage(props) {
         return images;
     }
 
-    function enableEditing() {
-        console.log('enabling editing')
-        setIsEditing(true);
-    }
-
-    function saveChanges() {
-        setIsEditing(false);
-    }
-
-    let adminButton;
+    let editButton;
     if (isAdmin) {
-        if (!isEditing) {
-            adminButton = <Button variant="warning" onClick={() => {enableEditing()}}>Edit</Button>;
-        } else {
-            adminButton = <Button variant="warning" onClick={() => {saveChanges()}}>Save</Button>;
-        }
-    }
-
-    let backNavigationWhileEditingAlert;
-    if (showBackNavigationWhileEditingAlert) {
-        backNavigationWhileEditingAlert =
-            <Alert variant="warning" onClose={() => setShowBackNavigationWhileEditingAlert(false)} dismissible>
-                <Alert.Heading>Make sure you save your changes before going back.</Alert.Heading>
-                <p>
-                  You are currently in an editing phase. Please save all changes before navigating back.
-                </p>
-            </Alert>
+        editButton =
+            <Link to={`/motorcycle/edit/${props.id}`}>
+                <Button variant="warning">Edit</Button>
+            </Link>
     }
 
     if (motorcycle === null) {
@@ -119,21 +93,20 @@ export default function ItemPage(props) {
                                     </svg>
                                 </span> Wszystkie Motocykle
                                 </div>
-                                {backNavigationWhileEditingAlert}
                             </div>
 
-                            <h3 className="itemName" contentEditable={isEditing} >{getTitle()}</h3>
+                            <h3 className="itemName">{getTitle()}</h3>
                             <Row>
                                 <Col>
-                                    <h5 className="itemCost" contentEditable={isEditing}>{getPrice()}</h5>
+                                    <h5 className="itemCost">{getPrice()}</h5>
                                 </Col>
                                 <Col className="textAlignRight">
-                                    <p className="itemCost" contentEditable={isEditing}>{getOdometerReading()}</p>
+                                    <p className="itemCost">{getOdometerReading()}</p>
                                 </Col>
                             </Row>
-                            <p className="description" contentEditable={isEditing}>{getListingDescription()}</p>
+                            <p className="description">{getListingDescription()}</p>
                         </div>
-                        {adminButton}
+                        {editButton}
                     </Col>
                 </Row>
             </div>
