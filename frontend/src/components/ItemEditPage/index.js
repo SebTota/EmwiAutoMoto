@@ -9,7 +9,10 @@ import {getMotorcycle, updateMotorcycle} from "../../controllers/storeController
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
 
-export default function ItemPage(props) {
+export default function ItemEditPage(props) {
+    // props - type ['edit' - editing an existing motorcycle, 'new' - creating a new motorcycle]
+    // props - id [the id of the motorcycle that is being updated]
+
     const [motorcycle, setMotorcycle] = React.useState(null);
     /**
      * Loading - Page Loading
@@ -23,7 +26,7 @@ export default function ItemPage(props) {
 
     // componentDidMount()
     React.useEffect(() => {
-        if (props.id !== 'new') {
+        if (props.type === 'edit') {
             getMotorcycle(props.id).then(motorcycle => {
                 setMotorcycle(motorcycle);
                 setTypeOfChange(changeUpdate);

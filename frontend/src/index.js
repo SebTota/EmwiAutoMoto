@@ -4,6 +4,7 @@ import { BrowserRouter, Routes, Route } from "react-router-dom";
 
 import App from './App';
 import MotorcycleRoute from "./routes/motorcycleRoute";
+import EditMotorcycleRoute from "./routes/editMotorcycleRoute"
 import LoginRoute from "./routes/loginRoute"
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
@@ -17,9 +18,13 @@ root.render(
           <BrowserRouter>
               <Routes>
                   <Route path="/" element={<App />} />
-                  <Route path="motorcycle" >
+                  <Route path="/motorcycle" >
                       <Route path=":id" element={<MotorcycleRoute />} />
                   </Route>
+                  <Route path="/motorcycle/edit" >
+                      <Route path=":id" element={<EditMotorcycleRoute type='edit' />} />
+                  </Route>
+                  <Route path="/motorcycle/new" element={<EditMotorcycleRoute type='new' />} />
                   <Route path="/login" element={<LoginRoute />} />
                   <Route
                       path="*"
