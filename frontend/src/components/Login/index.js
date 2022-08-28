@@ -17,6 +17,7 @@ export default function Login(props) {
 
         login(username, password).then((data) => {
             localStorage.setItem('emwi-auto-moto-access-token', data['access_token']);
+            localStorage.setItem('emwi-auto-moto-username', data['username']);
             window.location.href = '/';
         }).catch((err) => {
             setShowPasswordAlert(true);
