@@ -1,12 +1,10 @@
 import React from 'react';
-import {useNavigate} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ImageGallery from 'react-image-gallery';
-import {getMotorcycle} from "../../controllers/StoreController";
+import {getMotorcycle, updateMotorcycle} from "../../controllers/storeController";
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -73,7 +71,6 @@ export default function ItemPage(props) {
 
     function getOdometerMeasurement() {
         if (typeOfChange === changeUpdate) {
-            console.log(motorcycle.odometer_measurement)
             return motorcycle.odometer_measurement;
         }
     }
@@ -85,7 +82,32 @@ export default function ItemPage(props) {
     }
 
     function saveChanges() {
-        console.log('changes saved')
+        const id = props.id;
+        const year = document.getElementById('year').value;
+        const make = document.getElementById('make').value;
+        const model = document.getElementById('model').value;
+        const color = document.getElementById('color').value;
+        const price = document.getElementById('price').value;
+        const odometer = document.getElementById('odometer').value;
+        const odometerMeasurement = document.getElementById('odometerMeasurementSelect').value;
+        const isSold = document.getElementById('isSold').value;
+
+        const changes = {
+            'year': year,
+            'make': make,
+            'model': model,
+            'color': color,
+            'price': price,
+            'odometer': odometer,
+            'odometer_measurement': odometerMeasurement,
+            'sold': isSold
+        }
+
+        console.log(changes);
+
+        updateMotorcycle(id, changes).then((data) => {
+            console.log(`Response from update motorcycle request: ${data}`);
+        })
     }
 
     if (motorcycle === null && (typeOfChange === changeUpdate || typeOfChange === changeLoading)) {
@@ -97,31 +119,31 @@ export default function ItemPage(props) {
                     <Row className="mb-3">
                         <Form.Group as={Col} md={2} className="mb-3">
                             <Form.Label>Year</Form.Label>
-                            <Form.Control type="number" placeholder="Year" defaultValue={getYear()}/>
+                            <Form.Control id="year" type="number" placeholder="Year" defaultValue={getYear()}/>
                         </Form.Group>
                         <Form.Group as={Col} md={3} className="mb-3">
                             <Form.Label>Make</Form.Label>
-                            <Form.Control placeholder="Make" defaultValue={getMake()}/>
+                            <Form.Control id="make" placeholder="Make" defaultValue={getMake()}/>
                         </Form.Group>
                         <Form.Group as={Col} md={5} className="mb-3">
                             <Form.Label>Model</Form.Label>
-                            <Form.Control placeholder="Model" defaultValue={getModel()}/>
+                            <Form.Control id="model" placeholder="Model" defaultValue={getModel()}/>
                         </Form.Group>
                         <Form.Group as={Col} md={2} className="mb-3">
                             <Form.Label>Color</Form.Label>
-                            <Form.Control placeholder="Color" defaultValue={getColor()}/>
+                            <Form.Control id="color" placeholder="Color" defaultValue={getColor()}/>
                         </Form.Group>
                     </Row>
                     <Row>
                         <Form.Group as={Col} md={3} className="mb-3">
                             <Form.Label>Price - Zloty/PLN</Form.Label>
-                            <Form.Control type="number" placeholder="Price" defaultValue={getPrice()}/>
+                            <Form.Control id="price" type="number" placeholder="Price" defaultValue={getPrice()}/>
                         </Form.Group>
                         <Form.Group as={Col} md={7}>
                             <Row>
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer</Form.Label>
-                                    <Form.Control type="number" placeholder="Odometer" defaultValue={getOdometer()}/>
+                                    <Form.Control id="odometer" type="number" placeholder="Odometer" defaultValue={getOdometer()}/>
                                 </Form.Group>
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer Measurement</Form.Label>
@@ -134,7 +156,7 @@ export default function ItemPage(props) {
                         </Form.Group>
                         <Form.Group as={Col} md={2} className="mb-3">
                             <Form.Label>Status</Form.Label>
-                            <Form.Select id="odometerMeasurementSelect" defaultValue={getIsSold()}>
+                            <Form.Select id="isSold" defaultValue={getIsSold()}>
                                 <option value="false">For Sale</option>
                                 <option value="true">Sold</option>
                             </Form.Select>

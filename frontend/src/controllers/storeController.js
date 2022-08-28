@@ -1,5 +1,5 @@
 import {Motorcycle} from "../models/Motorcycle";
-import { HOST, ROUTES } from './constants'
+import { HOST, ROUTES } from '../constants'
 
 
 export function getMotorcycles() {
@@ -26,4 +26,19 @@ export function getMotorcycle(id) {
             resolve(new Motorcycle(data));
         })
     });
+}
+
+
+export function updateMotorcycle(id, changes) {
+    return new Promise((resolve, _) => {
+        fetch(HOST + ROUTES.UPDATE_MOTORCYCLE, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(changes)
+        }).then((data) => {
+            resolve(data);
+        })
+    })
 }

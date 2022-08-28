@@ -5,7 +5,7 @@ import Col from 'react-bootstrap/Col';
 import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
-import {getMotorcycle} from "../../controllers/StoreController";
+import {getMotorcycle} from "../../controllers/storeController";
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";

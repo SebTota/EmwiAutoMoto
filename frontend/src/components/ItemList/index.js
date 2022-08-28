@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Container from 'react-bootstrap/Container';
 
 import ListItem from "../ListItem";
-import { getMotorcycles } from "../../controllers/StoreController";
+import { getMotorcycles } from "../../controllers/storeController";
 
 import "./styles.css"
 
