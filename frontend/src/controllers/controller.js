@@ -15,6 +15,8 @@ export  function post(url = '', data = {}) {
             body: JSON.stringify(data)
         }).then((response) => {
             if (response.status === 401) {
+                localStorage.removeItem('emwi-auto-moto-access-token')
+                localStorage.removeItem('emwi-auto-moto-username')
                 window.location.href = '/login';
                 reject(response.json());
             } else {
