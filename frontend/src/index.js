@@ -6,10 +6,17 @@ import App from './App';
 import MotorcycleRoute from "./routes/motorcycleRoute";
 import EditMotorcycleRoute from "./routes/editMotorcycleRoute"
 import LoginRoute from "./routes/loginRoute"
+import { PrivateRoute } from "./routes/PrivateRoute";
 import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './index.css';
+
+
+// let protectedRoutes;
+// if (isAuthenticated()) {
+//     protectedRoutes
+// }
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
@@ -22,9 +29,9 @@ root.render(
                       <Route path=":id" element={<MotorcycleRoute />} />
                   </Route>
                   <Route path="/motorcycle/edit" >
-                      <Route path=":id" element={<EditMotorcycleRoute type='edit' />} />
+                      <Route path=":id" element={<PrivateRoute><EditMotorcycleRoute type='edit' /></PrivateRoute>} />
                   </Route>
-                  <Route path="/motorcycle/new" element={<EditMotorcycleRoute type='new' />} />
+                  <Route path="/motorcycle/new" element={<PrivateRoute><EditMotorcycleRoute type='new' /></PrivateRoute>} />
                   <Route path="/login" element={<LoginRoute />} />
                   <Route
                       path="*"
