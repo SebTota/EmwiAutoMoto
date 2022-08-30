@@ -13,11 +13,6 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import './index.css';
 
 
-// let protectedRoutes;
-// if (isAuthenticated()) {
-//     protectedRoutes
-// }
-
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
     <div className="wrapper">

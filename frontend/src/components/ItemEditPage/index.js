@@ -87,6 +87,12 @@ export default function ItemEditPage(props) {
         }
     }
 
+    function getDescription() {
+        if (typeOfChange === changeUpdate) {
+            return motorcycle.description;
+        }
+    }
+
     function saveChanges() {
         const year = document.getElementById('year').value;
         const make = document.getElementById('make').value;
@@ -96,6 +102,7 @@ export default function ItemEditPage(props) {
         const odometer = document.getElementById('odometer').value;
         const odometerMeasurement = document.getElementById('odometerMeasurementSelect').value;
         const isSold = document.getElementById('isSold').value;
+        const description = document.getElementById('description').value;
 
         const changes = {
             'year': year,
@@ -105,7 +112,8 @@ export default function ItemEditPage(props) {
             'price': price,
             'odometer': odometer,
             'odometer_measurement': odometerMeasurement,
-            'sold': isSold
+            'sold': isSold,
+            'description': description
         }
 
         console.log(`Updating ${id} with changes: `, changes);
@@ -148,7 +156,8 @@ export default function ItemEditPage(props) {
                             <Row>
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer</Form.Label>
-                                    <Form.Control id="odometer" type="number" placeholder="Odometer" defaultValue={getOdometer()}/>
+                                    <Form.Control id="odometer" type="number" placeholder="Odometer"
+                                                  defaultValue={getOdometer()}/>
                                 </Form.Group>
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer Measurement</Form.Label>
@@ -167,7 +176,21 @@ export default function ItemEditPage(props) {
                             </Form.Select>
                         </Form.Group>
                     </Row>
-                    <Button variant="primary" onClick={() => {saveChanges()}}>Save</Button>
+                    <Row>
+                        <Form.Group className="mb-3">
+                            <Form.Label>Description</Form.Label>
+                            <Form.Control
+                                id="description"
+                                defaultValue={getDescription()}
+                                as="textarea"
+                                placeholder="Description"
+                                style={{height: '120px'}}
+                            />
+                        </Form.Group>
+                    </Row>
+                    <Button variant="primary" onClick={() => {
+                        saveChanges()
+                    }}>Save</Button>
                 </Form>
             </div>
         )
