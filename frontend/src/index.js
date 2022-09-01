@@ -8,6 +8,7 @@ import EditMotorcycleRoute from "./routes/editMotorcycleRoute"
 import LoginRoute from "./routes/loginRoute"
 import { PrivateRoute } from "./routes/PrivateRoute";
 import reportWebVitals from './reportWebVitals';
+import $ from "jquery";
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 import './index.css';

@@ -2,7 +2,6 @@ import React from 'react';
 import {Link, useNavigate} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
-import Alert from 'react-bootstrap/Alert';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
 import {getMotorcycle} from "../../controllers/storeController";
@@ -58,7 +57,6 @@ export default function ItemPage(props) {
                 return image;
             }
         })
-        console.log(images)
         return images;
     }
 

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -8,12 +8,15 @@ import {getMotorcycle, updateMotorcycle} from "../../controllers/storeController
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
+import {ReactSortable} from "react-sortablejs";
 
 export default function ItemEditPage(props) {
     // props - type ['edit' - editing an existing motorcycle, 'new' - creating a new motorcycle]
     // props - id [the id of the motorcycle that is being updated]
 
     const [motorcycle, setMotorcycle] = React.useState(null);
+    const [images, setImages] = React.useState([]);
+
     /**
      * Loading - Page Loading
      * Update - Updating an existing motorcycle
@@ -33,6 +36,7 @@ export default function ItemEditPage(props) {
             getMotorcycle(id).then(motorcycle => {
                 setMotorcycle(motorcycle);
                 setTypeOfChange(changeUpdate);
+                getImages(motorcycle);
             })
         } else {
             setTypeOfChange(changeNew);
@@ -92,6 +96,27 @@ export default function ItemEditPage(props) {
             return motorcycle.description;
         }
     }
+
+    function getImages(motorcycle) {
+        let images = motorcycle.images;
+        images.map(image => {
+            if (image.hasOwnProperty('image')) {
+                image['original'] = image['image'];
+                delete image['image'];
+                return image;
+            }
+        })
+        setImages(images);
+    }
+
+    function getImageThumbnailList() {
+        let imageThumbnailUrls = [];
+        images.forEach((entry) => {
+            imageThumbnailUrls.push(entry['thumbnail'])
+        })
+        return imageThumbnailUrls;
+    }
+
 
     function saveChanges() {
         const year = document.getElementById('year').value;
@@ -187,6 +212,23 @@ export default function ItemEditPage(props) {
                                 style={{height: '120px'}}
                             />
                         </Form.Group>
+                    </Row>
+                    <Row>
+                        <div className="image-gallery-wrapper">
+                            <ImageGallery className="image-gallery-obj" items={images}/>
+                        </div>
+                    </Row>
+                    <Row>
+                        <div className="sortable-list-wrapper">
+                            <ReactSortable list={images} setList={setImages} className="row">
+                                {
+                                    getImageThumbnailList().map((photoUrl) =>
+                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-image-wrapper">
+                                            <img className="sortable-image" src={photoUrl}/>
+                                        </div>)
+                                }
+                            </ReactSortable>
+                        </div>
                     </Row>
                     <Button variant="primary" onClick={() => {
                         saveChanges()

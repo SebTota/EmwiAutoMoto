@@ -20,12 +20,13 @@
 }
 
 .image-gallery-thumbnail {
-  width: 120px
+    width: 120px
 }
 
 .image-gallery-thumbnail img {
-  width: auto;
-  height: 75px;
+    width: auto;
+    height: 75px;
+    object-fit: cover;
 }
 
 .image-gallery-image {
