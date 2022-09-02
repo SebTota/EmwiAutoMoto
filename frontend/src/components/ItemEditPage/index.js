@@ -223,14 +223,19 @@ export default function ItemEditPage(props) {
                             <ReactSortable list={images} setList={setImages} className="row">
                                 {
                                     getImageThumbnailList().map((photoUrl) =>
-                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-image-wrapper">
-                                            <img className="sortable-image" src={photoUrl}/>
+                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper">
+                                            <div className="sortable-image-wrapper">
+                                                <img className="sortable-image" src={photoUrl}/>
+                                            </div>
+                                            <div>
+                                                <Button variant="danger" className="sortable-remove-button">Delete</Button>
+                                            </div>
                                         </div>)
                                 }
                             </ReactSortable>
                         </div>
                     </Row>
-                    <Button variant="primary" onClick={() => {
+                    <Button variant="primary" className="m-5" onClick={() => {
                         saveChanges()
                     }}>Save</Button>
                 </Form>

@@ -40,5 +40,11 @@
 }
 
 .sortable-image-wrapper {
-    padding-bottom: calc(var(--bs-gutter-x) * .5);
+    padding: 0;
+    height: calc(100% - 47px);
+    width: 100%;
+}
+
+.sortable-remove-button {
+    margin: 5px;
 }
