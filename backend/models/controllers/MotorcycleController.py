@@ -2,11 +2,12 @@ from datetime import datetime
 from typing import List, Set
 
 from fireo.models import Model
-from fireo.fields import TextField, NumberField, BooleanField, MapField, DateTime
+from fireo.fields import TextField, NumberField, BooleanField, ListField, DateTime
 
 from backend.models.schemas import Image
 from backend.models.schemas.Motorcycle import Motorcycle, UpdateMotorcycle
 from backend.utils.image_handler import delete_image
+from backend.exceptions import NoProductFoundError
 
 EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_NEW = {'key', 'id'}
 EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE = {'key', 'id', 'date_created'}
@@ -36,20 +37,27 @@ class MotorcycleController(Model):
     description: str = TextField(required=True)
     sold: bool = BooleanField(required=True)
     thumbnail: str = TextField(required=True)
-    images: List[ImageData] = MapField(ImageData())
-    videos: List[VideoData] = MapField(VideoData())
+    images: List[ImageData] = ListField(ImageData())
+    videos: List[VideoData] = ListField(VideoData())
+
+    @staticmethod
+    def get_motorcycle_by_id(id: str) -> Motorcycle:
+        m: MotorcycleController = MotorcycleController.collection.get(f'motorcycle_controller/{id}')
+        if m is None:
+            raise NoProductFoundError(f'No motorcycle found with given id')
+
+        return Motorcycle.parse_obj(m.to_dict())
+
 
     @staticmethod
     def update_motorcycle(id: str, motorcycle: UpdateMotorcycle, update_keys: Set[str]) -> Model:
-        old_motorcycle: Motorcycle = MotorcycleController.collection.get(f'motorcycle_controller/{id}')
-        if old_motorcycle is None:
-            raise Exception('Invalid motorcycle id')
+        old_motorcycle: Motorcycle = MotorcycleController.get_motorcycle_by_id(id)
 
         if motorcycle.images is not None:
             new_images: List[Image] = motorcycle.images
             old_images: List[Image] = old_motorcycle.images
             removed_images: List[Image] = [image for image in old_images if image not in new_images]
-            print(f'Removing images: ${removed_images}')
+            print(f'Removing images: ${removed_images} from motorcycle: {id}')
             for image in removed_images:
                 delete_image(image)
 

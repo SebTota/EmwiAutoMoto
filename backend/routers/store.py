@@ -3,6 +3,7 @@ from typing import Union
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
+from backend.exceptions import NoProductFoundError
 from backend.models.controllers import MotorcycleController
 from backend.models.schemas import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
 
@@ -33,11 +34,10 @@ def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: 
 
 @router.get('/motorcycle/{item_id}')
 def get_motorcycle(item_id: str):
-    motorcycle: Union[MotorcycleController, None] = MotorcycleController.collection.get(f'motorcycle_controller/{item_id}')
-    if motorcycle is None:
+    try:
+        return MotorcycleController.get_motorcycle_by_id(item_id)
+    except NoProductFoundError as e:
         raise HTTPException(status_code=404, detail='Invalid motorcycle id.')
-    else:
-        return Motorcycle.parse_obj(motorcycle.to_dict())
 
 
 @router.post('/motorcycle', status_code=201, response_description="id of the newly created item")
@@ -50,7 +50,7 @@ def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
     return MotorcycleController.add_motorcycle(motorcycle).id
 
 
-@router.post('/motorcycle/{item_id}', status_code=201, response_description="id of the updated item")
+@router.post('/motorcycle/{item_id}', response_description="id of the updated item")
 def update_motorcycle(item_id: str, motorcycle: UpdateMotorcycle, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     return MotorcycleController.update_motorcycle(item_id, motorcycle, motorcycle.__fields_set__).id
