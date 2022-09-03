@@ -1,4 +1,5 @@
 import io
+import uuid
 from PIL import Image as PIL_Image
 from fastapi import APIRouter, Depends, UploadFile
 from fastapi.exceptions import HTTPException
@@ -12,14 +13,15 @@ router = APIRouter(tags=["Images"])
 
 
 @router.post('/productImage', response_model=UploadImageResponse, status_code=201)
-async def upload_product_image_route(image: UploadFile, Authorize: AuthJWT = Depends()):
+async def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
-    image_content = await image.read()
+    image_content = await file.read()
     img = PIL_Image.open(io.BytesIO(image_content))
 
     try:
-        thumbnail_url = create_thumbnail_for_image(img, image.filename)
-        image_url = upload_image_to_cloud_storage(img, image.filename)
+        name: str = str(uuid.uuid4())
+        thumbnail_url = create_thumbnail_for_image(img, name)
+        image_url = upload_image_to_cloud_storage(img, name)
         return UploadImageResponse(thumbnail=thumbnail_url, image=image_url)
     except FileUploadError as e:
         raise HTTPException(status_code=500, detail='Failed to process image.')
