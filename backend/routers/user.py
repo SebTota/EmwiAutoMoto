@@ -3,7 +3,7 @@ import datetime
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
-from backend.models.api import AuthRequest, LoggedInUser
+from backend.models.schemas import AuthRequest, LoggedInUser
 from backend.models.controllers import UserController
 from backend.utils.Auth import Auth
 

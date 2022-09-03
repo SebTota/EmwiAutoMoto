@@ -4,7 +4,7 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
 from backend.models.controllers import MotorcycleController
-from backend.models.api import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
+from backend.models.schemas import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
 
 router = APIRouter(tags=["Store"])
 

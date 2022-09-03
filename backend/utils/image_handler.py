@@ -5,7 +5,7 @@ from botocore.config import Config
 from PIL import Image as PIL_Image
 
 from backend.exceptions import FileUploadError
-from backend.models.api import Image
+from backend.models.schemas import Image
 
 BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
 BASE_HOST_URL = os.getenv('STORAGE_BASE_HOST_URL')
@@ -13,15 +13,15 @@ BASE_HOST_URL = os.getenv('STORAGE_BASE_HOST_URL')
 
 def _get_storage_resource() -> boto3.resource:
     return boto3.resource(service_name='s3',
-                        endpoint_url= os.getenv('STORAGE_ENDPOINT_URL'),
-                        aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
-                        aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
-                        config=Config(signature_version='s3v4'))
+                          endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
+                          aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
+                          aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
+                          config=Config(signature_version='s3v4'))
 
 
 def _get_s3_client() -> boto3.client:
     return boto3.client(service_name='s3',
-                        endpoint_url= os.getenv('STORAGE_ENDPOINT_URL'),
+                        endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
                         aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
                         aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
                         config=Config(signature_version='s3v4'))

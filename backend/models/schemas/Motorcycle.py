@@ -46,13 +46,17 @@ class Motorcycle(BaseModel):
                 return miles_to_kilometers(values['odometer'])
 
 
-class UpdateMotorcycle(Motorcycle):
+class UpdateMotorcycle(BaseModel):
+    id: Union[str, None]  # Only used for response, ignored in request
+    date_created: Union[datetime, None]  # Only used for response, ignored in request
+    date_last_updated: Union[datetime, None]  # Only used for response, ignored in request
     year: Optional[int]
     make: Optional[str]
     model: Optional[str]
     odometer: Optional[int]
     # Can not use validator to ensure this is Optional but not None so set default case instead. Acts similar.
     odometer_measurement: OdometerMeasurementEnum = None
+    km: Union[int, None]  # Only used for response, ignored in request
     color: Optional[str]
     price: Optional[int]
     description: Optional[str]
@@ -60,6 +64,24 @@ class UpdateMotorcycle(Motorcycle):
     thumbnail: Optional[str]
     images: Optional[List[Image]]
     videos: Optional[List[Video]]
+
+    class Config:
+        use_enum_values = True
+
+    def __init__(self, **data: Any):
+        super().__init__(**data)
+        if 'odometer' in data and data['odometer'] is not None \
+            and 'odometer_measurement' in data and data['odometer_measurement'] is not None:
+                self.__fields_set__.add('km')
+
+    @validator('km', pre=True, always=True)
+    def set_km_value(cls, v, values):
+        if 'odometer' in values and values['odometer'] is not None \
+                and 'odometer_measurement' in values and values['odometer_measurement'] is not None:
+            if values['odometer_measurement'] == OdometerMeasurementEnum.km.value:
+                return values['odometer']
+            elif values['odometer_measurement'] == OdometerMeasurementEnum.mi.value:
+                return miles_to_kilometers(values['odometer'])
 
     @validator('odometer_measurement', always=True)
     def odometer_measurement_validation(cls, v, values, **kwargs):

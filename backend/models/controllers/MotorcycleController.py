@@ -4,8 +4,8 @@ from typing import List, Set
 from fireo.models import Model
 from fireo.fields import TextField, NumberField, BooleanField, ListField, DateTime
 
-from backend.models.api import Image
-from backend.models.api.Motorcycle import Motorcycle, UpdateMotorcycle
+from backend.models.schemas import Image
+from backend.models.schemas.Motorcycle import Motorcycle, UpdateMotorcycle
 from backend.utils.image_handler import delete_image
 
 EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_NEW = {'key', 'id'}

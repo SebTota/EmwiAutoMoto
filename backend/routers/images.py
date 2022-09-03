@@ -5,7 +5,7 @@ from fastapi.exceptions import HTTPException
 from fastapi_jwt_auth import AuthJWT
 
 from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image, delete_image
-from backend.models.api import UploadImageResponse, Image
+from backend.models.schemas import UploadImageResponse, Image
 from backend.exceptions.FileUploadError import FileUploadError
 
 router = APIRouter(tags=["Images"])
