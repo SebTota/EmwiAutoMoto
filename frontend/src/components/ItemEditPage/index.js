@@ -109,14 +109,30 @@ export default function ItemEditPage(props) {
         setImages(images);
     }
 
-    function getImageThumbnailList() {
-        let imageThumbnailUrls = [];
-        images.forEach((entry) => {
-            imageThumbnailUrls.push(entry['thumbnail'])
-        })
-        return imageThumbnailUrls;
+    function getImageThumbnailFromImage(image) {
+        return image.thumbnail;
     }
 
+    function removeImage(image) {
+        setImages(images.filter(img => {
+            return img !== image
+        }))
+    }
+
+    function getImageForApiCall() {
+        /*
+         * What is going on with these states!?!
+         */
+        let i = []
+        images.forEach((img) => {
+            if (img.hasOwnProperty('original')) {
+                img['image'] = img['original'];
+                delete img['original'];
+                i.push(img)
+            }
+        })
+        return i;
+    }
 
     function saveChanges() {
         const year = document.getElementById('year').value;
@@ -138,7 +154,8 @@ export default function ItemEditPage(props) {
             'odometer': odometer,
             'odometer_measurement': odometerMeasurement,
             'sold': isSold,
-            'description': description
+            'description': description,
+            'images': getImageForApiCall()
         }
 
         console.log(`Updating ${id} with changes: `, changes);
@@ -222,13 +239,13 @@ export default function ItemEditPage(props) {
                         <div className="sortable-list-wrapper">
                             <ReactSortable list={images} setList={setImages} className="row">
                                 {
-                                    getImageThumbnailList().map((photoUrl) =>
+                                    images.map((image) =>
                                         <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper">
                                             <div className="sortable-image-wrapper">
-                                                <img className="sortable-image" src={photoUrl}/>
+                                                <img className="sortable-image" src={getImageThumbnailFromImage(image)}/>
                                             </div>
                                             <div>
-                                                <Button variant="danger" className="sortable-remove-button">Delete</Button>
+                                                <Button variant="danger" className="sortable-remove-button" onClick={() => {removeImage(image)}}>Delete</Button>
                                             </div>
                                         </div>)
                                 }
