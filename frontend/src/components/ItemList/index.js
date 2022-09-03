@@ -33,7 +33,7 @@ class ItemList extends Component {
                 <Container className="items">
                     <div className="row">
                         {
-                            this.state.motorcycles.map((motorcycle) => <div key={motorcycle.key} className="col-sm-6 col-md-6 col-lg-4"><ListItem key={motorcycle.key} item={motorcycle}/></div>)
+                            this.state.motorcycles.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4"><ListItem item={motorcycle}/></div>)
                         }
                     </div>
                 </Container>
