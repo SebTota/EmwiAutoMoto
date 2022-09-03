@@ -17,6 +17,7 @@ export default function ItemEditPage(props) {
     const [motorcycle, setMotorcycle] = React.useState(null);
     const [images, setImages] = React.useState([]);
     const [displayImages, setDisplayImages] = React.useState([]);
+    const imageDisplayRef = React.createRef();
 
     /**
      * Loading - Page Loading
@@ -138,6 +139,10 @@ export default function ItemEditPage(props) {
         })
     }
 
+    function slideToImageInGallery(i) {
+        imageDisplayRef.current.slideToIndex(i);
+    }
+
     function saveChanges() {
         const year = document.getElementById('year').value;
         const make = document.getElementById('make').value;
@@ -238,19 +243,22 @@ export default function ItemEditPage(props) {
                     </Row>
                     <Row>
                         <div className="image-gallery-wrapper mb-3">
-                            <ImageGallery className="image-gallery-obj"
+                            <ImageGallery ref={imageDisplayRef}
+                                          items={displayImages}
+                                          className="image-gallery-obj"
                                           showThumbnails={false}
                                           showFullscreenButton={false}
                                           showIndex={true}
-                                          items={displayImages}/>
+                                          showPlayButton={false}/>
                         </div>
                     </Row>
                     <Row>
                         <div className="sortable-list-wrapper">
                             <ReactSortable list={images} setList={setImages} className="row">
                                 {
-                                    images.map((image) =>
-                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper">
+                                    images.map((image, i) =>
+                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
+                                             onClick={() => {slideToImageInGallery(i)}}>
                                             <div className="sortable-image-wrapper">
                                                 <img className="sortable-image"
                                                      src={getImageThumbnailFromImage(image)}/>

@@ -48,3 +48,7 @@
 .sortable-remove-button {
     margin: 5px;
 }
+
+.sortable-wrapper {
+    cursor: pointer;
+}
