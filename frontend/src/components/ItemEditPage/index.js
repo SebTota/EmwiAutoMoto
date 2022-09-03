@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ImageGallery from 'react-image-gallery';
-import {getMotorcycle, updateMotorcycle} from "../../controllers/storeController";
+import {getMotorcycle, updateMotorcycle, uploadImage} from "../../controllers/storeController";
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -16,6 +16,7 @@ export default function ItemEditPage(props) {
 
     const [motorcycle, setMotorcycle] = React.useState(null);
     const [images, setImages] = React.useState([]);
+    const [displayImages, setDisplayImages] = React.useState([]);
 
     /**
      * Loading - Page Loading
@@ -36,12 +37,16 @@ export default function ItemEditPage(props) {
             getMotorcycle(id).then(motorcycle => {
                 setMotorcycle(motorcycle);
                 setTypeOfChange(changeUpdate);
-                getImages(motorcycle);
+                setImages(motorcycle.images);
             })
         } else {
             setTypeOfChange(changeNew);
         }
     }, []);
+
+    React.useEffect(() => {
+        mapImagesToDisplayImages();
+    }, [images]);
 
     function getYear() {
         if (typeOfChange === changeUpdate) {
@@ -97,16 +102,15 @@ export default function ItemEditPage(props) {
         }
     }
 
-    function getImages(motorcycle) {
-        let images = motorcycle.images;
-        images.map(image => {
-            if (image.hasOwnProperty('image')) {
-                image['original'] = image['image'];
-                delete image['image'];
-                return image;
-            }
-        })
-        setImages(images);
+    function mapImagesToDisplayImages() {
+        let imgs = [];
+        for (let i = 0; i < images.length; i++) {
+            imgs.push({
+                'original': images[i]['image'],
+                'thumbnail': images[i]['thumbnail']
+            })
+        }
+        setDisplayImages(imgs);
     }
 
     function getImageThumbnailFromImage(image) {
@@ -119,19 +123,19 @@ export default function ItemEditPage(props) {
         }))
     }
 
-    function getImageForApiCall() {
-        /*
-         * What is going on with these states!?!
-         */
-        let i = []
-        images.forEach((img) => {
-            if (img.hasOwnProperty('original')) {
-                img['image'] = img['original'];
-                delete img['original'];
-                i.push(img)
-            }
+    function addImage(img) {
+        let imgs = [...images];
+        imgs.push(img);
+        setImages(imgs);
+    }
+
+    function fileChangeHandler(event) {
+        let file = event.target.files[0];
+        uploadImage(file).then(uploadedImage => {
+            addImage(uploadedImage)
+        }).catch(err => {
+            console.log('Failed uploading image due to error.', err);
         })
-        return i;
     }
 
     function saveChanges() {
@@ -155,13 +159,15 @@ export default function ItemEditPage(props) {
             'odometer_measurement': odometerMeasurement,
             'sold': isSold,
             'description': description,
-            'images': getImageForApiCall()
+            'images': images,
+            'thumbnail': images[0]['thumbnail']
         }
 
         console.log(`Updating ${id} with changes: `, changes);
 
         updateMotorcycle(id, changes).then((data) => {
             console.log(`Response from update motorcycle request: ${data}`);
+            window.location.href = `/motorcycle/${id}`
         })
     }
 
@@ -232,7 +238,7 @@ export default function ItemEditPage(props) {
                     </Row>
                     <Row>
                         <div className="image-gallery-wrapper">
-                            <ImageGallery className="image-gallery-obj" items={images}/>
+                            <ImageGallery className="image-gallery-obj" items={displayImages}/>
                         </div>
                     </Row>
                     <Row>
@@ -242,16 +248,24 @@ export default function ItemEditPage(props) {
                                     images.map((image) =>
                                         <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper">
                                             <div className="sortable-image-wrapper">
-                                                <img className="sortable-image" src={getImageThumbnailFromImage(image)}/>
+                                                <img className="sortable-image"
+                                                     src={getImageThumbnailFromImage(image)}/>
                                             </div>
                                             <div>
-                                                <Button variant="danger" className="sortable-remove-button" onClick={() => {removeImage(image)}}>Delete</Button>
+                                                <Button variant="danger" className="sortable-remove-button"
+                                                        onClick={() => {
+                                                            removeImage(image)
+                                                        }}>Delete</Button>
                                             </div>
                                         </div>)
                                 }
                             </ReactSortable>
                         </div>
                     </Row>
+                    <Form.Group controlId="formFile" className="mb-3">
+                        <Form.Label>Add a photo</Form.Label>
+                        <Form.Control type="file" accept="image/png, image/jpg, image/jpeg" onChange={fileChangeHandler}/>
+                    </Form.Group>
                     <Button variant="primary" className="m-5" onClick={() => {
                         saveChanges()
                     }}>Save</Button>
