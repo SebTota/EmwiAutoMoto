@@ -3,5 +3,6 @@ export const ROUTES = {
     GET_MOTORCYCLES: '/store/motorcycles',
     GET_MOTORCYCLE: '/store/motorcycle/{id}',
     UPDATE_MOTORCYCLE: '/store/motorcycle/{id}',
-    USER_LOGIN: '/login'
+    USER_LOGIN: '/login',
+    UPLOAD_IMAGE: '/store/productImage'
 }
