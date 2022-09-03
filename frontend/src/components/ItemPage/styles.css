@@ -2,6 +2,10 @@
     cursor: pointer;
 }
 
+.description {
+    white-space: pre-line;
+}
+
 .textAlignLeft {
     text-align: left;
 }
