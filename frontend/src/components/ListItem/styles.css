@@ -2,6 +2,11 @@
     margin-bottom: 25px;
 }
 
+.motorcycle-card-img {
+    height: 250px;
+    object-fit: cover;
+}
+
 .shop-item-card-title-col {
     font-weight: 600;
 }

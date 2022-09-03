@@ -10,7 +10,7 @@ class ListItem extends Component {
         return(
             <Link to={`/motorcycle/${this.props.item.id}`} style={{ color: 'inherit', textDecoration: 'inherit'}}>
                 <Card className="motorcycle-card-wrapper">
-                    <Card.Img variant="top" src={this.props.item.thumbnail} />
+                    <Card.Img className="motorcycle-card-img" variant="top" src={this.props.item.thumbnail} />
                     <Card.Body className="shop-item-card">
                         <Row><Col className="shop-item-card-title-col"><span>{this.props.item.year + ' ' + this.props.item.make + ' ' + this.props.item.model}</span></Col></Row>
                         <Row>
