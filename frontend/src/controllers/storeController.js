@@ -8,11 +8,7 @@ export function getMotorcycles() {
         fetch(HOST + ROUTES.GET_MOTORCYCLES).then(response => {
             return response.json()
         }).then(data => {
-            let motorcycles = [];
-            for (let i = 0; i < data.items.length; i++) {
-                motorcycles.push(new Motorcycle(data.items[i]));
-            }
-            resolve(motorcycles);
+            resolve(data.items);
         })
     });
 }
@@ -23,7 +19,7 @@ export function getMotorcycle(id) {
         fetch(HOST + ROUTES.GET_MOTORCYCLE.replace('{id}', id)).then(response => {
             return response.json()
         }).then(data => {
-            resolve(new Motorcycle(data));
+            resolve(data);
         })
     });
 }
@@ -31,4 +27,8 @@ export function getMotorcycle(id) {
 
 export function updateMotorcycle(id, changes) {
     return post(HOST + ROUTES.UPDATE_MOTORCYCLE.replace('{id}', id), changes)
+}
+
+export function uploadImage(image) {
+    return post(HOST + ROUTES.UPLOAD_IMAGE, {}, image);
 }
