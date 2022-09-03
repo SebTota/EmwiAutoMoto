@@ -1,0 +1,2 @@
+class NoProductFoundError(Exception):
+    pass
