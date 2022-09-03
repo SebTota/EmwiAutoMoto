@@ -13,8 +13,8 @@ class Motorcycle(BaseModel):
     def __init__(self, **data: Any):
         super().__init__(**data)
         if 'odometer' in data and data['odometer'] is not None \
-            and 'odometer_measurement' in data and data['odometer_measurement'] is not None:
-                self.__fields_set__.add('km')
+                and 'odometer_measurement' in data and data['odometer_measurement'] is not None:
+            self.__fields_set__.add('km')
 
     id: Union[str, None]  # Only used for response, ignored in request
     date_created: Union[datetime, None]  # Only used for response, ignored in request
@@ -71,8 +71,8 @@ class UpdateMotorcycle(BaseModel):
     def __init__(self, **data: Any):
         super().__init__(**data)
         if 'odometer' in data and data['odometer'] is not None \
-            and 'odometer_measurement' in data and data['odometer_measurement'] is not None:
-                self.__fields_set__.add('km')
+                and 'odometer_measurement' in data and data['odometer_measurement'] is not None:
+            self.__fields_set__.add('km')
 
     @validator('km', pre=True, always=True)
     def set_km_value(cls, v, values):
@@ -118,6 +118,7 @@ class UpdateMotorcycle(BaseModel):
     @validator('odometer')
     def validator_odometer(cls, v):
         assert v is not None, 'odometer may not be None'
+        assert v >= 0, 'odometer may not be less than 0'
         return v
 
     @validator('color')
@@ -128,6 +129,7 @@ class UpdateMotorcycle(BaseModel):
     @validator('price')
     def validator_price(cls, v):
         assert v is not None, 'price may not be None'
+        assert v >= 0, 'price may not be less than 0'
         return v
 
     @validator('description')

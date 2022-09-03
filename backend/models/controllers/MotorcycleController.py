@@ -2,7 +2,7 @@ from datetime import datetime
 from typing import List, Set
 
 from fireo.models import Model
-from fireo.fields import TextField, NumberField, BooleanField, ListField, DateTime
+from fireo.fields import TextField, NumberField, BooleanField, MapField, DateTime
 
 from backend.models.schemas import Image
 from backend.models.schemas.Motorcycle import Motorcycle, UpdateMotorcycle
@@ -36,8 +36,8 @@ class MotorcycleController(Model):
     description: str = TextField(required=True)
     sold: bool = BooleanField(required=True)
     thumbnail: str = TextField(required=True)
-    images: List[ImageData] = ListField()
-    videos: List[VideoData] = ListField()
+    images: List[ImageData] = MapField(ImageData())
+    videos: List[VideoData] = MapField(VideoData())
 
     @staticmethod
     def update_motorcycle(id: str, motorcycle: UpdateMotorcycle, update_keys: Set[str]) -> Model:
