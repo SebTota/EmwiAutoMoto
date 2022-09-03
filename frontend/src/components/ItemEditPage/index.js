@@ -237,8 +237,12 @@ export default function ItemEditPage(props) {
                         </Form.Group>
                     </Row>
                     <Row>
-                        <div className="image-gallery-wrapper">
-                            <ImageGallery className="image-gallery-obj" items={displayImages}/>
+                        <div className="image-gallery-wrapper mb-3">
+                            <ImageGallery className="image-gallery-obj"
+                                          showThumbnails={false}
+                                          showFullscreenButton={false}
+                                          showIndex={true}
+                                          items={displayImages}/>
                         </div>
                     </Row>
                     <Row>
