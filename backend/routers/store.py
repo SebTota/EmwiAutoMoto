@@ -45,7 +45,7 @@ def new_motorcycle(motorcycle: Motorcycle, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
 
     if not valid_motorcycle(motorcycle):
-        return HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
+        raise HTTPException(status_code=400, detail='Invalid motorcycle details provided.')
 
     return MotorcycleController.add_motorcycle(motorcycle).id
 
