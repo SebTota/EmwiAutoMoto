@@ -1,11 +1,10 @@
-import {Motorcycle} from "../models/Motorcycle";
 import { HOST, ROUTES } from '../constants'
 import { post } from "./controller"
 
 
-export function getMotorcycles() {
+export function getMotorcycles(showSold = false) {
     return new Promise((resolve, _) => {
-        fetch(HOST + ROUTES.GET_MOTORCYCLES).then(response => {
+        fetch(HOST + ROUTES.GET_MOTORCYCLES.replace('{show_sold}', showSold)).then(response => {
             return response.json()
         }).then(data => {
             resolve(data.items);
