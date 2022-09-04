@@ -1,5 +1,5 @@
 import { HOST, ROUTES } from '../constants'
-import { post } from "./controller"
+import {fetchDelete, post} from "./controller"
 
 
 export function getMotorcycles(showSold = false) {
@@ -34,4 +34,8 @@ export function createMotorcycle(motorcycle) {
 
 export function uploadImage(image) {
     return post(HOST + ROUTES.UPLOAD_IMAGE, {}, image);
+}
+
+export function deleteMotorcycle(id) {
+    return fetchDelete(HOST + ROUTES.DELETE_MOTORCYCLE.replace('{id}', id));
 }
