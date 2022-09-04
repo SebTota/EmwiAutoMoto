@@ -15,7 +15,7 @@ router = APIRouter(tags=["Images"])
 @router.post('/productImage', response_model=UploadImageResponse, status_code=201)
 def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
-    image_content = await file.read()
+    image_content = file.file.read()
     img = PIL_Image.open(io.BytesIO(image_content))
 
     try:
@@ -25,6 +25,9 @@ def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends())
         return UploadImageResponse(thumbnail=thumbnail_url, image=image_url)
     except FileUploadError as e:
         raise HTTPException(status_code=500, detail='Failed to process image.')
+    finally:
+        img.close()
+        file.file.close()
 
 
 @router.delete('/productImage')

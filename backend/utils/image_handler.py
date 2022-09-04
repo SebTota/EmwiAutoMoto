@@ -2,6 +2,7 @@ import io
 import os
 import boto3
 from botocore.config import Config
+from boto3.s3.transfer import TransferConfig
 from PIL import Image as PIL_Image
 
 from backend.exceptions import FileUploadError
@@ -29,13 +30,14 @@ def _get_s3_client() -> boto3.client:
 
 def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
     s3 = _get_storage_resource()
+    config = TransferConfig(use_threads=True, max_concurrency=20)
 
     buffer = io.BytesIO()
     image.save(buffer, format=image.format)
     buffer.seek(0)
 
     try:
-        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name)
+        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, Config=config)
         return f'{BASE_HOST_URL}/{image_name}'
     except Exception as e:
         raise FileUploadError(e)
@@ -52,7 +54,9 @@ def create_thumbnail_for_image(image: PIL_Image, image_name: str, size: [int, in
     img.thumbnail((size[0], size[1]))
     img.format = image.format
 
-    return upload_image_to_cloud_storage(img, image_name)
+    r = upload_image_to_cloud_storage(img, image_name)
+    img.close()
+    return r
 
 
 def delete_image(image: Image):
