@@ -258,7 +258,9 @@ export default function ItemEditPage(props) {
                                 {
                                     images.map((image, i) =>
                                         <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
-                                             onClick={() => {slideToImageInGallery(i)}}>
+                                             onClick={() => {
+                                                 slideToImageInGallery(i)
+                                             }}>
                                             <div className="sortable-image-wrapper">
                                                 <img className="sortable-image"
                                                      src={getImageThumbnailFromImage(image)}/>
@@ -276,7 +278,8 @@ export default function ItemEditPage(props) {
                     </Row>
                     <Form.Group controlId="formFile" className="mb-3">
                         <Form.Label>Add a photo</Form.Label>
-                        <Form.Control type="file" accept="image/png, image/jpg, image/jpeg" onChange={fileChangeHandler}/>
+                        <Form.Control type="file" accept="image/png, image/jpg, image/jpeg"
+                                      onChange={fileChangeHandler}/>
                     </Form.Group>
                     <Button variant="primary" className="m-5" onClick={() => {
                         saveChanges()

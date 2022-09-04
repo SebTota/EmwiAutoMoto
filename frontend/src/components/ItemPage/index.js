@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link, useNavigate} from "react-router-dom";
+import {Link} from "react-router-dom";
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
@@ -10,7 +10,6 @@ import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
 
 export default function ItemPage(props) {
-    const navigate = useNavigate();
     const [motorcycle, setMotorcycle] = React.useState(null);
     const [isAdmin, setIsAdmin] = React.useState(false);
 
@@ -29,7 +28,7 @@ export default function ItemPage(props) {
     }
 
     function goBack() {
-        navigate(-1);
+        window.location.href = '/';
     }
 
     function getTitle() {
