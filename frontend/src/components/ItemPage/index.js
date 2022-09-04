@@ -4,14 +4,18 @@ import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import ImageGallery from 'react-image-gallery';
-import {getMotorcycle} from "../../controllers/storeController";
+import {deleteMotorcycle, getMotorcycle} from "../../controllers/storeController";
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
+import {Alert} from "react-bootstrap";
 
 export default function ItemPage(props) {
     const [motorcycle, setMotorcycle] = React.useState(null);
     const [isAdmin, setIsAdmin] = React.useState(false);
+    const [showRemoveAlert, setShowRemoveAlert] = React.useState(false);
+
+    const id = props.id;
 
     // componentDidMount()
     React.useEffect(() => {
@@ -47,6 +51,17 @@ export default function ItemPage(props) {
         return motorcycle.description
     }
 
+    function deleteMotorcycleHandler() {
+        setShowRemoveAlert(false);
+        console.log(`Deleting motorcycle: ${id}`);
+        deleteMotorcycle(id).then(r => {
+            console.log(`Response form deleting motorcycle request: ${r}`);
+            window.location.href = '/';
+        }).catch(err => {
+            console.log(`Failed to delete motorcycle.`, err);
+        })
+    }
+
     function getImages() {
         let images = motorcycle.images;
         images.map(image => {
@@ -61,10 +76,29 @@ export default function ItemPage(props) {
 
     let editButton;
     if (isAdmin) {
-        editButton =
-            <Link to={`/motorcycle/edit/${props.id}`}>
-                <Button variant="warning">Edit</Button>
-            </Link>
+        editButton = (
+            <div>
+                <Link to={`/motorcycle/edit/${props.id}`}>
+                    <Button variant="warning" className="m-1">Edit</Button>
+                </Link>
+                <Button variant="danger" className="m-1" onClick={() => setShowRemoveAlert(true)}>Remove</Button>
+                <Alert className="m-3" show={showRemoveAlert} variant="danger" onClose={() => setShowRemoveAlert(false)}>
+                    <Alert.Heading>Are you use you want to delete this motorcycle?</Alert.Heading>
+                    <p>
+                      This action can not be undone. Are you sure you want to delete this motorcycle?
+                    </p>
+                    <hr />
+                    <div className="d-flex justify-content-evenly">
+                        <Button onClick={() => setShowRemoveAlert(false)} variant="outline-success">
+                        Close
+                      </Button>
+                      <Button onClick={() => deleteMotorcycleHandler()} variant="outline-danger">
+                        DELETE
+                      </Button>
+                    </div>
+                  </Alert>
+            </div>
+        )
     }
 
     if (motorcycle === null) {
