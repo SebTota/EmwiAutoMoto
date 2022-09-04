@@ -48,16 +48,16 @@ class MotorcycleController(Model):
 
         return Motorcycle.parse_obj(m.to_dict())
 
-
     @staticmethod
     def update_motorcycle(id: str, motorcycle: UpdateMotorcycle, update_keys: Set[str]) -> Model:
+        update_keys: Set[str] = {key for key in update_keys if key not in EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE}
         old_motorcycle: Motorcycle = MotorcycleController.get_motorcycle_by_id(id)
 
         if motorcycle.images is not None:
             new_images: List[Image] = motorcycle.images
             old_images: List[Image] = old_motorcycle.images
             removed_images: List[Image] = [image for image in old_images if image not in new_images]
-            print(f'Removing images: ${removed_images} from motorcycle: {id}')
+            print(f'Removing images: {removed_images} from motorcycle: {id}')
             for image in removed_images:
                 delete_image(image)
 
