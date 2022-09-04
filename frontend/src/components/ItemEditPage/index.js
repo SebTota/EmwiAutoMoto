@@ -257,7 +257,7 @@ export default function ItemEditPage(props) {
                             <ReactSortable list={images} setList={setImages} className="row">
                                 {
                                     images.map((image, i) =>
-                                        <div className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
+                                        <div key={image.thumbnail} className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
                                              onClick={() => {
                                                  slideToImageInGallery(i)
                                              }}>

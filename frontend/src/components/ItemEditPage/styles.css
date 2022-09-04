@@ -19,23 +19,15 @@
     margin-bottom: 1rem;
 }
 
-.image-gallery-thumbnail {
-  width: 120px
-}
-
-.image-gallery-thumbnail img {
-  width: auto;
-  height: 75px;
-}
-
-.image-gallery-image {
-    max-width: 100%;
-    aspect-ratio: 4 /3;
+.image-gallery {
+    max-width: 600px;
+    margin: auto auto 20px;
 }
 
 .sortable-image {
     width: 100%;
     height: 100%;
+    aspect-ratio: 4/3;
     object-fit: cover;
 }
 
