@@ -1,6 +1,7 @@
 import HeaderNavbar from "../components/Navbar/navbar";
 import ItemPage from "../components/ItemPage";
 import {useParams} from "react-router-dom";
+import Container from "react-bootstrap/Container";
 
 export default function MotorcycleRoute() {
     let params = useParams();
@@ -8,7 +9,9 @@ export default function MotorcycleRoute() {
     return (
         <div className="App">
             <HeaderNavbar/>
-            <ItemPage id={params.id}/>
+            <Container>
+                <ItemPage id={params.id}/>
+            </Container>
         </div>
     );
 }
