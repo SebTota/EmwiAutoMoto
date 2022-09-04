@@ -4,7 +4,7 @@ import Col from 'react-bootstrap/Col';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import ImageGallery from 'react-image-gallery';
-import {getMotorcycle, updateMotorcycle, uploadImage} from "../../controllers/storeController";
+import {createMotorcycle, getMotorcycle, updateMotorcycle, uploadImage} from "../../controllers/storeController";
 
 import "./styles.css"
 import "react-image-gallery/styles/css/image-gallery.css";
@@ -165,15 +165,27 @@ export default function ItemEditPage(props) {
             'sold': isSold,
             'description': description,
             'images': images,
+            'videos': [],
             'thumbnail': images[0]['thumbnail']
         }
 
         console.log(`Updating ${id} with changes: `, changes);
 
-        updateMotorcycle(id, changes).then((data) => {
-            console.log(`Response from update motorcycle request: ${data}`);
-            window.location.href = `/motorcycle/${id}`
-        })
+        if (typeOfChange === changeUpdate) {
+            updateMotorcycle(id, changes).then((data) => {
+                console.log(`Response from update motorcycle request: ${data}`);
+                window.location.href = `/motorcycle/${id}`
+            }).catch(err => {
+                console.log('Failed to update motorcycle', err);
+            })
+        } else if (typeOfChange === changeNew) {
+            createMotorcycle(changes).then((data) => {
+                console.log(`Response from create motorcycle request: ${data}`);
+                window.location.href = `/motorcycle/${data}`
+            }).catch(err => {
+                console.log('Failed to create new motorcycle', err);
+            })
+        }
     }
 
     if (motorcycle === null && (typeOfChange === changeUpdate || typeOfChange === changeLoading)) {

@@ -26,8 +26,10 @@ export  function post(url = '', data = {}, file = null) {
                 localStorage.removeItem('emwi-auto-moto-username')
                 window.location.href = '/login';
                 reject(response.json());
-            } else {
+            } else if (response.status >= 200 && response.status < 300) {
                 resolve(response.json())
+            } else {
+                reject(response.json())
             }
         }).catch((err) => {
             reject(err);

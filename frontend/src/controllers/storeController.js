@@ -28,6 +28,10 @@ export function updateMotorcycle(id, changes) {
     return post(HOST + ROUTES.UPDATE_MOTORCYCLE.replace('{id}', id), changes)
 }
 
+export function createMotorcycle(motorcycle) {
+    return post(HOST + ROUTES.CREATE_MOTORCYCLE, motorcycle)
+}
+
 export function uploadImage(image) {
     return post(HOST + ROUTES.UPLOAD_IMAGE, {}, image);
 }

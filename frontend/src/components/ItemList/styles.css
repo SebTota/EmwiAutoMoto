@@ -20,3 +20,14 @@
     font-weight: 700;
     color: black;
 }
+
+.product-grid-header-add-new-btn {
+    cursor: pointer;
+    text-decoration: none;
+    color: black;
+}
+
+.product-grid-header-add-new-btn:hover {
+    font-weight: 700;
+    color: black;
+}

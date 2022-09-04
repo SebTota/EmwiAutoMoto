@@ -5,6 +5,7 @@ import ListItem from "../ListItem";
 import {getMotorcycles} from "../../controllers/storeController";
 
 import "./styles.css"
+import {isAdmin} from "../../utils/utils";
 
 export default function ItemList(props) {
     const [motorcycles, setMotorcycles] = React.useState(null);
@@ -42,6 +43,10 @@ export default function ItemList(props) {
         })
     }
 
+    function addNewMotorcycle() {
+        window.location.href = '/motorcycle/new'
+    }
+
     let listBody = (<h3>Loading</h3>);
     if (motorcycles !== null) {
         listBody = (<div className="row">
@@ -52,12 +57,18 @@ export default function ItemList(props) {
         </div>)
     }
 
+    let adminActions = <div></div>
+    if (isAdmin()) {
+        adminActions = (<div>
+                            <span>Actions: </span>
+                            <a className="product-grid-header-add-new-btn" onClick={addNewMotorcycle}>Add New Motorcycle</a>
+                        </div>)
+    }
+
     return (
         <Container>
             <header className="product-grid-header">
-                <div>
-                    {/*show total count or other details here*/}
-                </div>
+                {adminActions}
                 <div>
                     <span className="me-2">Show: </span>
                     <a ref={showForSaleButton}
