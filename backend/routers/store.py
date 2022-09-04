@@ -17,7 +17,7 @@ def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: 
     if pagination_cursor:
         motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
     else:
-        motorcycles_controller = motorcycles_controller.order('date_created')
+        motorcycles_controller = motorcycles_controller.order('-date_created')
 
     motorcycles_controller = motorcycles_controller.fetch(limit)
 
