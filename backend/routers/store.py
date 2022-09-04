@@ -59,9 +59,7 @@ def update_motorcycle(item_id: str, motorcycle: UpdateMotorcycle, Authorize: Aut
 @router.delete('/motorcycle/{item_id}')
 def delete_motorcycle(item_id: str, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
-
-    # TODO: Delete all images related to the motorcycle being deleted
-    MotorcycleController.collection.delete(item_id)
+    MotorcycleController.delete_motorcycle(item_id)
     return "Deleted motorcycle"
 
 

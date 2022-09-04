@@ -75,3 +75,14 @@ class MotorcycleController(Model):
         m: MotorcycleController = MotorcycleController.from_dict(
             motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_NEW))
         return m.save()
+
+    @staticmethod
+    def delete_motorcycle(id: str):
+        print(f'Deleting motorcycle: {id}')
+        m: Motorcycle = MotorcycleController.get_motorcycle_by_id(id)
+
+        print(f'Deleting images: {m.images} for motorcycle: {id}')
+        for image in m.images:
+            delete_image(image)
+
+        MotorcycleController.collection.delete(f'motorcycle_controller/{id}')
