@@ -13,7 +13,7 @@ router = APIRouter(tags=["Images"])
 
 
 @router.post('/productImage', response_model=UploadImageResponse, status_code=201)
-async def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends()):
+def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends()):
     Authorize.jwt_required()
     image_content = await file.read()
     img = PIL_Image.open(io.BytesIO(image_content))
