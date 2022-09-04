@@ -1,0 +1,22 @@
+.product-grid-header {
+    display: flex;
+    margin-bottom: 1rem;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+}
+
+.product-grid-header-show {
+    text-decoration: none;
+    color: #615a5a;
+    cursor: pointer;
+}
+
+.product-grid-header-show:hover {
+    color: black;
+}
+
+.product-grid-header-show-active {
+    font-weight: 700;
+    color: black;
+}
