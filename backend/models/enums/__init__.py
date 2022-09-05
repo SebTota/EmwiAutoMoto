@@ -1,1 +1,2 @@
 from .OdometerMeasurementEnum import OdometerMeasurementEnum
+from .ProductStatusEnum import ProductStatusEnum
