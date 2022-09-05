@@ -13,6 +13,7 @@ export default function ItemList(props) {
     const selectedForSaleOptionClass = 'product-grid-header-show-active';
     const showForSaleButton = React.createRef();
     const showSoldButton = React.createRef();
+    const showInactiveButton = React.createRef();
 
     // componentDidMount()
     React.useEffect(() => {
@@ -22,14 +23,6 @@ export default function ItemList(props) {
     }, []);
 
     function showMotorcyclesHandler(showSold) {
-        if (showSold && showSoldButton.current.classList.contains(selectedForSaleOptionClass)) {
-            return;
-        }
-
-        if (!showSold && showForSaleButton.current.classList.contains(selectedForSaleOptionClass)) {
-            return;
-        }
-
         setMotorcycles(null);
         if (showSold) {
             showForSaleButton.current.classList.remove(selectedForSaleOptionClass);
@@ -38,9 +31,22 @@ export default function ItemList(props) {
             showSoldButton.current.classList.remove(selectedForSaleOptionClass);
             showForSaleButton.current.classList.add(selectedForSaleOptionClass);
         }
-        getMotorcycles(showSold).then(motorcycles => {
+
+        const showStatus =  showInactiveButton.current.classList.contains(selectedForSaleOptionClass) ? 'inactive': 'active';
+        getMotorcycles(showSold, showStatus).then(motorcycles => {
             setMotorcycles(motorcycles);
-        })
+        });
+    }
+
+    function toggleShowInactiveMotorcycles() {
+        if (showInactiveButton.current.classList.contains(selectedForSaleOptionClass)) {
+            showInactiveButton.current.classList.remove(selectedForSaleOptionClass);
+        } else {
+            showInactiveButton.current.classList.add(selectedForSaleOptionClass);
+        }
+
+        const showSold = showSoldButton.current.classList.contains(selectedForSaleOptionClass);
+        showMotorcyclesHandler(showSold);
     }
 
     function addNewMotorcycle() {
@@ -65,6 +71,12 @@ export default function ItemList(props) {
                         </div>)
     }
 
+    let adminShowProductOptions;
+    if (isAdmin()) {
+        adminShowProductOptions = (<a ref={showInactiveButton}
+                       onClick={toggleShowInactiveMotorcycles} className="product-grid-header-show me-2">Inactive</a>)
+    }
+
     return (
         <Container>
             <header className="product-grid-header">
@@ -80,6 +92,7 @@ export default function ItemList(props) {
                        onClick={() => {
                            showMotorcyclesHandler(true)
                        }} className="product-grid-header-show me-2">Sold</a>
+                    {adminShowProductOptions}
                 </div>
             </header>
             {listBody}
