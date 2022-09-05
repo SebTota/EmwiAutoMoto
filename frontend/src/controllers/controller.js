@@ -25,11 +25,11 @@ export function post(url, data = {}, file = null) {
                 localStorage.removeItem('emwi-auto-moto-access-token')
                 localStorage.removeItem('emwi-auto-moto-username')
                 window.location.href = '/login';
-                reject(response.json());
+                reject(response.statusText);
             } else if (response.status >= 200 && response.status < 300) {
                 resolve(response.json())
             } else {
-                reject(response.json())
+                reject(response.statusText)
             }
         }).catch((err) => {
             reject(err);
@@ -54,11 +54,11 @@ export function fetchDelete(url, data = {}) {
                 localStorage.removeItem('emwi-auto-moto-access-token')
                 localStorage.removeItem('emwi-auto-moto-username')
                 window.location.href = '/login';
-                reject(response.json());
+                reject(response.statusText);
             } else if (response.status >= 200 && response.status < 300) {
                 resolve(response.json())
             } else {
-                reject(response.json())
+                reject(response.statusText)
             }
         }).catch((err) => {
             reject(err);
