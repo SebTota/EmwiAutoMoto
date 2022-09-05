@@ -24,6 +24,8 @@ def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends())
         image_url = upload_image_to_cloud_storage(img, name)
         return UploadImageResponse(thumbnail=thumbnail_url, image=image_url)
     except FileUploadError as e:
+        img.close()
+        file.file.close()
         raise HTTPException(status_code=500, detail='Failed to process image.')
     finally:
         img.close()
