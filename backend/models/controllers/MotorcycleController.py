@@ -54,7 +54,7 @@ class MotorcycleController(Model):
         update_keys: Set[str] = {key for key in update_keys if key not in EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE}
         old_motorcycle: Motorcycle = MotorcycleController.get_motorcycle_by_id(id)
 
-        if motorcycle.images is not None:
+        if motorcycle.images is not None and old_motorcycle.images is not None:
             new_images: List[Image] = motorcycle.images
             old_images: List[Image] = old_motorcycle.images
             removed_images: List[Image] = [image for image in old_images if image not in new_images]
