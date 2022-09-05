@@ -32,7 +32,12 @@ export default function ItemList(props) {
             showForSaleButton.current.classList.add(selectedForSaleOptionClass);
         }
 
-        const showStatus =  showInactiveButton.current.classList.contains(selectedForSaleOptionClass) ? 'inactive': 'active';
+        let showStatus;
+        if (showInactiveButton.current === null || !showInactiveButton.current.classList.contains(selectedForSaleOptionClass)) {
+            showStatus = 'active';
+        } else {
+            showStatus = 'inactive';
+        }
         getMotorcycles(showSold, showStatus).then(motorcycles => {
             setMotorcycles(motorcycles);
         });
