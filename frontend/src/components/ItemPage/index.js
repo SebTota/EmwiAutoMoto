@@ -22,7 +22,7 @@ export default function ItemPage(props) {
         if (isSignedIn()) {
             setIsAdmin(true);
         }
-        getMotorcycle(props.id).then(motorcycle => {
+        getMotorcycle(id).then(motorcycle => {
             setMotorcycle(motorcycle)
         })
     }, []);
@@ -64,12 +64,16 @@ export default function ItemPage(props) {
 
     function getImages() {
         let images = motorcycle.images;
+        if (images === null) {
+            return [];
+        }
         images.map(image => {
             if (image.hasOwnProperty('image')) {
                 image['original'] = image['image'];
                 delete image['image'];
                 return image;
             }
+            return image;
         })
         return images;
     }
@@ -78,7 +82,7 @@ export default function ItemPage(props) {
     if (isAdmin) {
         editButton = (
             <div>
-                <Link to={`/motorcycle/edit/${props.id}`}>
+                <Link to={`/motorcycle/edit/${id}`}>
                     <Button variant="warning" className="m-1">Edit</Button>
                 </Link>
                 <Button variant="danger" className="m-1" onClick={() => setShowRemoveAlert(true)}>Remove</Button>
@@ -143,5 +147,4 @@ export default function ItemPage(props) {
             </div>
         )
     }
-
 }

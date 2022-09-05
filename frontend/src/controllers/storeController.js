@@ -29,7 +29,7 @@ export function updateMotorcycle(id, changes) {
 }
 
 export function createMotorcycle(motorcycle) {
-    return post(HOST + ROUTES.CREATE_MOTORCYCLE, motorcycle)
+    return post(HOST + ROUTES.CREATE_MOTORCYCLE, motorcycle);
 }
 
 export function uploadImage(image) {
