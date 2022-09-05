@@ -17,6 +17,8 @@ export default function ItemEditPage(props) {
     const [motorcycle, setMotorcycle] = React.useState(null);
     const [images, setImages] = React.useState([]);
     const [displayImages, setDisplayImages] = React.useState([]);
+    const [numFilesUploading, setNumFilesUploading] = React.useState(0);
+    const [itemId, setItemId] = React.useState(props.id);
     const imageDisplayRef = React.createRef();
 
     /**
@@ -29,17 +31,13 @@ export default function ItemEditPage(props) {
     const changeNew = "New";
     const [typeOfChange, setTypeOfChange] = React.useState(changeLoading); // TODO: Make this an Enum
 
-    const id = props.id;
     const type = props.type;
 
     // componentDidMount()
     React.useEffect(() => {
         if (type === 'edit') {
-            getMotorcycle(id).then(motorcycle => {
-                setMotorcycle(motorcycle);
-                setTypeOfChange(changeUpdate);
-                setImages(motorcycle.images);
-            })
+            setTypeOfChange(changeUpdate);
+            getMotorcycleDetail(itemId);
         } else {
             setTypeOfChange(changeNew);
         }
@@ -48,6 +46,21 @@ export default function ItemEditPage(props) {
     React.useEffect(() => {
         mapImagesToDisplayImages();
     }, [images]);
+
+    React.useEffect(() => {
+        if (itemId) {
+            getMotorcycleDetail(itemId);
+        }
+    }, [itemId]);
+
+    function getMotorcycleDetail(motorcycleId) {
+        getMotorcycle(motorcycleId).then(motorcycle => {
+            setMotorcycle(motorcycle);
+            if (motorcycle.images) {
+                setImages(motorcycle.images);
+            }
+        })
+    }
 
     function getYear() {
         if (typeOfChange === changeUpdate) {
@@ -131,19 +144,24 @@ export default function ItemEditPage(props) {
     }
 
     function fileChangeHandler(event) {
-        let file = event.target.files[0];
-        uploadImage(file).then(uploadedImage => {
-            addImage(uploadedImage)
-        }).catch(err => {
-            console.log('Failed uploading image due to error.', err);
-        })
+        const files = event.target.files;
+        setNumFilesUploading(files.length);
+        for (let i = 0; i < files.length; i++) {
+            uploadImage(files[i]).then(uploadedImage => {
+                setNumFilesUploading(numFilesUploading - 1);
+                addImage(uploadedImage)
+            }).catch(err => {
+                setNumFilesUploading(numFilesUploading - 1);
+                console.log('Failed uploading image due to error.', err);
+            })
+        }
     }
 
     function slideToImageInGallery(i) {
         imageDisplayRef.current.slideToIndex(i);
     }
 
-    function saveChanges() {
+    function publishProduct() {
         const year = document.getElementById('year').value;
         const make = document.getElementById('make').value;
         const model = document.getElementById('model').value;
@@ -163,29 +181,83 @@ export default function ItemEditPage(props) {
             'odometer': odometer,
             'odometer_measurement': odometerMeasurement,
             'sold': isSold,
-            'description': description,
-            'images': images,
-            'videos': [],
-            'thumbnail': images[0]['thumbnail']
+            'description': description
         }
 
-        console.log(`Updating ${id} with changes: `, changes);
-
         if (typeOfChange === changeUpdate) {
-            updateMotorcycle(id, changes).then((data) => {
-                console.log(`Response from update motorcycle request: ${data}`);
-                window.location.href = `/motorcycle/${id}`
+            changes['images'] = images;
+            changes['videos'] = [];
+            changes['thumbnail'] = images.length > 0 ? images[0]['thumbnail'] : '';
+            changes['status'] = 'active';
+
+            updateMotorcycle(itemId, changes).then((data) => {
+                console.log(`Response from update motorcycle request:`, data);
+                window.location.href = `/motorcycle/${itemId}`
             }).catch(err => {
                 console.log('Failed to update motorcycle', err);
             })
         } else if (typeOfChange === changeNew) {
+            changes['status'] = 'inactive';
             createMotorcycle(changes).then((data) => {
-                console.log(`Response from create motorcycle request: ${data}`);
-                window.location.href = `/motorcycle/${data}`
+                console.log(`Response from create motorcycle request:`, data);
+                setItemId(data['id']);
+                setTypeOfChange(changeUpdate);
             }).catch(err => {
                 console.log('Failed to create new motorcycle', err);
             })
         }
+    }
+
+    function renderImageHandler() {
+        if (typeOfChange !== changeUpdate) {
+            return;
+        }
+
+        return (
+            <div>
+                <Row>
+                    <div className="image-gallery-wrapper mb-3">
+                        <ImageGallery ref={imageDisplayRef}
+                                      items={displayImages}
+                                      className="image-gallery-obj"
+                                      showThumbnails={false}
+                                      showFullscreenButton={false}
+                                      showIndex={true}
+                                      showPlayButton={false}/>
+                    </div>
+                </Row>
+                <Row>
+                    <div className="sortable-list-wrapper">
+                        <ReactSortable list={images} setList={setImages} className="row">
+                            {
+                                images.map((image, i) =>
+                                    <div key={image.thumbnail}
+                                         className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
+                                         onClick={() => {
+                                             slideToImageInGallery(i)
+                                         }}>
+                                        <div className="sortable-image-wrapper">
+                                            <img className="sortable-image"
+                                                 src={getImageThumbnailFromImage(image)}/>
+                                        </div>
+                                        <div>
+                                            <Button variant="danger" className="sortable-remove-button"
+                                                    onClick={() => {
+                                                        removeImage(image)
+                                                    }}>Delete</Button>
+                                        </div>
+                                    </div>)
+                            }
+                        </ReactSortable>
+                    </div>
+                    <input id="fileSelectorButton" type="file" accept="image/png, image/jpg, image/jpeg" multiple
+                           onChange={fileChangeHandler}/>
+                    <Button onClick={() => document.getElementById('fileSelectorButton').click()}
+                            disabled={numFilesUploading > 0}>
+                        {numFilesUploading <= 0 ? 'Upload Photo' : 'Uploading Photos...'}
+                    </Button>
+                </Row>
+            </div>)
     }
 
     if (motorcycle === null && (typeOfChange === changeUpdate || typeOfChange === changeLoading)) {
@@ -215,13 +287,14 @@ export default function ItemEditPage(props) {
                     <Row>
                         <Form.Group as={Col} md={3} className="mb-3">
                             <Form.Label>Price - Zloty/PLN</Form.Label>
-                            <Form.Control id="price" type="number" placeholder="Price" defaultValue={getPrice()}/>
+                            <Form.Control id="price" type="number" placeholder="Price" min="0"
+                                          defaultValue={getPrice()}/>
                         </Form.Group>
                         <Form.Group as={Col} md={7}>
                             <Row>
                                 <Form.Group as={Col} md={6} className="mb-3">
                                     <Form.Label>Odometer</Form.Label>
-                                    <Form.Control id="odometer" type="number" placeholder="Odometer"
+                                    <Form.Control id="odometer" type="number" min="0" placeholder="Odometer"
                                                   defaultValue={getOdometer()}/>
                                 </Form.Group>
                                 <Form.Group as={Col} md={6} className="mb-3">
@@ -253,49 +326,10 @@ export default function ItemEditPage(props) {
                             />
                         </Form.Group>
                     </Row>
-                    <Row>
-                        <div className="image-gallery-wrapper mb-3">
-                            <ImageGallery ref={imageDisplayRef}
-                                          items={displayImages}
-                                          className="image-gallery-obj"
-                                          showThumbnails={false}
-                                          showFullscreenButton={false}
-                                          showIndex={true}
-                                          showPlayButton={false}/>
-                        </div>
-                    </Row>
-                    <Row>
-                        <div className="sortable-list-wrapper">
-                            <ReactSortable list={images} setList={setImages} className="row">
-                                {
-                                    images.map((image, i) =>
-                                        <div key={image.thumbnail} className="col-xs-4 col-sm-4 col-md-3 col-lg-2 sortable-wrapper"
-                                             onClick={() => {
-                                                 slideToImageInGallery(i)
-                                             }}>
-                                            <div className="sortable-image-wrapper">
-                                                <img className="sortable-image"
-                                                     src={getImageThumbnailFromImage(image)}/>
-                                            </div>
-                                            <div>
-                                                <Button variant="danger" className="sortable-remove-button"
-                                                        onClick={() => {
-                                                            removeImage(image)
-                                                        }}>Delete</Button>
-                                            </div>
-                                        </div>)
-                                }
-                            </ReactSortable>
-                        </div>
-                    </Row>
-                    <Form.Group controlId="formFile" className="mb-3">
-                        <Form.Label>Add a photo</Form.Label>
-                        <Form.Control type="file" accept="image/png, image/jpg, image/jpeg"
-                                      onChange={fileChangeHandler}/>
-                    </Form.Group>
-                    <Button variant="primary" className="m-5" onClick={() => {
-                        saveChanges()
-                    }}>Save</Button>
+                    {renderImageHandler()}
+                    <Button variant="primary" className="m-5" disabled={numFilesUploading > 0} onClick={() => {
+                        publishProduct()
+                    }}>{typeOfChange === changeNew ? 'Save' : 'Update'}</Button>
                 </Form>
             </div>
         )

@@ -44,3 +44,7 @@
 .sortable-wrapper {
     cursor: pointer;
 }
+
+#fileSelectorButton {
+    display: none;
+}
