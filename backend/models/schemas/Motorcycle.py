@@ -5,7 +5,7 @@ from typing import List, Union, Any, Optional
 
 from .Image import Image
 from .Video import Video
-from backend.models.enums import OdometerMeasurementEnum
+from backend.models.enums import OdometerMeasurementEnum, ProductStatusEnum
 from backend.utils.conversions import miles_to_kilometers
 
 
@@ -29,9 +29,10 @@ class Motorcycle(BaseModel):
     price: int
     description: str
     sold: bool
-    thumbnail: str
-    images: List[Image]
-    videos: List[Video]
+    status: Union[ProductStatusEnum, None]
+    thumbnail: Optional[str]
+    images: Optional[List[Image]]
+    videos: Optional[List[Video]]
 
     class Config:
         use_enum_values = True
@@ -61,6 +62,7 @@ class UpdateMotorcycle(BaseModel):
     price: Optional[int]
     description: Optional[str]
     sold: Optional[bool]
+    status: Union[ProductStatusEnum, None]
     thumbnail: Optional[str]
     images: Optional[List[Image]]
     videos: Optional[List[Video]]
@@ -140,6 +142,11 @@ class UpdateMotorcycle(BaseModel):
     @validator('sold')
     def validator_sold(cls, v):
         assert v is not None, 'sold may not be None'
+        return v
+
+    @validator('status')
+    def validator_status(cls, v):
+        assert v is not None, 'status may not be None'
         return v
 
     @validator('thumbnail')

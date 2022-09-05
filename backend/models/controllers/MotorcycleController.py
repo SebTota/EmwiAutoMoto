@@ -36,7 +36,8 @@ class MotorcycleController(Model):
     price: int = NumberField(required=True)
     description: str = TextField(required=True)
     sold: bool = BooleanField(required=True)
-    thumbnail: str = TextField(required=True)
+    status: str = TextField(required=True)
+    thumbnail: str = TextField()
     images: List[ImageData] = ListField(ImageData())
     videos: List[VideoData] = ListField(VideoData())
 

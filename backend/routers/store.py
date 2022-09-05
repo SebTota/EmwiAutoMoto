@@ -5,6 +5,7 @@ from fastapi_jwt_auth import AuthJWT
 
 from backend.exceptions import NoProductFoundError
 from backend.models.controllers import MotorcycleController
+from backend.models.enums import ProductStatusEnum
 from backend.models.schemas import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
 
 router = APIRouter(tags=["Store"])
@@ -12,7 +13,9 @@ router = APIRouter(tags=["Store"])
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
 def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: str = None):
-    motorcycles_controller = MotorcycleController.collection.filter(sold=show_sold)
+    motorcycles_controller = MotorcycleController.collection\
+        .filter(sold=show_sold)\
+        .filter(status=ProductStatusEnum.active.value)
 
     if pagination_cursor:
         motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
