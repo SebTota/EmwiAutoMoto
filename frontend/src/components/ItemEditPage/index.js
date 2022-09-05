@@ -137,22 +137,30 @@ export default function ItemEditPage(props) {
         }))
     }
 
-    function addImage(img) {
-        let imgs = [...images];
-        imgs.push(img);
-        setImages(imgs);
+    function addImages(imgs) {
+        let joinedImages = [...images, ...imgs]
+        setImages(joinedImages);
     }
 
     function fileChangeHandler(event) {
         const files = event.target.files;
         setNumFilesUploading(files.length);
+
+        let uploadedImages = [];
+        let numFilesDone = 0;
+
         for (let i = 0; i < files.length; i++) {
             uploadImage(files[i]).then(uploadedImage => {
-                setNumFilesUploading(numFilesUploading - 1);
-                addImage(uploadedImage)
+                uploadedImages.push(uploadedImage);
             }).catch(err => {
-                setNumFilesUploading(numFilesUploading - 1);
                 console.log('Failed uploading image due to error.', err);
+            }).finally(() => {
+                setNumFilesUploading(numFilesUploading - 1);
+                numFilesDone += 1;
+
+                if (numFilesDone === files.length) {
+                    addImages(uploadedImages);
+                }
             })
         }
     }
