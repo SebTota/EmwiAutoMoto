@@ -2,9 +2,9 @@ import { HOST, ROUTES } from '../constants'
 import {fetchDelete, post} from "./controller"
 
 
-export function getMotorcycles(showSold = false) {
+export function getMotorcycles(showSold = false, show_status = 'active') {
     return new Promise((resolve, _) => {
-        fetch(HOST + ROUTES.GET_MOTORCYCLES.replace('{show_sold}', showSold)).then(response => {
+        fetch(HOST + ROUTES.GET_MOTORCYCLES.replace('{show_sold}', showSold).replace('{show_status}', show_status)).then(response => {
             return response.json()
         }).then(data => {
             resolve(data.items);

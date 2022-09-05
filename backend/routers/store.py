@@ -12,10 +12,11 @@ router = APIRouter(tags=["Store"])
 
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
-def get_motorcycles(limit: int = 9, show_sold: bool = False, pagination_cursor: str = None):
+def get_motorcycles(limit: int = 9, show_sold: bool = False,
+                    show_status: ProductStatusEnum = ProductStatusEnum.active.value, pagination_cursor: str = None):
     motorcycles_controller = MotorcycleController.collection\
         .filter(sold=show_sold)\
-        .filter(status=ProductStatusEnum.active.value)
+        .filter(status=show_status)
 
     if pagination_cursor:
         motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
