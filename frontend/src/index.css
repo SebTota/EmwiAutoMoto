@@ -3,8 +3,3 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
-
-.wrapper {
-  padding: 30px !important;
-  margin: auto !important;
-}

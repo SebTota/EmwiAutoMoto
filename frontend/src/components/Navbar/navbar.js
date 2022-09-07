@@ -2,6 +2,8 @@ import React from 'react';
 import Container from 'react-bootstrap/Container';
 import Navbar from 'react-bootstrap/Navbar';
 import {Nav} from "react-bootstrap";
+import {Link} from "react-router-dom";
+import {LinkContainer} from 'react-router-bootstrap';
 
 import "./styles.css"
 
@@ -28,9 +30,9 @@ function HeaderNavbar() {
     let adminMessage;
     if (!isCheckingAdmin) {
         if (isAdmin) {
-        adminMessage = <Navbar.Text>Signed in as: <a>{getUsernameOfSignedInUser()}</a></Navbar.Text>
+            adminMessage = <Navbar.Text>Signed in as: {getUsernameOfSignedInUser()}</Navbar.Text>
         } else {
-            adminMessage = <Nav.Link href="/login">Login</Nav.Link>
+            adminMessage = <LinkContainer to='/login'><Navbar.Link>Login</Navbar.Link></LinkContainer>
         }
     }
 
@@ -38,10 +40,14 @@ function HeaderNavbar() {
         <div className="header">
             <Navbar collapseOnSelect expand="lg">
                 <Container>
-                    <Navbar.Brand href="/"><h1>EMWI Auto-Moto</h1></Navbar.Brand>
+                    <LinkContainer to='/'><Navbar.Brand>EMWI Auto-Moto</Navbar.Brand></LinkContainer>
                     <Navbar.Toggle aria-controls="responsive-navbar-nav"/>
                     <Navbar.Collapse id="responsive-navbar-nav">
+                        <Nav className="justify-content-start flex-grow-1 pe-3">
+                            <LinkContainer to='/'><Nav.Link>Motorcycles</Nav.Link></LinkContainer>
+                        </Nav>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
+                            <LinkContainer to='/contact'><Nav.Link>Contact</Nav.Link></LinkContainer>
                             {adminMessage}
                         </Nav>
                     </Navbar.Collapse>
