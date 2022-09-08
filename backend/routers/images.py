@@ -22,6 +22,8 @@ def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends())
         name: str = str(uuid.uuid4())
         thumbnail_url = create_thumbnail_for_image(img, name)
         image_url = upload_image_to_cloud_storage(img, name)
+        img.close()
+        file.file.close()
         return UploadImageResponse(thumbnail=thumbnail_url, image=image_url)
     except FileUploadError as e:
         img.close()
