@@ -1,5 +1,12 @@
 .backToHomeLink {
     cursor: pointer;
+    text-decoration: none !important;
+    color: black;
+}
+
+.backToHomeLink:hover {
+    text-decoration: none;
+    color: black;
 }
 
 .description {
