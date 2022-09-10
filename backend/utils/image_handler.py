@@ -30,14 +30,13 @@ def _get_s3_client() -> boto3.client:
 
 def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
     s3 = _get_storage_resource()
-    config = TransferConfig(use_threads=True, max_concurrency=20)
 
     buffer = io.BytesIO()
     image.save(buffer, format=image.format)
     buffer.seek(0)
 
     try:
-        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, Config=config)
+        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name)
         return f'{BASE_HOST_URL}/{image_name}'
     except Exception as e:
         raise FileUploadError(e)

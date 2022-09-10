@@ -19,7 +19,7 @@ def upload_product_image_route(file: UploadFile, Authorize: AuthJWT = Depends())
     img = PIL_Image.open(io.BytesIO(image_content))
 
     try:
-        name: str = str(uuid.uuid4())
+        name: str = f'{str(uuid.uuid4())}.{file.filename.split(".")[-1]}'
         thumbnail_url = create_thumbnail_for_image(img, name)
         image_url = upload_image_to_cloud_storage(img, name)
         img.close()
