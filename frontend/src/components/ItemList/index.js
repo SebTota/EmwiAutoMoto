@@ -6,9 +6,10 @@ import {getMotorcycles} from "../../controllers/storeController";
 
 import "./styles.css"
 import {isAdmin} from "../../utils/utils";
+import Button from "react-bootstrap/Button";
 
 export default function ItemList(props) {
-    const [motorcycles, setMotorcycles] = React.useState(null);
+    const [motorcycleResponse, setMotorcycleResponse] = React.useState(null);
 
     const selectedForSaleOptionClass = 'product-grid-header-show-active';
     const showForSaleButton = React.createRef();
@@ -17,20 +18,40 @@ export default function ItemList(props) {
 
     // componentDidMount()
     React.useEffect(() => {
-        getMotorcycles().then(motorcycles => {
-            setMotorcycles(motorcycles)
-        })
+        getMotorcyclesOnLoad();
+        setButtonsOnLoad();
     }, []);
 
-    function showMotorcyclesHandler(showSold) {
-        setMotorcycles(null);
-        if (showSold) {
-            showForSaleButton.current.classList.remove(selectedForSaleOptionClass);
-            showSoldButton.current.classList.add(selectedForSaleOptionClass);
+    function getMotorcyclesOnLoad() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showSold = urlParams.has('showSold') ? urlParams.get('showSold') : 'false';
+        const showStatus = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
+        const page = urlParams.has('page') ? urlParams.get('page') : '1';
+
+        getMotorcycles(showSold, showStatus, page).then(motorcycles => {
+            setMotorcycleResponse(motorcycles);
+        })
+    }
+
+    function setButtonsOnLoad() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const showSold = urlParams.has('showSold') ? urlParams.get('showSold') : 'false';
+        const showStatus = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
+
+        if (showSold === 'true') {
+            showSoldButton.current.classList.add('product-grid-header-show-active')
         } else {
-            showSoldButton.current.classList.remove(selectedForSaleOptionClass);
-            showForSaleButton.current.classList.add(selectedForSaleOptionClass);
+            showForSaleButton.current.classList.add('product-grid-header-show-active')
         }
+
+        if (showStatus === 'inactive') {
+            showInactiveButton.current.classList.add(selectedForSaleOptionClass);
+        }
+    }
+
+    function onMotorcycleSearchChange(page=motorcycleResponse.page) {
+        setMotorcycleResponse(null);
+        const showSold = showSoldButton.current.classList.contains(selectedForSaleOptionClass);
 
         let showStatus;
         if (showInactiveButton.current === null || !showInactiveButton.current.classList.contains(selectedForSaleOptionClass)) {
@@ -38,9 +59,20 @@ export default function ItemList(props) {
         } else {
             showStatus = 'inactive';
         }
-        getMotorcycles(showSold, showStatus).then(motorcycles => {
-            setMotorcycles(motorcycles);
+        getMotorcycles(showSold, showStatus, page).then(motorcycles => {
+            setMotorcycleResponse(motorcycles);
         });
+    }
+
+    function showMotorcyclesHandler(showSold) {
+        if (showSold) {
+            showForSaleButton.current.classList.remove(selectedForSaleOptionClass);
+            showSoldButton.current.classList.add(selectedForSaleOptionClass);
+        } else {
+            showSoldButton.current.classList.remove(selectedForSaleOptionClass);
+            showForSaleButton.current.classList.add(selectedForSaleOptionClass);
+        }
+        onMotorcycleSearchChange();
     }
 
     function toggleShowInactiveMotorcycles() {
@@ -49,9 +81,28 @@ export default function ItemList(props) {
         } else {
             showInactiveButton.current.classList.add(selectedForSaleOptionClass);
         }
+        onMotorcycleSearchChange();
+    }
 
-        const showSold = showSoldButton.current.classList.contains(selectedForSaleOptionClass);
-        showMotorcyclesHandler(showSold);
+    function showBackPageButton() {
+        return motorcycleResponse && motorcycleResponse.page > 1;
+    }
+
+    function showNextPageButton() {
+        return motorcycleResponse && motorcycleResponse.has_next_page;
+    }
+
+    function goToNextPage() {
+        setMotorcycleResponse(null);
+        getMotorcycles(false, 'active', motorcycleResponse.page + 1).then(motorcycles => {
+            setMotorcycleResponse(motorcycles);
+        })
+    }
+
+    function goToPreviousPage() {
+        getMotorcycles(false, 'active', motorcycleResponse.page - 1).then(motorcycles => {
+            setMotorcycleResponse(motorcycles);
+        })
     }
 
     function addNewMotorcycle() {
@@ -59,10 +110,10 @@ export default function ItemList(props) {
     }
 
     let listBody = (<h3>Loading</h3>);
-    if (motorcycles !== null) {
+    if (motorcycleResponse !== null) {
         listBody = (<div className="row">
             {
-                motorcycles.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
+                motorcycleResponse.items.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
                     <ListItem item={motorcycle}/></div>)
             }
         </div>)
@@ -92,7 +143,7 @@ export default function ItemList(props) {
                        onClick={() => {
                            showMotorcyclesHandler(false)
                        }}
-                       className="product-grid-header-show product-grid-header-show-active me-2">For Sale</a>
+                       className="product-grid-header-show me-2">For Sale</a>
                     <a ref={showSoldButton}
                        onClick={() => {
                            showMotorcyclesHandler(true)
@@ -101,6 +152,10 @@ export default function ItemList(props) {
                 </div>
             </header>
             {listBody}
+            <div>
+                {showBackPageButton() ? <Button variant="outline-secondary" className="m-1 me-2" onClick={goToPreviousPage}>Prev</Button> : null}
+                {showNextPageButton() ? <Button variant="outline-secondary" className="m-1 ms-2" onClick={goToNextPage}>Next</Button> : null}
+            </div>
         </Container>
     );
 }

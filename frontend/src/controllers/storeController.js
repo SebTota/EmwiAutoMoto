@@ -2,12 +2,14 @@ import { HOST, ROUTES } from '../constants'
 import {fetchDelete, post} from "./controller"
 
 
-export function getMotorcycles(showSold = false, show_status = 'active') {
+export function getMotorcycles(showSold = false, show_status = 'active', page = 1) {
     return new Promise((resolve, _) => {
-        fetch(HOST + ROUTES.GET_MOTORCYCLES.replace('{show_sold}', showSold).replace('{show_status}', show_status)).then(response => {
+        fetch(HOST + ROUTES.GET_MOTORCYCLES.replace('{show_sold}', showSold)
+            .replace('{show_status}', show_status)
+            .replace('{page}', page)).then(response => {
             return response.json()
         }).then(data => {
-            resolve(data.items);
+            resolve(data);
         })
     });
 }
