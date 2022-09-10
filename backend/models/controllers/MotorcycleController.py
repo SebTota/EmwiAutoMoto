@@ -52,6 +52,8 @@ class MotorcycleController(Model):
     @staticmethod
     def update_motorcycle(id: str, motorcycle: UpdateMotorcycle, update_keys: Set[str]) -> Model:
         update_keys: Set[str] = {key for key in update_keys if key not in EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE}
+        motorcycle.date_last_updated = datetime.utcnow()
+        update_keys.add('date_last_updated')
         old_motorcycle: Motorcycle = MotorcycleController.get_motorcycle_by_id(id)
 
         if motorcycle.images is not None and old_motorcycle.images is not None:
@@ -62,10 +64,9 @@ class MotorcycleController(Model):
             for image in removed_images:
                 delete_image(image)
 
-        motorcycle.date_last_updated = datetime.utcnow()
         m: MotorcycleController = MotorcycleController.from_dict(
-            motorcycle.dict(exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE, include=update_keys))
-
+            motorcycle.dict(include=update_keys, exclude=EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE))
+        m._field_changed = [f for f in m._field_changed if f not in EXCLUDE_KEYS_FROM_DB_TO_MODEL_MAP_FOR_UPDATE]
         return m.update(f'motorcycle_controller/{id}')
 
     @staticmethod
