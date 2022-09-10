@@ -7,4 +7,5 @@ from backend.models.schemas import Motorcycle
 class MotorcycleListResponse(BaseModel):
     num_items: int
     items: List[Motorcycle]
-    pagination_cursor: Union[str, None]
+    page: int
+    has_next_page: bool

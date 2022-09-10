@@ -1,5 +1,3 @@
-from typing import Union
-
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
@@ -13,27 +11,27 @@ router = APIRouter(tags=["Store"])
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
 def get_motorcycles(limit: int = 9, show_sold: bool = False,
-                    show_status: ProductStatusEnum = ProductStatusEnum.active.value, pagination_cursor: str = None):
-    motorcycles_controller = MotorcycleController.collection\
-        .filter(sold=show_sold)\
+                    show_status: ProductStatusEnum = ProductStatusEnum.active.value, page: int = 1):
+    start_index = (limit * page) - limit
+    motorcycles_controller = MotorcycleController.collection.offset(start_index)
+    motorcycles_controller = motorcycles_controller \
+        .filter(sold=show_sold) \
         .filter(status=show_status)
 
-    if pagination_cursor:
-        motorcycles_controller = motorcycles_controller.cursor(pagination_cursor)
-    else:
-        motorcycles_controller = motorcycles_controller.order('-date_created')
-
-    motorcycles_controller = motorcycles_controller.fetch(limit)
+    motorcycles_controller = motorcycles_controller.order('-date_created')
+    motorcycles_controller = motorcycles_controller.fetch(limit + 1)
 
     motorcycles = [m.to_dict() for m in motorcycles_controller]
-    cursor = motorcycles_controller.cursor
 
-    if len(motorcycles) < limit or len(list(MotorcycleController.collection.cursor(cursor).fetch(1))) == 0:
-        cursor = None
+    has_next_page = False
+    if len(motorcycles) > limit:
+        motorcycles.pop()
+        has_next_page = True
 
     return MotorcycleListResponse(num_items=len(motorcycles),
                                   items=motorcycles,
-                                  pagination_cursor=cursor)
+                                  page=page,
+                                  has_next_page=has_next_page)
 
 
 @router.get('/motorcycle/{item_id}')
