@@ -7,8 +7,16 @@ import {getMotorcycles} from "../../controllers/storeController";
 import "./styles.css"
 import {isAdmin} from "../../utils/utils";
 import Button from "react-bootstrap/Button";
+import {
+  useNavigate,
+  createSearchParams,
+} from 'react-router-dom';
 
 export default function ItemList(props) {
+    const navigate = useNavigate();
+
+    const defaultParams = Object.freeze({'page': 1, 'showSold': false, 'showStatus': 'active'});
+    const params = {'page': 1, 'showSold': false, 'showStatus': 'active'};
     const [motorcycleResponse, setMotorcycleResponse] = React.useState(null);
 
     const selectedForSaleOptionClass = 'product-grid-header-show-active';
@@ -18,17 +26,44 @@ export default function ItemList(props) {
 
     // componentDidMount()
     React.useEffect(() => {
-        getMotorcyclesOnLoad();
+        getQueryParamsOnLoad();
+        updateMotorcycleList();
         setButtonsOnLoad();
     }, []);
 
-    function getMotorcyclesOnLoad() {
+    function getQueryParamsOnLoad() {
         const urlParams = new URLSearchParams(window.location.search);
-        const showSold = urlParams.has('showSold') ? urlParams.get('showSold') : 'false';
-        const showStatus = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
-        const page = urlParams.has('page') ? urlParams.get('page') : '1';
+        params['page'] = urlParams.has('page') ? urlParams.get('page') : '1';
 
-        getMotorcycles(showSold, showStatus, page).then(motorcycles => {
+        params['showSold'] = urlParams.has('showSold') ? urlParams.get('showSold') : false;
+        params['showStatus'] = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
+        params['page'] = urlParams.has('page') ? urlParams.get('page') : 1;
+    }
+
+    function updateMotorcycleList() {
+        /**
+         * Update the motorcycle list and query params to represent the motorcycles being shown
+         */
+
+        /**
+         * Create a dictionary of ONLY the query params that are not default
+         * Ex: if we are only showing for sale motorcycles, we don't need that in the query params
+         * since that is default behavior
+         */
+        let p = {};
+        for (const param in params) {
+            if (defaultParams[param] !== params[param]) {
+                console.log(defaultParams[param], params[param])
+                p[param] = params[param];
+            }
+        }
+
+        navigate({
+            pathname: '',
+            search: `?${createSearchParams(p)}`
+        })
+
+        getMotorcycles(params['showSold'], params['showStatus'], params['page']).then(motorcycles => {
             setMotorcycleResponse(motorcycles);
         })
     }
@@ -59,9 +94,11 @@ export default function ItemList(props) {
         } else {
             showStatus = 'inactive';
         }
-        getMotorcycles(showSold, showStatus, page).then(motorcycles => {
-            setMotorcycleResponse(motorcycles);
-        });
+
+        params['showStatus'] = showStatus;
+        params['showSold'] = showSold;
+        params['page'] = page;
+        updateMotorcycleList();
     }
 
     function showMotorcyclesHandler(showSold) {
@@ -72,7 +109,7 @@ export default function ItemList(props) {
             showSoldButton.current.classList.remove(selectedForSaleOptionClass);
             showForSaleButton.current.classList.add(selectedForSaleOptionClass);
         }
-        onMotorcycleSearchChange();
+        onMotorcycleSearchChange(1);
     }
 
     function toggleShowInactiveMotorcycles() {
@@ -81,7 +118,7 @@ export default function ItemList(props) {
         } else {
             showInactiveButton.current.classList.add(selectedForSaleOptionClass);
         }
-        onMotorcycleSearchChange();
+        onMotorcycleSearchChange(1);
     }
 
     function showBackPageButton() {
@@ -93,20 +130,17 @@ export default function ItemList(props) {
     }
 
     function goToNextPage() {
-        setMotorcycleResponse(null);
-        getMotorcycles(false, 'active', motorcycleResponse.page + 1).then(motorcycles => {
-            setMotorcycleResponse(motorcycles);
-        })
+        onMotorcycleSearchChange(motorcycleResponse.page + 1);
     }
 
     function goToPreviousPage() {
-        getMotorcycles(false, 'active', motorcycleResponse.page - 1).then(motorcycles => {
-            setMotorcycleResponse(motorcycles);
-        })
+        onMotorcycleSearchChange(motorcycleResponse.page - 1);
     }
 
     function addNewMotorcycle() {
-        window.location.href = '/motorcycle/new'
+        navigate({
+            pathname: '/motorcycle/new',
+        })
     }
 
     let listBody = (<h3>Loading</h3>);
