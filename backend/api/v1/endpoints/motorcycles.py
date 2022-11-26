@@ -10,7 +10,7 @@ from backend import crud, models, schemas
 from backend.enums import ProductStatusEnum
 from backend.exceptions import FileUploadError
 from backend.utils import deps
-from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image
+from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image, delete_image
 
 router = APIRouter()
 
@@ -139,8 +139,12 @@ def delete_item(
     """
     Delete an item.
     """
-    item = crud.motorcycle.get(db=db, id=id)
+    item: schemas.Motorcycle = crud.motorcycle.get(db=db, id=id)
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
+
+    for image in item.images:
+        delete_image(image)
+
     item = crud.motorcycle.remove(db=db, id=id)
     return item

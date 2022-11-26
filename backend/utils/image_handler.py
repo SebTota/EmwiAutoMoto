@@ -62,7 +62,7 @@ def delete_image(image: Image):
     s3: boto3.client = _get_s3_client()
     s3.delete_objects(Bucket=BUCKET_NAME, Delete={
         'Objects': [
-            {'Key': image.image.split('/')[-1]},
-            {'Key': image.thumbnail.split('/')[-1]}
+            {'Key': image.image_url.split('/')[-1]},
+            {'Key': image.thumbnail_url.split('/')[-1]}
         ]
     })
