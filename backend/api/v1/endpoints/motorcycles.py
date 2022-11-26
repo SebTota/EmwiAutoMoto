@@ -65,7 +65,7 @@ def add_product_image(
         db: Session = Depends(deps.get_db),
         id: str,
         file: UploadFile,
-        # current_user: models.User = Depends(deps.get_current_active_superuser),
+        current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Add a product image to a motorcycle.
