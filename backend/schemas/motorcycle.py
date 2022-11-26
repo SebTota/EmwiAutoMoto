@@ -92,3 +92,10 @@ class Motorcycle(MotorcycleInDBBase):
 # Properties stored in DB
 class MotorcycleInDB(MotorcycleInDBBase):
     pass
+
+
+# Used for pagination
+class MotorcycleList(BaseModel):
+    cursor: Optional[int]  # If None, that means we are on the last page
+    has_next_page: bool
+    motorcycles: List[Motorcycle]

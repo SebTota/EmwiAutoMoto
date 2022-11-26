@@ -1,12 +1,13 @@
-import datetime
-from typing import Any, Dict, Union
+from typing import Any, Dict, Union, List
 import string
 import random
 
 from fastapi.encoders import jsonable_encoder
 from sqlalchemy.orm import Session
+from sqlalchemy import desc
 
 from backend.crud.base import CRUDBase
+from backend.enums import ProductStatusEnum
 from backend.models.motorcycle import Motorcycle
 from backend.schemas.motorcycle import MotorcycleCreate, MotorcycleUpdate
 
@@ -33,6 +34,18 @@ class CRUDMotorcycle(CRUDBase[Motorcycle, MotorcycleCreate, MotorcycleUpdate]):
         else:
             update_data = obj_in.dict(exclude_unset=True)
         return super().update(db, db_obj=db_obj, obj_in=update_data)
+
+    def get_multi_with_filters(
+        self, db: Session, *, skip: int = 0, limit: int = 100,
+            show_sold: bool = False, show_status: ProductStatusEnum = ProductStatusEnum.active.value
+    ) -> List[Motorcycle]:
+        return db.query(self.model)\
+            .where(Motorcycle.sold == show_sold)\
+            .where(Motorcycle.status == show_status) \
+            .order_by(desc(Motorcycle.date_created)) \
+            .offset(skip)\
+            .limit(limit)\
+            .all()
 
 
 motorcycle = CRUDMotorcycle(Motorcycle)

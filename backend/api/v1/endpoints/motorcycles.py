@@ -7,6 +7,7 @@ from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
 
 from backend import crud, models, schemas
+from backend.enums import ProductStatusEnum
 from backend.exceptions import FileUploadError
 from backend.utils import deps
 from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image
@@ -14,17 +15,36 @@ from backend.utils.image_handler import upload_image_to_cloud_storage, create_th
 router = APIRouter()
 
 
-@router.get("/", response_model=List[schemas.Motorcycle])
+@router.get("/", response_model=schemas.MotorcycleList)
 def read_items(
         db: Session = Depends(deps.get_db),
-        skip: int = 0,
+        show_sold: bool = False,
+        show_status: ProductStatusEnum = ProductStatusEnum.active.value,
+        cursor: int = 0,
         limit: int = 15,
 ) -> Any:
     """
     Retrieve motorcycle items.
     """
-    items = crud.motorcycle.get_multi(db, skip=skip, limit=limit)
-    return items
+    items = crud.motorcycle.get_multi_with_filters(db, skip=cursor, limit=limit + 1,
+                                                   show_sold=show_sold, show_status=show_status)
+
+    if not items:
+        return schemas.MotorcycleList(cursor=None,
+                                      has_next_page=False,
+                                      motorcycles=[])
+
+    has_next_page = True if len(items) == limit + 1 else False
+    new_cursor = cursor + limit if has_next_page else None
+
+    # Remove the extra motorcycle we got as a pagination test IFF there is a next page
+    # (indicating we received +1 results back from db)
+    if has_next_page:
+        items.pop()
+
+    return schemas.MotorcycleList(cursor=new_cursor,
+                                  has_next_page=has_next_page,
+                                  motorcycles=items)
 
 
 @router.post("/", response_model=schemas.Motorcycle)

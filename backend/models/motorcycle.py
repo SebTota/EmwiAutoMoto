@@ -11,8 +11,8 @@ if TYPE_CHECKING:
 
 class Motorcycle(Base):
     id = Column(String(12), primary_key=True, index=True)
-    date_created = Column(DateTime, server_default=func.now())
-    date_last_updated = Column(DateTime, server_default=func.now(), onupdate=func.current_timestamp())
+    date_created = Column(DateTime, server_default=func.now(), index=True)
+    date_last_updated = Column(DateTime, server_default=func.now(), onupdate=func.current_timestamp(), index=True)
     year = Column(Integer)
     make = Column(String(50))
     model = Column(String(50))
@@ -25,7 +25,7 @@ class Motorcycle(Base):
     color = Column(String(20))
     price = Column(Integer)
     description = Column(String)
-    sold = Column(Boolean(), default=False)
+    sold = Column(Boolean(), index=True)
     status = Column(String(10), index=True)
 
     # Store a copy of the current thumbnail to prevent a need to get all images
