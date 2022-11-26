@@ -2,8 +2,6 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
-from backend.enums import OdometerMeasurementEnum, ProductStatusEnum
-
 
 # Shared properties
 class ImageBase(BaseModel):
@@ -24,8 +22,8 @@ class ImageUpdate(ImageBase):
 
 # Properties shared by models stored in DB
 class ImageInDBBase(ImageBase):
-    id: int
-    motorcycle_id: int
+    id: str
+    motorcycle_id: str
 
     class Config:
         orm_mode = True
