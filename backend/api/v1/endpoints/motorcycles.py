@@ -31,7 +31,7 @@ def create_item(
         *,
         db: Session = Depends(deps.get_db),
         item_in: schemas.MotorcycleCreate,
-        # current_user: models.User = Depends(deps.get_current_active_superuser),
+        current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new motorcycle.
@@ -46,7 +46,7 @@ def update_item(
         db: Session = Depends(deps.get_db),
         id: str,
         item_in: schemas.MotorcycleUpdate,
-        # current_user: models.User = Depends(deps.get_current_active_superuser),
+        current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Update a motorcycle.
