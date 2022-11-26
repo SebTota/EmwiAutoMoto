@@ -23,7 +23,6 @@ class ImageUpdate(ImageBase):
 # Properties shared by models stored in DB
 class ImageInDBBase(ImageBase):
     id: str
-    motorcycle_id: str
 
     class Config:
         orm_mode = True
@@ -36,4 +35,4 @@ class Image(ImageInDBBase):
 
 # Properties stored in DB
 class ImageInDB(ImageInDBBase):
-    pass
+    motorcycle_id: str
