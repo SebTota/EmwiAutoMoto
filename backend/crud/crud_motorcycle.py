@@ -34,14 +34,5 @@ class CRUDMotorcycle(CRUDBase[Motorcycle, MotorcycleCreate, MotorcycleUpdate]):
             update_data = obj_in.dict(exclude_unset=True)
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
-    def add_image(
-            self, db: Session, *, db_obj: Motorcycle, obj_in: Union[MotorcycleUpdate, Dict[str, Any]]
-    ) -> Motorcycle:
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
-        return super().update(db, db_obj=db_obj, obj_in=update_data)
-
 
 motorcycle = CRUDMotorcycle(Motorcycle)
