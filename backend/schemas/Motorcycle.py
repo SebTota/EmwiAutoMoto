@@ -5,7 +5,7 @@ from typing import List, Union, Any, Optional
 
 from .Image import Image
 from .Video import Video
-from backend.models.enums import OdometerMeasurementEnum, ProductStatusEnum
+from backend.enums import OdometerMeasurementEnum, ProductStatusEnum
 from backend.utils.conversions import miles_to_kilometers
 
 

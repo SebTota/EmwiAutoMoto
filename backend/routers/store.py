@@ -2,15 +2,15 @@ from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
 
 from backend.exceptions import NoProductFoundError
-from backend.models.controllers import MotorcycleController
-from backend.models.enums import ProductStatusEnum
-from backend.models.schemas import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
+from backend.controllers import MotorcycleController
+from backend.enums import ProductStatusEnum
+from backend.schemas import Motorcycle, UpdateMotorcycle, MotorcycleListResponse
 
 router = APIRouter(tags=["Store"])
 
 
 @router.get('/motorcycles', response_model=MotorcycleListResponse)
-def get_motorcycles(limit: int = 9, show_sold: bool = False,
+def get_motorcycles(limit: int = 1, show_sold: bool = False,
                     show_status: ProductStatusEnum = ProductStatusEnum.active.value, page: int = 1):
     start_index = (limit * page) - limit
     motorcycles_controller = MotorcycleController.collection.offset(start_index)

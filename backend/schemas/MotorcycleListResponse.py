@@ -1,7 +1,7 @@
 from typing import List, Union
 from pydantic import BaseModel
 
-from backend.models.schemas import Motorcycle
+from backend.schemas import Motorcycle
 
 
 class MotorcycleListResponse(BaseModel):

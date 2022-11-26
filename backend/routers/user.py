@@ -1,10 +1,14 @@
+from typing import Any, List
 import datetime
 
 from fastapi import APIRouter, HTTPException, Depends
 from fastapi_jwt_auth import AuthJWT
+from sqlalchemy.orm import Session
 
-from backend.models.schemas import AuthRequest, LoggedInUser
-from backend.models.controllers import UserController
+from backend import crud, schemas, models
+from backend.utils import deps
+from backend.schemas import AuthRequest, LoggedInUser
+from backend.controllers import UserController
 from backend.utils.Auth import Auth
 
 router = APIRouter(tags=["User"])
@@ -45,3 +49,34 @@ def user(Authorize: AuthJWT = Depends()):
     return {
         'username': Authorize.get_jwt_subject()
     }
+
+
+@router.post("/", response_model=schemas.User)
+def create_user(
+    *,
+    db: Session = Depends(deps.get_db),
+    user_in: schemas.UserCreate,
+    # current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Create new user.
+    """
+    user = crud.user.get_by_email(db, email=user_in.email)
+    if user:
+        raise HTTPException(
+            status_code=400,
+            detail="The user with this username already exists in the system.",
+        )
+    user = crud.user.create(db, obj_in=user_in)
+    return user
+
+
+@router.get("/me", response_model=schemas.User)
+def read_user_me(
+    db: Session = Depends(deps.get_db),
+    current_user: models.User = Depends(deps.get_current_active_user),
+) -> Any:
+    """
+    Get current user.
+    """
+    return current_user

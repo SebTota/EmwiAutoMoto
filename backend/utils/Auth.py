@@ -1,7 +1,7 @@
 import bcrypt
 
-from backend.models.schemas import AuthRequest
-from backend.models.controllers import UserController
+from backend.schemas import AuthRequest
+from backend.controllers import UserController
 
 
 class Auth:
