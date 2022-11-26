@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 
 from backend import crud, models, schemas
 from backend.utils import deps
-from backend.core.config import settings
 
 router = APIRouter()
 

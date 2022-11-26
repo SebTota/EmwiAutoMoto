@@ -1,6 +1,5 @@
 from dotenv import load_dotenv
-
-load_dotenv()
+load_dotenv()  # noqa
 
 from fastapi import FastAPI
 
