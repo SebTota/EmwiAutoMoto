@@ -104,6 +104,11 @@ def add_product_image(
         img.close()
         file.file.close()
 
+        # Set the photo as the thumbnail if the item doesn't already have a thumbnail
+        if motorcycle.thumbnail_url is None:
+            update: schemas.MotorcycleUpdate = schemas.MotorcycleUpdate(thumbnail_url=thumbnail_url)
+            motorcycle = crud.motorcycle.update(db=db, db_obj=motorcycle, obj_in=update)
+
         image: schemas.ImageCreate = schemas.ImageCreate(image_url=image_url, thumbnail_url=thumbnail_url)
         i = crud.image.create_and_add_to_motorcycle(db=db, db_obj=motorcycle, obj_in=image)
         return i
