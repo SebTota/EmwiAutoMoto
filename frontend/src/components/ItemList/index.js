@@ -15,8 +15,8 @@ import {
 export default function ItemList(props) {
     const navigate = useNavigate();
 
-    const defaultParams = Object.freeze({'page': 1, 'showSold': false, 'showStatus': 'active'});
-    const params = {'page': 1, 'showSold': false, 'showStatus': 'active'};
+    const defaultParams = Object.freeze({'page': 1, 'show_sold': false, 'show_status': 'active'});
+    const params = {'page': 1, 'show_sold': false, 'show_status': 'active'};
 
     const [waitingForApiResponse, setWaitingForApiResponse] = React.useState(true);
     const [motorcycleResponse, setMotorcycleResponse] = React.useState(null);
@@ -35,10 +35,9 @@ export default function ItemList(props) {
 
     function getQueryParamsOnLoad() {
         const urlParams = new URLSearchParams(window.location.search);
-        params['page'] = urlParams.has('page') ? urlParams.get('page') : '1';
 
-        params['showSold'] = urlParams.has('showSold') ? urlParams.get('showSold') : false;
-        params['showStatus'] = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
+        params['show_sold'] = urlParams.has('show_sold') ? urlParams.get('show_sold') : false;
+        params['show_status'] = urlParams.has('show_status') ? urlParams.get('show_status') : 'active';
         params['page'] = urlParams.has('page') ? urlParams.get('page') : 1;
     }
 
@@ -65,7 +64,9 @@ export default function ItemList(props) {
             search: `?${createSearchParams(p)}`
         })
 
-        getMotorcycles(params['showSold'], params['showStatus'], params['page']).then(motorcycles => {
+        setWaitingForApiResponse(true);
+        getMotorcycles(params['show_sold'], params['show_status'], params['page']).then(motorcycles => {
+            console.log(motorcycles)
             setMotorcycleResponse(motorcycles);
             setWaitingForApiResponse(false);
         })
@@ -73,8 +74,8 @@ export default function ItemList(props) {
 
     function setButtonsOnLoad() {
         const urlParams = new URLSearchParams(window.location.search);
-        const showSold = urlParams.has('showSold') ? urlParams.get('showSold') : 'false';
-        const showStatus = urlParams.has('showStatus') ? urlParams.get('showStatus') : 'active';
+        const showSold = urlParams.has('show_sold') ? urlParams.get('show_sold') : 'false';
+        const showStatus = urlParams.has('show_status') ? urlParams.get('show_status') : 'active';
 
         if (showSold === 'true') {
             showSoldButton.current.classList.add('product-grid-header-show-active')
@@ -98,8 +99,8 @@ export default function ItemList(props) {
             showStatus = 'inactive';
         }
 
-        params['showStatus'] = showStatus;
-        params['showSold'] = showSold;
+        params['show_status'] = showStatus;
+        params['show_sold'] = showSold;
         params['page'] = page;
         updateMotorcycleList();
     }
@@ -147,19 +148,27 @@ export default function ItemList(props) {
     }
 
     let listBody = (<h3>Loading</h3>);
-    if (!waitingForApiResponse && motorcycleResponse && motorcycleResponse.items) {
-        listBody = (<div className="row">
-            {
-                motorcycleResponse.items.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
-                    <ListItem item={motorcycle}/></div>)
+    if (!waitingForApiResponse) {
+        if (motorcycleResponse && motorcycleResponse.motorcycles) {
+            if (motorcycleResponse.motorcycles.length > 0) {
+                listBody = (<div className="row">
+                                {
+                                    motorcycleResponse.motorcycles.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
+                                        <ListItem item={motorcycle}/></div>)
+                                }
+                            </div>)
+            } else {
+                listBody = (<div className="alert alert-warning" role="alert">
+                            Looks like there are no motorcycles with those search filters available right now!
+                            </div>)
             }
-        </div>)
-    } else if (!waitingForApiResponse) {
-        listBody = (
-            <div className="alert alert-danger" role="alert">
-            Uh oh! An error occurred. Please try again later.
-            </div>
-        )
+        } else {
+            listBody = (
+                <div className="alert alert-danger" role="alert">
+                Uh oh! An error occurred. Please try again later.
+                </div>
+            )
+        }
     }
 
     let adminActions = <div></div>
