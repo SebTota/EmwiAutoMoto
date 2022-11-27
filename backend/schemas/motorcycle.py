@@ -23,7 +23,7 @@ class MotorcycleBase(BaseModel):
     description: Optional[str] = None
     sold: Optional[bool] = None
     status: Optional[ProductStatusEnum] = None
-    thumbnail: Optional[str] = None
+    thumbnail_url: Optional[str] = None
     images: Optional[List[Image]] = []
 
     class Config:
