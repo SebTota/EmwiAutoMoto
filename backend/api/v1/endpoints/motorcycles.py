@@ -20,29 +20,30 @@ def read_items(
         db: Session = Depends(deps.get_db),
         show_sold: bool = False,
         show_status: ProductStatusEnum = ProductStatusEnum.active.value,
-        cursor: int = 0,
+        page: int = 0,
         limit: int = 15,
 ) -> Any:
     """
     Retrieve motorcycle items.
     """
-    items = crud.motorcycle.get_multi_with_filters(db, skip=cursor, limit=limit + 1,
+    offset: int = (page - 1) * limit
+    items: List[schemas.Motorcycle] = crud.motorcycle.get_multi_with_filters(db, offset=offset, limit=limit + 1,
                                                    show_sold=show_sold, show_status=show_status)
 
     if not items:
-        return schemas.MotorcycleList(cursor=None,
+        return schemas.MotorcycleList(page=None,
                                       has_next_page=False,
                                       motorcycles=[])
 
     has_next_page = True if len(items) == limit + 1 else False
-    new_cursor = cursor + limit if has_next_page else None
 
     # Remove the extra motorcycle we got as a pagination test IFF there is a next page
     # (indicating we received +1 results back from db)
     if has_next_page:
         items.pop()
 
-    return schemas.MotorcycleList(next_page_cursor=new_cursor,
+    return schemas.MotorcycleList(page=page,
+                                  has_next_page=has_next_page,
                                   motorcycles=items)
 
 

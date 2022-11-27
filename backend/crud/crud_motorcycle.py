@@ -36,14 +36,14 @@ class CRUDMotorcycle(CRUDBase[Motorcycle, MotorcycleCreate, MotorcycleUpdate]):
         return super().update(db, db_obj=db_obj, obj_in=update_data)
 
     def get_multi_with_filters(
-        self, db: Session, *, skip: int = 0, limit: int = 100,
+        self, db: Session, *, offset: int = 0, limit: int = 100,
             show_sold: bool = False, show_status: ProductStatusEnum = ProductStatusEnum.active.value
     ) -> List[Motorcycle]:
         return db.query(self.model)\
             .where(Motorcycle.sold == show_sold)\
             .where(Motorcycle.status == show_status) \
             .order_by(desc(Motorcycle.date_created)) \
-            .offset(skip)\
+            .offset(offset)\
             .limit(limit)\
             .all()
 

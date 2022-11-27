@@ -96,5 +96,6 @@ class MotorcycleInDB(MotorcycleInDBBase):
 
 # Used for pagination
 class MotorcycleList(BaseModel):
-    next_page_cursor: Optional[int]
+    page: Optional[int]
+    has_next_page: bool
     motorcycles: List[Motorcycle]
