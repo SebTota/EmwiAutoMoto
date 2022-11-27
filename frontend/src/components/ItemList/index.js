@@ -144,13 +144,19 @@ export default function ItemList(props) {
     }
 
     let listBody = (<h3>Loading</h3>);
-    if (motorcycleResponse !== null) {
+    if (motorcycleResponse && motorcycleResponse.items) {
         listBody = (<div className="row">
             {
                 motorcycleResponse.items.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
                     <ListItem item={motorcycle}/></div>)
             }
         </div>)
+    } else {
+        listBody = (
+            <div className="alert alert-danger" role="alert">
+            Uh oh! An error occurred. Please try again later.
+            </div>
+        )
     }
 
     let adminActions = <div></div>
