@@ -31,7 +31,7 @@ function HeaderNavbar() {
         if (isAdmin) {
             adminMessage = <Navbar.Text>Signed in as: {getUsernameOfSignedInUser()}</Navbar.Text>
         } else {
-            adminMessage = <LinkContainer to='/login'><Navbar.Link>Login</Navbar.Link></LinkContainer>
+            adminMessage = <LinkContainer to='/login'><Nav.Link>Login</Nav.Link></LinkContainer>
         }
     }
 
