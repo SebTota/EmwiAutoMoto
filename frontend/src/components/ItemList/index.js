@@ -17,6 +17,8 @@ export default function ItemList(props) {
 
     const defaultParams = Object.freeze({'page': 1, 'showSold': false, 'showStatus': 'active'});
     const params = {'page': 1, 'showSold': false, 'showStatus': 'active'};
+
+    const [waitingForApiResponse, setWaitingForApiResponse] = React.useState(true);
     const [motorcycleResponse, setMotorcycleResponse] = React.useState(null);
 
     const selectedForSaleOptionClass = 'product-grid-header-show-active';
@@ -65,6 +67,7 @@ export default function ItemList(props) {
 
         getMotorcycles(params['showSold'], params['showStatus'], params['page']).then(motorcycles => {
             setMotorcycleResponse(motorcycles);
+            setWaitingForApiResponse(false);
         })
     }
 
@@ -144,14 +147,14 @@ export default function ItemList(props) {
     }
 
     let listBody = (<h3>Loading</h3>);
-    if (motorcycleResponse && motorcycleResponse.items) {
+    if (!waitingForApiResponse && motorcycleResponse && motorcycleResponse.items) {
         listBody = (<div className="row">
             {
                 motorcycleResponse.items.map((motorcycle) => <div key={motorcycle.id} className="col-sm-6 col-md-6 col-lg-4">
                     <ListItem item={motorcycle}/></div>)
             }
         </div>)
-    } else {
+    } else if (!waitingForApiResponse) {
         listBody = (
             <div className="alert alert-danger" role="alert">
             Uh oh! An error occurred. Please try again later.
