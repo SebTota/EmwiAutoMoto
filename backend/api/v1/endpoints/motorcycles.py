@@ -42,8 +42,7 @@ def read_items(
     if has_next_page:
         items.pop()
 
-    return schemas.MotorcycleList(cursor=new_cursor,
-                                  has_next_page=has_next_page,
+    return schemas.MotorcycleList(next_page_cursor=new_cursor,
                                   motorcycles=items)
 
 
