@@ -1,4 +1,4 @@
-from sqlalchemy import Boolean, Column, Integer, String
+from sqlalchemy import Boolean, Column, Integer, String, DateTime
 
 from backend.db.base_class import Base
 
@@ -10,5 +10,7 @@ class User(Base):
     username = Column(String(20), index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
+    refresh_token = Column(String(60))
+    refresh_token_expires = Column(DateTime)
     is_active = Column(Boolean(), default=True)
     is_superuser = Column(Boolean(), default=False)

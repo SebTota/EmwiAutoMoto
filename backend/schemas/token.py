@@ -1,11 +1,15 @@
+import datetime
 from typing import Optional
 
 from pydantic import BaseModel
 
 
 class Token(BaseModel):
-    access_token: str
     token_type: str
+    access_token: str
+    access_token_expires: datetime.datetime
+    refresh_token: str
+    refresh_token_expires: datetime.datetime
 
 
 class TokenPayload(BaseModel):

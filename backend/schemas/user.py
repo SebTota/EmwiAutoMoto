@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional
 
 from pydantic import BaseModel, EmailStr, constr
@@ -27,6 +28,12 @@ class UserUpdate(UserBase):
     password: Optional[str] = None
 
 
+# Updated on the user that only the backend can perform
+class UserUpdateBackend(UserUpdate):
+    refresh_token: Optional[str] = None
+    refresh_token_expires: Optional[datetime.datetime] = None
+
+
 class UserInDBBase(UserBase):
     id: Optional[int] = None
 
@@ -42,3 +49,5 @@ class User(UserInDBBase):
 # Additional properties stored in DB
 class UserInDB(UserInDBBase):
     hashed_password: str
+    refresh_token: Optional[str] = None
+    refresh_token_expires: Optional[datetime.datetime] = None

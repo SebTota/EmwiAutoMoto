@@ -8,15 +8,12 @@ from sqlalchemy.orm import Session
 from backend import crud, models, schemas
 from backend.utils import deps
 from backend.core import security
-from backend.core.config import settings
 
 router = APIRouter()
 
 
 @router.post("/login/access-token", response_model=schemas.Token)
-def login_access_token(
-    db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()
-) -> Any:
+def login_access_token(db: Session = Depends(deps.get_db), form_data: OAuth2PasswordRequestForm = Depends()) -> Any:
     """
     OAuth2 compatible token login, get an access token for future requests
     """
@@ -27,13 +24,8 @@ def login_access_token(
         raise HTTPException(status_code=400, detail="Incorrect username or password")
     elif not crud.user.is_active(user):
         raise HTTPException(status_code=400, detail="Inactive user")
-    access_token_expires = timedelta(minutes=settings.ACCESS_TOKEN_EXPIRE_MINUTES)
-    return {
-        "access_token": security.create_access_token(
-            user.id, expires_delta=access_token_expires
-        ),
-        "token_type": "bearer",
-    }
+
+    return security.create_auth_token(db=db, user=user)
 
 
 @router.post("/login/test-token", response_model=schemas.User)
