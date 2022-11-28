@@ -64,13 +64,14 @@ export default function ItemPage(props) {
 
     function getImages() {
         let images = motorcycle.images;
-        if (images === null) {
+        if (!images) {
             return [];
         }
+
         images.map(image => {
-            if (image.hasOwnProperty('image')) {
-                image['original'] = image['image'];
-                delete image['image'];
+            if (image.hasOwnProperty('image_url')) {
+                image['original'] = image['image_url'];
+                delete image['image_url'];
                 return image;
             }
             return image;
