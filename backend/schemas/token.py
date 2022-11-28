@@ -14,3 +14,9 @@ class Token(BaseModel):
 
 class TokenPayload(BaseModel):
     sub: Optional[int] = None
+
+
+# Request data when trying to refresh auth token using refresh token
+class TokenRefreshRequest(BaseModel):
+    username: str
+    refresh_token: str

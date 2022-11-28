@@ -1,4 +1,3 @@
-from datetime import timedelta
 from typing import Any
 
 from fastapi import APIRouter, Body, Depends, HTTPException
@@ -34,3 +33,21 @@ def test_token(current_user: models.User = Depends(deps.get_current_user)) -> An
     Test access token
     """
     return current_user
+
+
+@router.post("/login/refresh-token", response_model=schemas.Token)
+def refresh_access_token(refresh_token_request: schemas.TokenRefreshRequest, db: Session = Depends(deps.get_db)) -> Any:
+    """
+    Refresh access token.
+    """
+    user = crud.user.get_by_username(db=db, username=refresh_token_request.username)
+    if not user:
+        # Do not give error specific to username being invalid to avoid username guessing abuse
+        raise HTTPException(status_code=400, detail="Invalid refresh credentials")
+    elif not crud.user.is_active(user):
+        raise HTTPException(status_code=400, detail="Inactive user")
+
+    if security.verify_refresh_token_valid(user, refresh_token_request.refresh_token):
+        return security.create_auth_token(db=db, user=user)
+    else:
+        raise HTTPException(status_code=400, detail="Invalid refresh credentials")

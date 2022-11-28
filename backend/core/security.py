@@ -41,6 +41,10 @@ def create_auth_token(db: Session, user: models.User) -> schemas.Token:
                          refresh_token_expires=refresh_token_expires)
 
 
+def verify_refresh_token_valid(user: models.User, refresh_token: str) -> bool:
+    return user.refresh_token_expires > datetime.utcnow() and user.refresh_token == refresh_token
+
+
 def verify_password(plain_password: str, hashed_password: str) -> bool:
     return pwd_context.verify(plain_password, hashed_password)
 
