@@ -1,13 +1,13 @@
 from typing import Optional
 
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, constr
 
 
 # Shared properties
 class UserBase(BaseModel):
-    first_name: Optional[str] = None
-    last_name: Optional[str] = None
-    username: Optional[str] = None
+    first_name: Optional[constr(max_length=20)] = None
+    last_name: Optional[constr(max_length=20)] = None
+    username: Optional[constr(max_length=20)] = None
     email: Optional[EmailStr] = None
     is_active: Optional[bool] = True
     is_superuser: Optional[bool] = False

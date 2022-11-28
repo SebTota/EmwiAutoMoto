@@ -5,9 +5,9 @@ from backend.db.base_class import Base
 
 class User(Base):
     id = Column(Integer, primary_key=True, index=True)
-    first_name = Column(String)
-    last_name = Column(String)
-    username = Column(String, index=True)
+    first_name = Column(String(20))
+    last_name = Column(String(20))
+    username = Column(String(20), index=True)
     email = Column(String, unique=True, index=True, nullable=False)
     hashed_password = Column(String, nullable=False)
     is_active = Column(Boolean(), default=True)
