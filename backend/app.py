@@ -2,6 +2,7 @@ from dotenv import load_dotenv
 load_dotenv()  # noqa
 
 from fastapi import FastAPI
+from starlette.middleware.cors import CORSMiddleware
 
 from backend.db.session import SessionLocal
 from backend.db.init_db import init_db
@@ -12,4 +13,13 @@ db = SessionLocal()
 init_db(db)
 
 app = FastAPI()
+
+app.add_middleware(
+        CORSMiddleware,
+        allow_origins=["http://localhost", "http://localhost:3000"],
+        allow_credentials=True,
+        allow_methods=["*"],
+        allow_headers=["*"],
+    )
+
 app.include_router(api_router, prefix=settings.API_V1_STR)
