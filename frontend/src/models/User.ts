@@ -1,4 +1,3 @@
-import {Token} from './Token'
 
 export class User {
     id: number;
@@ -8,10 +7,9 @@ export class User {
     email: string;
     is_active: boolean;
     is_superuser: boolean;
-    auth_token: Token;
 
     constructor(id: number, first_name: string, last_name: string, username: string,
-                email: string, is_active: boolean, is_superuser: boolean, auth_token: Token) {
+                email: string, is_active: boolean, is_superuser: boolean) {
         this.id = id;
         this.first_name = first_name;
         this.last_name = last_name;
@@ -19,7 +17,6 @@ export class User {
         this.email = email;
         this.is_active = is_active;
         this.is_superuser = is_superuser;
-        this.auth_token = auth_token;
     }
 
     private toObject() {
@@ -30,8 +27,7 @@ export class User {
             "username": this.username,
             "email": this.email,
             "is_active": this.is_active,
-            "is_superuser": this.is_superuser,
-            "auth_token": this.auth_token.toObject()
+            "is_superuser": this.is_superuser
         }
     }
 
@@ -49,12 +45,7 @@ export class User {
           user.username,
           user.email,
           user.is_active,
-          user.is_superuser,
-          new Token(user.auth_token.token_type,
-              user.auth_token.access_token,
-              user.auth_token.access_token_expires,
-              user.auth_token.refresh_token,
-              user.auth_token.refresh_token_expires)
+          user.is_superuser
         );
     }
 
