@@ -5,33 +5,37 @@ import {Nav} from "react-bootstrap";
 import {LinkContainer} from 'react-router-bootstrap';
 
 import "./styles.css"
+import {Auth} from "../../models/Auth";
 
 function HeaderNavbar() {
     const [isCheckingAdmin, setIsCheckingAdmin] = React.useState(true);
-    const [isAdmin, setIsAdmin] = React.useState(false);
+    const [isSignedIn, setIsSignedIn] = React.useState(false);
 
-    // componentDidMount()
     React.useEffect(() => {
-        if (isSignedIn()) {
-            setIsAdmin(true);
-        }
+        getUserIfSignedIn();
         setIsCheckingAdmin(false);
     }, []);
 
-    function isSignedIn() {
-        return localStorage.getItem('emwi-auto-moto-username') !== null;
+    function getUserIfSignedIn() {
+        const auth = Auth.getAuthFromLocalStorage();
+        if (auth && auth.token.isValid()) {
+            setIsSignedIn(true);
+        }
     }
 
     function getUsernameOfSignedInUser() {
-        return localStorage.getItem('emwi-auto-moto-username');
+        const auth = Auth.getAuthFromLocalStorage();
+        if (auth && auth.token.isValid()) {
+            return auth.user.username;
+        }
     }
 
-    let adminMessage;
+    let loginComponent;
     if (!isCheckingAdmin) {
-        if (isAdmin) {
-            adminMessage = <Navbar.Text>Signed in as: {getUsernameOfSignedInUser()}</Navbar.Text>
+        if (isSignedIn) {
+            loginComponent = <Navbar.Text>Signed in as: {getUsernameOfSignedInUser()}</Navbar.Text>
         } else {
-            adminMessage = <LinkContainer to='/login'><Nav.Link>Login</Nav.Link></LinkContainer>
+            loginComponent = <LinkContainer to='/login'><Nav.Link>Login</Nav.Link></LinkContainer>
         }
     }
 
@@ -47,7 +51,7 @@ function HeaderNavbar() {
                         </Nav>
                         <Nav className="justify-content-end flex-grow-1 pe-3">
                             <LinkContainer to='/contact'><Nav.Link>Contact</Nav.Link></LinkContainer>
-                            {adminMessage}
+                            {loginComponent}
                         </Nav>
                     </Navbar.Collapse>
                 </Container>
