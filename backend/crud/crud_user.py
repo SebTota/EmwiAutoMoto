@@ -1,6 +1,6 @@
-
 from typing import Any, Dict, Optional, Union
 
+from sqlalchemy import or_
 from sqlalchemy.orm import Session
 
 from backend.core.security import get_password_hash, verify_password
@@ -10,6 +10,9 @@ from backend.schemas.user import UserCreate, UserUpdate
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
+    def get_by_email_or_username(self, db: Session, *, email: str, username: str) -> Optional[User]:
+        return db.query(User).filter(or_(User.email == email, User.username == username)).first()
+
     def get_by_email(self, db: Session, *, email: str) -> Optional[User]:
         return db.query(User).filter(User.email == email).first()
 
@@ -30,7 +33,7 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
         return db_obj
 
     def update(
-        self, db: Session, *, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]
+            self, db: Session, *, db_obj: User, obj_in: Union[UserUpdate, Dict[str, Any]]
     ) -> User:
         if isinstance(obj_in, dict):
             update_data = obj_in
