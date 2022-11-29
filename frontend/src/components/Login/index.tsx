@@ -2,9 +2,12 @@ import React, {useState} from 'react';
 import Button from 'react-bootstrap/Button';
 import Form from 'react-bootstrap/Form';
 import Alert from 'react-bootstrap/Alert';
-import {login} from "../../controllers/tsUserController"
+import {login, getUserDetailWithAuthToken} from "../../controllers/tsUserController"
 
 import "./styles.css"
+import {Token} from "../../models/Token";
+import {Auth} from "../../models/Auth";
+import {User} from "../../models/User";
 
 export default function Login(props: any) {
     const [username, setUsername] = useState('');
@@ -17,13 +20,22 @@ export default function Login(props: any) {
         setShowPasswordAlert(false);
 
         login(username, password).then((data) => {
-            console.log("yay! We're signed in. Auth: ", data);
-            console.log(data);
-            // localStorage.setItem('emwi-auto-moto-access-token', data['access_token']);
-            // localStorage.setItem('emwi-auto-moto-username', data['username']);
-            // window.location.href = '/';
+            const token: Token = Token.fromSerialized(JSON.stringify(data));
+            getUserAfterLogin(token);
         }).catch((err) => {
-            console.log("Uh oh.", err)
+            console.error("Uh oh. An error occurred when signing in.", err)
+            setShowPasswordAlert(true);
+        })
+    }
+
+    function getUserAfterLogin(token: Token) {
+        getUserDetailWithAuthToken(token).then((userData) => {
+            const user: User = User.fromSerialized(JSON.stringify(userData))
+            const auth: Auth = new Auth(user, token);
+            auth.saveAuthToLocalStorage();
+            window.location.href = '/';
+        }).catch((err) => {
+            console.log("Uh oh. An error occurred when trying to get the signed in user details.", err)
             setShowPasswordAlert(true);
         })
     }
@@ -34,7 +46,6 @@ export default function Login(props: any) {
     }
 
     function handleUsernameInput(event: any) {
-        console.log(event.target.value);
         setUsername(event.target.value);
     }
 

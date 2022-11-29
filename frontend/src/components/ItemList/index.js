@@ -54,7 +54,6 @@ export default function ItemList(props) {
         let p = {};
         for (const param in params) {
             if (defaultParams[param] !== params[param]) {
-                console.log(defaultParams[param], params[param])
                 p[param] = params[param];
             }
         }
@@ -66,7 +65,6 @@ export default function ItemList(props) {
 
         setWaitingForApiResponse(true);
         getMotorcycles(params['show_sold'], params['show_status'], params['page']).then(motorcycles => {
-            console.log(motorcycles)
             setMotorcycleResponse(motorcycles);
             setWaitingForApiResponse(false);
         })

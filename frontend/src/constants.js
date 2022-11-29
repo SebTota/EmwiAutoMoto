@@ -6,5 +6,5 @@ export const ROUTES = {
     CREATE_MOTORCYCLE: '/api/v1/motorcycles',
     DELETE_MOTORCYCLE: '/api/v1/motorcycles/{id}',
     USER_LOGIN: '/api/v1/login/access-token',
-    UPLOAD_IMAGE: '/store/productImage'
+    USER_DETAILS: '/api/v1/users/me'
 }

@@ -25,16 +25,29 @@ export class Token {
         }
     }
 
+    serialize() {
+        return JSON.stringify(this.toObject());
+    }
+
     static fromSerialized(serialized: string) {
         const token: ReturnType<Token["toObject"]> = JSON.parse(serialized);
 
         return new Token(
             token.token_type,
             token.access_token,
-            token.access_token_expires,
+            new Date(token.access_token_expires),
             token.refresh_token,
-            token.refresh_token_expires
+            new Date(token.refresh_token_expires)
         );
+    }
+
+    /**
+     * Check if the refresh token is still valid
+     */
+    isValid() {
+        const now = new Date();
+        now.setHours(now.getHours() + 1);  // Allow for a one-hour buffer
+        return this.access_token_expires > now;
     }
 
     /**
@@ -42,8 +55,8 @@ export class Token {
      */
     canRefreshToken() {
         const now = new Date();
-        now.setHours(now.getHours() - 1);  // Allow for a one-hour buffer
-        return this.refresh_token_expires < now;
+        now.setHours(now.getHours() + 1);  // Allow for a one-hour buffer
+        return this.refresh_token_expires > now;
     }
 
 }
