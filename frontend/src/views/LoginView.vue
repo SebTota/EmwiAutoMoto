@@ -27,6 +27,9 @@
   </div>
 </template>
 
-<script setup>
-import { LockClosedIcon } from '@heroicons/vue/20/solid'
+<script setup lang="ts">
 </script>
+
+<style>
+
+</style>
