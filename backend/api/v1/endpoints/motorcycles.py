@@ -20,7 +20,7 @@ def read_items(
         db: Session = Depends(deps.get_db),
         show_sold: bool = False,
         show_status: ProductStatusEnum = ProductStatusEnum.active.value,
-        page: int = 0,
+        page: int = 1,
         limit: int = 15,
 ) -> Any:
     """
