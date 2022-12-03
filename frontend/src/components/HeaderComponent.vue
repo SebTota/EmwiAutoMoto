@@ -20,7 +20,8 @@
           </a>
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <a href="/login" class="whitespace-nowrap text-base font-medium">Sign in</a>
+          <a v-if="mainStateLoaded && !isLoggedIn" href="/login" class="whitespace-nowrap text-base font-medium">Sign in</a>
+          <p v-if="mainStateLoaded && isLoggedIn">{{ user.username }}</p>
         </div>
       </div>
     </div>
@@ -52,7 +53,7 @@
           <div class="space-y-5 py-5 px-5">
             <div>
               <link>
-              <a href="/login" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Sign in</a>
+              <a v-if="mainStateLoaded && !isLoggedIn" href="/login" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Sign in</a>
             </div>
           </div>
         </div>
@@ -62,18 +63,30 @@
 </template>
 
 <script setup>
-import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue'
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import {
   Bars3Icon,
   ChartBarIcon,
   XMarkIcon,
-} from '@heroicons/vue/24/outline'
+} from '@heroicons/vue/24/outline';
+import {useMainStore} from "@/stores/state";
+import {storeToRefs} from "pinia";
+import {ref} from "vue";
+
+const mainState = useMainStore();
+const mainStateLoaded = ref(false);
+const { isLoggedIn, user } = storeToRefs(mainState);
+
+mainState.actionCheckLoggedIn().then(() => {
+  mainStateLoaded.value = true;
+})
+
 
 const tabs = [
   {
     name: 'Motorcycles',
     description: 'View all motorcycles.',
-    href: '/motorcycles',
+    href: '/',
     icon: ChartBarIcon,
   },
 ]
