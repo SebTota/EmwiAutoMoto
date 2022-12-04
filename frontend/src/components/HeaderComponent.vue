@@ -1,7 +1,7 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
     <div class="mx-auto max-w-7xl px-5">
-      <div class="flex items-center justify-between border-b-2 border-gray-100 py-3 md:justify-start md:space-x-10">
+      <div class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <a href="/">
             <span class="sr-only">EMWI AUto Moto</span>
@@ -32,7 +32,7 @@
           <div class="px-5 py-5">
             <div class="flex items-center justify-between">
               <div>
-                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="Your Company" />
+                <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="EMWI Auto Moto" />
               </div>
               <div class="-mr-2">
                 <PopoverButton class="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
@@ -66,8 +66,8 @@
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import {
   Bars3Icon,
-  ChartBarIcon,
   XMarkIcon,
+  ArrowLongRightIcon
 } from '@heroicons/vue/24/outline';
 import {useMainStore} from "@/stores/state";
 import {storeToRefs} from "pinia";
@@ -86,7 +86,7 @@ const tabs = [
     name: 'Motorcycles',
     description: 'View all motorcycles.',
     href: '/',
-    icon: ChartBarIcon,
+    icon: ArrowLongRightIcon,
   },
 ]
 
