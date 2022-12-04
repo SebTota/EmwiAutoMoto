@@ -15,7 +15,7 @@ from backend.utils.image_handler import upload_image_to_cloud_storage, create_th
 router = APIRouter()
 
 
-@router.get("/", response_model=schemas.MotorcycleList)
+@router.get("", response_model=schemas.MotorcycleList)
 def read_items(
         db: Session = Depends(deps.get_db),
         show_sold: bool = False,
@@ -47,7 +47,7 @@ def read_items(
                                   motorcycles=items)
 
 
-@router.post("/", response_model=schemas.Motorcycle)
+@router.post("", response_model=schemas.Motorcycle)
 def create_item(
         *,
         db: Session = Depends(deps.get_db),
