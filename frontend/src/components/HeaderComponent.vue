@@ -21,7 +21,7 @@
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <a v-if="mainStateLoaded && !isLoggedIn" href="/login" class="whitespace-nowrap text-base font-medium">Sign in</a>
-          <p v-if="mainStateLoaded && isLoggedIn">{{ user.username }}</p>
+          <p v-if="mainStateLoaded && isLoggedIn">{{ getUsername() }}</p>
         </div>
       </div>
     </div>
@@ -62,7 +62,7 @@
   </Popover>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from '@headlessui/vue';
 import {
   Bars3Icon,
@@ -81,7 +81,6 @@ mainState.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 })
 
-
 const tabs = [
   {
     name: 'Motorcycles',
@@ -90,4 +89,9 @@ const tabs = [
     icon: ChartBarIcon,
   },
 ]
+
+function getUsername() {
+  return mainState.user?.username;
+}
+
 </script>
