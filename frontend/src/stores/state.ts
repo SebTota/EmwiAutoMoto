@@ -1,7 +1,7 @@
 import {defineStore} from "pinia";
 import type {IUser} from "@/interfaces/user";
 import {api} from "@/api";
-import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils";
+import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils/token";
 import router from "@/router";
 import type {IToken} from "@/interfaces/token";
 import axios from "axios";
@@ -85,7 +85,6 @@ export const useMainStore = defineStore('mainState', {
             }
 
             if (!this.isLoggedIn && this.token) {
-                await this.refreshToken();
                 try {
                     const response = await api.getMe(this.token.access_token);
                     this.isLoggedIn = true;
@@ -128,17 +127,16 @@ export const useMainStore = defineStore('mainState', {
                     } catch (error) {
                         console.error('Failed to refresh valid user token.', error);
                     }
+                } else if (!this.refreshTokenIsValid()) {
+                    this.actionRemoveLogIn();
                 }
-            } else {
-                console.debug('Logging out due to no token being present during token refresh.');
-                this.actionLogout();
             }
         },
         actionRemoveLogIn() {
-            removeLocalToken();
             this.token = null;
             this.user = null;
             this.isLoggedIn = false;
+            removeLocalToken();
         },
         actionRouteLoggedIn() {
             if (router.currentRoute.value.path === '/login') {
