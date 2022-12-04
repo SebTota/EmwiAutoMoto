@@ -67,3 +67,30 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+
+def get_user_from_refresh_token(
+        encrypted_refresh_token: str, db: Session = Depends(get_db)
+) -> schemas.User:
+    try:
+        payload = jwt.decode(
+            encrypted_refresh_token, settings.REFRESH_TOKEN_SECRET_KEY, algorithms=[security.ALGORITHM]
+        )
+        token_data = schemas.RefreshToken(**payload)
+    except (jwt.JWTError, ValidationError):
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Could not validate refresh token")
+
+    refresh_token = crud.refresh_token.get_by_refresh_token(db, decrypted_refresh_token=token_data.refresh_token)
+    if refresh_token:
+        crud.refresh_token.delete_by_obj(db, refresh_token)
+
+    if not refresh_token or refresh_token.expires < datetime.utcnow():
+        raise HTTPException(status_code=status.HTTP_403_FORBIDDEN, detail="Invalid or expired refresh token")
+
+    s = time.time()
+    user = crud.user.get(db, id=token_data.user_id)
+    print(f'DBQuery - GetUser: {(time.time() - s) * 1000} ms')
+    if not user:
+        raise HTTPException(status_code=404, detail="User not found")
+    return user
+

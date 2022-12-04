@@ -35,7 +35,7 @@ class UserUpdateBackend(UserUpdate):
 
 
 class UserInDBBase(UserBase):
-    id: Optional[int] = None
+    id: Optional[str] = None
 
     class Config:
         orm_mode = True

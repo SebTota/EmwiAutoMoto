@@ -7,6 +7,7 @@ from backend.core.security import get_password_hash, verify_password
 from backend.crud.base import CRUDBase
 from backend.models.user import User
 from backend.schemas.user import UserCreate, UserUpdate
+from backend.utils.deps import get_random_string
 
 
 class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
@@ -21,11 +22,14 @@ class CRUDUser(CRUDBase[User, UserCreate, UserUpdate]):
 
     def create(self, db: Session, *, obj_in: UserCreate) -> User:
         db_obj = User(
+            id=get_random_string(12),
             first_name=obj_in.first_name,
             last_name=obj_in.last_name,
             username=obj_in.username,
             email=obj_in.email,
-            hashed_password=get_password_hash(obj_in.password)
+            hashed_password=get_password_hash(obj_in.password),
+            is_active=True,
+            is_superuser=False
         )
         db.add(db_obj)
         db.commit()
