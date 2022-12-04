@@ -18,5 +18,4 @@ class TokenPayload(BaseModel):
 
 # Request data when trying to refresh auth token using refresh token
 class TokenRefreshRequest(BaseModel):
-    username: str
     refresh_token: str
