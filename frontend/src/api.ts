@@ -2,6 +2,7 @@ import axios from 'axios';
 import {apiUrl} from '@/env'
 import type {IUser} from "@/interfaces/user";
 import type {IToken} from "@/interfaces/token";
+import type {IMotorcycleList} from "@/interfaces/motorcycle";
 
 function authHeaders(token: string) {
   return {
@@ -28,4 +29,10 @@ export const api = {
   async getMe(token: string) {
     return axios.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
+  async getMotorcycles(page: number) {
+    const params = new URLSearchParams();
+    params.append('page', page.toString());
+
+    return axios.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, { params });
+  }
 };

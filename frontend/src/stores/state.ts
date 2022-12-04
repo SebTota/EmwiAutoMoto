@@ -5,6 +5,7 @@ import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils";
 import router from "@/router";
 import type {IToken} from "@/interfaces/token";
 import axios from "axios";
+import type {IMotorcycleList} from "@/interfaces/motorcycle";
 
 
 export interface MainState {
@@ -164,6 +165,15 @@ export const useMainStore = defineStore('mainState', {
                 return refreshTokenExp > new Date();
             }
             return false;
+        },
+        async getMotorcycles(page: number): Promise<IMotorcycleList> {
+            try {
+                const response = await api.getMotorcycles(page);
+                return response.data;
+            } catch (error) {
+                console.error('Failed to retrieve motorcycle list.', error);
+                throw Error('Failed to retrieve motorcycle list.');
+            }
         }
     }
 
