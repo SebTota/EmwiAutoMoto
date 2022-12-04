@@ -10,7 +10,7 @@ if TYPE_CHECKING:
 
 
 class Image(Base):
-    id = Column(String, primary_key=True, index=True)
+    id = Column(String(12), primary_key=True, index=True)
     image_url = Column(String, index=True)
     thumbnail_url = Column(String)
     motorcycle_id = Column(String, ForeignKey("motorcycle.id"))

@@ -10,17 +10,14 @@ from backend.crud.base import CRUDBase
 from backend.enums import ProductStatusEnum
 from backend.models.motorcycle import Motorcycle
 from backend.schemas.motorcycle import MotorcycleCreate, MotorcycleUpdate
-
-
-def _get_random_string(length):
-    return ''.join(random.choice(string.ascii_letters) for _ in range(length))
+from backend.utils.deps import get_random_string
 
 
 class CRUDMotorcycle(CRUDBase[Motorcycle, MotorcycleCreate, MotorcycleUpdate]):
 
     def create(self, db: Session, *, obj_in: MotorcycleCreate) -> Motorcycle:
         obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data, id=_get_random_string(12))
+        db_obj = self.model(**obj_in_data, id=get_random_string(12))
         db.add(db_obj)
         db.commit()
         db.refresh(db_obj)

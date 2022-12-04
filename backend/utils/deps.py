@@ -1,3 +1,7 @@
+import time
+from datetime import datetime
+import string
+import random
 from typing import Generator
 
 from fastapi import Depends, HTTPException, status
@@ -14,6 +18,10 @@ from backend.db.session import SessionLocal
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
 )
+
+
+def get_random_string(length):
+    return ''.join(random.choice(string.ascii_letters) for _ in range(length))
 
 
 def get_db() -> Generator:
