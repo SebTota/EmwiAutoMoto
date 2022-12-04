@@ -1,3 +1,4 @@
+import datetime
 from typing import Optional, List, Any
 
 from pydantic import BaseModel
@@ -75,10 +76,10 @@ class MotorcycleUpdate(MotorcycleBase):
 
 
 # Properties shared by models stored in DB
-class MotorcycleInDBBase(MotorcycleBase):
+class MotorcycleInDBBase(MotorcycleCreate):
     id: str
-    date_created: Any
-    date_last_updated: Any
+    date_created: datetime.datetime
+    date_last_updated: datetime.datetime
 
     class Config:
         orm_mode = True
