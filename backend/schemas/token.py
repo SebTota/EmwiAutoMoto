@@ -13,7 +13,7 @@ class Token(BaseModel):
 
 
 class TokenPayload(BaseModel):
-    sub: Optional[int] = None
+    sub: Optional[str] = None
 
 
 # Request data when trying to refresh auth token using refresh token
