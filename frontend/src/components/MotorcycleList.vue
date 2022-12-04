@@ -1,7 +1,7 @@
 <template>
   <div class="bg-white dark:text-gray-400 dark:bg-gray-900">
     <div class="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900">Motorcycles</h2>
+      <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motorcycles</h2>
 
       <div v-if="isLoadingMotorcycles" class="text-center">
         <div class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 inline-flex items-center">
@@ -20,7 +20,7 @@
           </div>
           <div class="mt-4 flex justify-between">
             <div>
-              <h3 class="text-medium font-medium text-gray-900 dark:text-gray-400">
+              <h3 class="text-medium font-medium text-gray-900 dark:text-gray-300">
                 <a :href="product.href">
                   <span aria-hidden="true" class="absolute inset-0" />
                   {{ product.make + product.model }}
@@ -28,7 +28,7 @@
               </h3>
               <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{ product.color }}</p>
             </div>
-            <p class="text-medium font-medium text-gray-900 dark:text-gray-400">{{ product.price }}</p>
+            <p class="text-medium font-medium text-gray-900 dark:text-gray-300">{{ product.price }}</p>
           </div>
         </div>
       </div>

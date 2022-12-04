@@ -9,13 +9,13 @@
           </a>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
-          <PopoverButton class="inline-flex items-center justify-center rounded-md bg-white p-2 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+          <PopoverButton class="inline-flex items-center justify-center rounded-md bg-white p-2 focus:outline-none dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800">
             <span class="sr-only">Open menu</span>
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </PopoverButton>
         </div>
         <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
-          <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50">
+          <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800">
             <a class="text-base font-medium">{{ item.name }}</a>
           </a>
         </PopoverGroup>
@@ -28,14 +28,14 @@
 
     <transition enter-active-class="duration-200 ease-out" enter-from-class="opacity-0 scale-95" enter-to-class="opacity-100 scale-100" leave-active-class="duration-100 ease-in" leave-from-class="opacity-100 scale-100" leave-to-class="opacity-0 scale-95">
       <PopoverPanel focus class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden">
-        <div class="divide-y-2 divide-gray-50 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:text-grey-100 dark:bg-gray-800">
+        <div class="divide-y-2 divide-gray-50 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:text-gray-400 dark:bg-gray-800">
           <div class="px-5 py-5">
             <div class="flex items-center justify-between">
               <div>
                 <img class="h-8 w-auto" src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600" alt="EMWI Auto Moto" />
               </div>
               <div class="-mr-2">
-                <PopoverButton class="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-inset focus:ring-indigo-500">
+                <PopoverButton class="inline-flex items-center justify-center rounded-md p-2 hover:bg-gray-100 focus:outline-none dark:bg-gray-800 dark:text-white dark:hover:bg-gray-700">
                   <span class="sr-only">Close menu</span>
                   <XMarkIcon class="h-6 w-6" aria-hidden="true" />
                 </PopoverButton>
@@ -43,8 +43,8 @@
             </div>
             <div class="mt-6">
               <nav class="grid gap-y-8">
-                <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100">
-                  <component :is="item.icon" class="h-6 w-6 flex-shrink-0 text-indigo-600" aria-hidden="true" />
+                <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                  <component :is="item.icon" class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
                   <span class="ml-3 text-base font-medium">{{ item.name }}</span>
                 </a>
               </nav>
