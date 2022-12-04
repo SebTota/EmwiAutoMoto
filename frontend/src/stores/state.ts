@@ -4,7 +4,6 @@ import {api} from "@/api";
 import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils";
 import router from "@/router";
 import type {IToken} from "@/interfaces/token";
-import type {AxiosError} from "axios";
 import axios from "axios";
 
 
@@ -87,14 +86,14 @@ export const useMainStore = defineStore('mainState', {
             if (!this.isLoggedIn && this.token) {
                 await this.refreshToken();
                 try {
-                        const response = await api.getMe(this.token.access_token);
-                        this.isLoggedIn = true;
-                        this.user = response.data;
-                    } catch (error) {
-                        console.error('Failed to retrieve signed in user information.', error);
-                        await this.actionRemoveLogIn();
-                    }
-            } else {
+                    const response = await api.getMe(this.token.access_token);
+                    this.isLoggedIn = true;
+                    this.user = response.data;
+                } catch (error) {
+                    console.error('Failed to retrieve signed in user information.', error);
+                    await this.actionRemoveLogIn();
+                }
+            } else if (!this.token) {
                 await this.actionRemoveLogIn();
             }
         },
@@ -119,6 +118,7 @@ export const useMainStore = defineStore('mainState', {
                 const shouldRefresh: boolean = tokenExp < sevenDaysIntoTheFuture;
 
                 if (shouldRefresh && this.refreshTokenIsValid()) {
+                    console.debug('Refreshing auth token');
                     try {
                         const response = await api.refreshToken(this.token.refresh_token);
                         if (response.data) {
@@ -129,6 +129,7 @@ export const useMainStore = defineStore('mainState', {
                     }
                 }
             } else {
+                console.debug('Logging out due to no token being present during token refresh.');
                 this.actionLogout();
             }
         },
