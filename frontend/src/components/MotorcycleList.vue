@@ -21,9 +21,9 @@
           <div class="mt-4 flex justify-between">
             <div>
               <h3 class="text-medium font-medium text-gray-900 dark:text-gray-300">
-                <a :href="product.href">
+                <a @click="getProductUrl(product.id)">
                   <span aria-hidden="true" class="absolute inset-0" />
-                  {{ product.make + product.model }}
+                  {{ product.make + ' ' + product.model }}
                 </a>
               </h3>
               <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{ product.color }}</p>
@@ -41,6 +41,7 @@ import {ref} from "vue";
 
 import type {IMotorcycleList} from "@/interfaces/motorcycle";
 import {useMainStore} from "@/stores/state";
+import router from "@/router";
 
 const mainState = useMainStore();
 const isLoadingMotorcycles = ref(true);
@@ -55,5 +56,9 @@ mainState.getMotorcycles(1).then((motorcycleList: IMotorcycleList) => {
   errorMessage = "Uh oh. Something went wrong. Please try again later.";
   console.log('Failed to load motorcycles', err);
 })
+
+function getProductUrl(productId: string) {
+  router.push({ name: 'motorcycleDetail', params: { id: productId } })
+}
 
 </script>

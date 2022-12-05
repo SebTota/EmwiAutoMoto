@@ -2,7 +2,7 @@ import axios from 'axios';
 import {apiUrl} from '@/env'
 import type {IUser} from "@/interfaces/user";
 import type {IToken} from "@/interfaces/token";
-import type {IMotorcycleList} from "@/interfaces/motorcycle";
+import type {IMotorcycle, IMotorcycleList} from "@/interfaces/motorcycle";
 import {handleDates} from "@/utils/dates";
 
 const client = axios.create({ baseURL: apiUrl });
@@ -42,5 +42,8 @@ export const api = {
     params.append('page', page.toString());
 
     return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, { params });
+  },
+  async getMotorcycle(id: string) {
+    return client.get<IMotorcycle>(`${apiUrl}/api/v1/motorcycles/${id}`);
   }
 };
