@@ -14,7 +14,6 @@ export const getLocalToken = (): IToken | null => {
 }
 
 export const saveLocalToken = (token: IToken) => {
-    console.log(JSON.stringify(token));
     localStorage.setItem(LOCAL_STORAGE_NAME_AUTH_TOKEN, JSON.stringify(token));
 }
 
