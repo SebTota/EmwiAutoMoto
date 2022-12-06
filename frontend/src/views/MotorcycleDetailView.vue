@@ -13,10 +13,16 @@
     <div class="max-w-2xl mx-auto py-2 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
-        <TabGroup as="div" class="flex flex-col-reverse grow col-span-3">
+        <TabGroup as="div" class="flex flex-col grow col-span-3 grid-rows-1">
+          <!-- Image View -->
+          <TabPanels class="w-full aspect-w-5 aspect-h-3">
+            <TabPanel v-for="image in product.images" :key="image.image_url">
+              <img :src="image.image_url" class="w-full h-full object-center object-cover sm:rounded-lg" />
+            </TabPanel>
+          </TabPanels>
           <!-- Image selector -->
-          <div class="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-            <TabList class="grid grid-cols-4 grid-rows-1 gap-6">
+          <div class="mt-6 w-full max-w-2xl mx-auto sm:block">
+            <TabList class="grid grid-cols-3 md:grid-cols-4 gap-3">
               <Tab v-for="image in product.images" :key="image.thumbnail_url" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
@@ -25,11 +31,6 @@
               </Tab>
             </TabList>
           </div>
-          <TabPanels class="w-full aspect-w-5 aspect-h-3">
-            <TabPanel v-for="image in product.images" :key="image.image_url">
-              <img :src="image.image_url" class="w-full h-full object-center object-cover sm:rounded-lg" />
-            </TabPanel>
-          </TabPanels>
         </TabGroup>
 
         <!-- Product info -->
@@ -88,6 +89,8 @@ import {useMainStore} from "@/stores/state";
 import type {IMotorcycle} from "@/interfaces/motorcycle";
 import {getCssClassFromColor} from "@/utils/colors";
 import router from "@/router";
+import {savedSearchParamsToRouteParams, saveSearchParams} from "@/utils/searchParams";
+import type {ISearchParams} from "@/interfaces/searchParams";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -105,8 +108,17 @@ if (typeof motorcycleId === 'string') {
   })
 }
 
+const params: ISearchParams ={
+  'page': 2,
+  'show_sold': false,
+  'show_status': 'active',
+  'limit': 15
+}
+
+saveSearchParams(params)
+
 function goBack() {
-  router.go(-1)
+  router.push({name: 'motorcycleList', params: savedSearchParamsToRouteParams()})
 }
 
 </script>
