@@ -5,11 +5,12 @@ const router = createRouter({
   routes: [
     {
       path: "/",
-      name: "home",
+      name: "motorcycleList",
       component: () => import("../views/MotorcycleListView.vue"),
     },
     {
       path: "/motorcycle/:id",
+
       name: "motorcycleDetail",
       component: () => import("../views/MotorcycleDetailView.vue"),
     },
@@ -18,6 +19,11 @@ const router = createRouter({
       name: "login",
       component: () => import("../views/LoginView.vue"),
     },
+    {
+      path: "/:pathMatch(.*)*",
+      name: "404",
+      redirect: '/'
+    }
   ],
 });
 

@@ -16,7 +16,7 @@
         <TabGroup as="div" class="flex flex-col-reverse grow col-span-3">
           <!-- Image selector -->
           <div class="hidden mt-6 w-full max-w-2xl mx-auto sm:block lg:max-w-none">
-            <TabList class="grid grid-cols-4 gap-6">
+            <TabList class="grid grid-cols-4 grid-rows-1 gap-6">
               <Tab v-for="image in product.images" :key="image.thumbnail_url" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
