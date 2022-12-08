@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white dark:text-gray-400 dark:bg-gray-900">
-    <div class="mx-auto max-w-2xl py-16 px-4 sm:py-24 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motorcycles</h2>
 
       <div v-if="isLoadingMotorcycles" class="text-center">
@@ -16,7 +16,7 @@
       <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
         <div v-for="product in products" :key="product.id" class="group relative">
           <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
-            <img :src="product.thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+            <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
           </div>
           <div class="mt-4 flex justify-between">
             <div>

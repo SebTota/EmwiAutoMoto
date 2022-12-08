@@ -30,4 +30,5 @@ class Motorcycle(Base):
 
     # Store a copy of the current thumbnail to prevent a need to get all images
     thumbnail_url = Column(String)
+    medium_thumbnail_url = Column(String)
     images = relationship("Image", back_populates="motorcycle", cascade="all, delete-orphan")

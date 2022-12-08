@@ -15,6 +15,7 @@ export interface IMotorcycle {
     sold: boolean,
     status: string,
     thumbnail_url: string | null,
+    medium_thumbnail_url: string | null,
     images: IImage[] | null
 }
 

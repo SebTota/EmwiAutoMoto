@@ -25,6 +25,7 @@ class MotorcycleBase(BaseModel):
     sold: Optional[bool] = None
     status: Optional[ProductStatusEnum] = None
     thumbnail_url: Optional[str] = None
+    medium_thumbnail_url: Optional[str] = None
     images: Optional[List[Image]] = []
 
     class Config:

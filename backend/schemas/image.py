@@ -7,12 +7,14 @@ from pydantic import BaseModel
 class ImageBase(BaseModel):
     image_url: Optional[str] = None
     thumbnail_url: Optional[str] = None
+    medium_thumbnail_url: Optional[str] = None
 
 
 # Properties to receive on item creation
 class ImageCreate(ImageBase):
     image_url: str
     thumbnail_url: str
+    medium_thumbnail_url = str
 
 
 # Properties to receive on item update

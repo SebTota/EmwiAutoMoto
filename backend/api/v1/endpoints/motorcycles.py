@@ -10,7 +10,7 @@ from backend import crud, models, schemas
 from backend.enums import ProductStatusEnum
 from backend.exceptions import FileUploadError
 from backend.utils import deps
-from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image, delete_image
+from backend.utils.image_handler import delete_image, process_image
 
 router = APIRouter()
 
@@ -99,17 +99,19 @@ def add_product_image(
 
     try:
         name: str = f'{str(uuid.uuid4())}.{file.filename.split(".")[-1]}'
-        thumbnail_url = create_thumbnail_for_image(img, name)
-        image_url = upload_image_to_cloud_storage(img, name)
+        [image_url, thumbnail_url, medium_thumbnail_url] = process_image(img, name)
         img.close()
         file.file.close()
 
         # Set the photo as the thumbnail if the item doesn't already have a thumbnail
         if motorcycle.thumbnail_url is None:
-            update: schemas.MotorcycleUpdate = schemas.MotorcycleUpdate(thumbnail_url=thumbnail_url)
+            update: schemas.MotorcycleUpdate = schemas.MotorcycleUpdate(thumbnail_url=thumbnail_url,
+                                                                        medium_thumbnail_url=medium_thumbnail_url)
             motorcycle = crud.motorcycle.update(db=db, db_obj=motorcycle, obj_in=update)
 
-        image: schemas.ImageCreate = schemas.ImageCreate(image_url=image_url, thumbnail_url=thumbnail_url)
+        image: schemas.ImageCreate = schemas.ImageCreate(image_url=image_url,
+                                                         thumbnail_url=thumbnail_url,
+                                                         medium_thumbnail_url=medium_thumbnail_url)
         i = crud.image.create_and_add_to_motorcycle(db=db, db_obj=motorcycle, obj_in=image)
         return i
     except FileUploadError as e:
