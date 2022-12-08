@@ -60,7 +60,7 @@
                 </div>
             </div>
             <div class="mt-10 flex sm:flex-col1">
-              <button type="submit" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Contact Us</button>
+              <button type="submit" @click="goToContactPage" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Contact Us</button>
 
               <button type="button" class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
                 <HeartIcon class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
@@ -108,17 +108,13 @@ if (typeof motorcycleId === 'string') {
   })
 }
 
-const params: ISearchParams ={
-  'page': 2,
-  'show_sold': false,
-  'show_status': 'active',
-  'limit': 15
-}
-
-saveSearchParams(params)
-
 function goBack() {
   router.push({name: 'motorcycleList', params: savedSearchParamsToRouteParams()})
+}
+
+function goToContactPage(event: any) {
+  event.preventDefault();
+  router.push({name: 'contact', params: {motorcycleRef: encodeURIComponent(window.location.href)}})
 }
 
 </script>
