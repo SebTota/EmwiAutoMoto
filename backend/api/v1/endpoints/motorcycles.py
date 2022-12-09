@@ -1,10 +1,11 @@
 import io
 import uuid
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
+from starlette import status
 
 from backend import crud, models, schemas
 from backend.enums import ProductStatusEnum
@@ -22,13 +23,21 @@ def read_items(
         show_status: ProductStatusEnum = ProductStatusEnum.active.value,
         page: int = 1,
         limit: int = 15,
+        current_user: Optional[models.User] = Depends(deps.get_current_active_superuser_if_signed_in),
 ) -> Any:
     """
     Retrieve motorcycle items.
     """
+    if show_status is not ProductStatusEnum.active.value and current_user is None:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="You are not authorized to perform this query",
+        )
+
     offset: int = (page - 1) * limit
     items: List[schemas.Motorcycle] = crud.motorcycle.get_multi_with_filters(db, offset=offset, limit=limit + 1,
-                                                   show_sold=show_sold, show_status=show_status)
+                                                                             show_sold=show_sold,
+                                                                             show_status=show_status)
 
     if not items:
         return schemas.MotorcycleList(page=None,
