@@ -88,6 +88,12 @@ const tabs = [
     href: '/',
     icon: ArrowLongRightIcon,
   },
+    {
+    name: 'Contact',
+    description: 'Contact.',
+    href: '/contact',
+    icon: ArrowLongRightIcon,
+  },
 ]
 
 function getUsername() {
