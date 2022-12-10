@@ -14,15 +14,15 @@
       </div>
 
       <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
-        <div v-for="product in products" :key="product.id" class="group relative">
-          <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 group-hover:opacity-75 lg:aspect-none lg:h-80">
+        <div v-for="product in products" :key="product.id"
+             @click="getProductUrl(product.id)" class="hover:opacity-75">
+          <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
             <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
           </div>
           <div class="mt-4 flex justify-between">
             <div>
               <h3 class="text-medium font-medium text-gray-900 dark:text-gray-300">
-                <a @click="getProductUrl(product.id)">
-                  <span aria-hidden="true" class="absolute inset-0" />
+                <a>
                   {{ product.make + ' ' + product.model }}
                 </a>
               </h3>
