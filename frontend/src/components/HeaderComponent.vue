@@ -83,14 +83,14 @@ mainState.actionCheckLoggedIn().then(() => {
 
 const tabs = [
   {
-    name: 'Motorcycles',
-    description: 'View all motorcycles.',
+    name: 'Motocykle',
+    description: 'Motocykle',
     href: '/',
     icon: ArrowLongRightIcon,
   },
     {
-    name: 'Contact',
-    description: 'Contact.',
+    name: 'Kontakt',
+    description: 'Kontakt',
     href: '/contact',
     icon: ArrowLongRightIcon,
   },
