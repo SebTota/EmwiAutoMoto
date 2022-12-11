@@ -13,24 +13,30 @@
         </div>
       </div>
 
-      <div v-else class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
-        <div v-for="product in products" :key="product.id"
+      <div v-else>
+        <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
+          <div v-for="product in motorcycleList.motorcycles" :key="product.id"
              @click="getProductUrl(product.id)" class="hover:opacity-75">
-          <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
-            <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
-          </div>
-          <div class="mt-4 flex justify-between">
-            <div>
-              <h3 class="text-medium font-medium text-gray-900 dark:text-gray-300">
-                <a>
-                  {{ product.make + ' ' + product.model }}
-                </a>
-              </h3>
-              <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{ product.color }}</p>
+            <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
+              <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
             </div>
-            <p class="text-medium font-medium text-gray-900 dark:text-gray-300">{{ product.price }}</p>
+            <div class="mt-4 flex justify-between">
+              <div>
+                <h3 class="text-medium font-medium text-gray-900 dark:text-gray-300">
+                  <a>
+                    {{ product.make + ' ' + product.model }}
+                  </a>
+                </h3>
+                <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{ product.color }}</p>
+              </div>
+              <p class="text-medium font-medium text-gray-900 dark:text-gray-300">{{ product.price }}</p>
+            </div>
           </div>
         </div>
+        <MotorcycleListPagination :hasNextPage="hasNextPage"
+                                :hasPrevPage="hasPrevPage"
+                                :nextPage="navigateToNextPage"
+                                :prevPage="navigateToPreviousPage"/>
       </div>
     </div>
   </div>
@@ -42,23 +48,46 @@ import {ref} from "vue";
 import type {IMotorcycleList} from "@/interfaces/motorcycle";
 import {useMainStore} from "@/stores/state";
 import router from "@/router";
+import MotorcycleListCategoryFilter from "@/components/MotorcycleListCategoryFilter.vue";
+import MotorcycleListPagination from "@/components/MotorcycleListPagination.vue";
 
 const mainState = useMainStore();
 const isLoadingMotorcycles = ref(true);
+const hasNextPage = ref(false);
+const hasPrevPage = ref(false);
 
 let products = [];
+let motorcycleList: IMotorcycleList;
 let errorMessage = null;
 
-mainState.getMotorcycles(1).then((motorcycleList: IMotorcycleList) => {
-  isLoadingMotorcycles.value = false;
-  products = motorcycleList.motorcycles;
-}).catch(err => {
-  errorMessage = "Uh oh. Something went wrong. Please try again later.";
-  console.log('Failed to load motorcycles', err);
-})
+function updateMotorcycles(page: number) {
+  mainState.getMotorcycles(page).then((motorcycleListResponse: IMotorcycleList) => {
+    motorcycleList = motorcycleListResponse;
+    products = motorcycleListResponse.motorcycles;
+    hasNextPage.value = motorcycleListResponse.has_next_page;
+    hasPrevPage.value = motorcycleListResponse.page ? motorcycleListResponse.page > 1 : true;
+    isLoadingMotorcycles.value = false;
+  }).catch(err => {
+    errorMessage = "Uh oh. Something went wrong. Please try again later.";
+    console.log('Failed to load motorcycles', err);
+  })
+}
 
 function getProductUrl(productId: string) {
   router.push({ name: 'motorcycleDetail', params: { id: productId } })
 }
 
+function navigateToNextPage() {
+  if (motorcycleList && motorcycleList.page && motorcycleList.has_next_page) {
+    updateMotorcycles(motorcycleList.page + 1);
+  }
+}
+
+function navigateToPreviousPage() {
+  if (motorcycleList && motorcycleList.page && motorcycleList.page < 1) {
+    updateMotorcycles(motorcycleList.page - 1);
+  }
+}
+
+updateMotorcycles(1);
 </script>
