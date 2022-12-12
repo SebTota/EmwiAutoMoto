@@ -9,7 +9,7 @@
     </div>
   </div>
 
-  <div v-else class="bg-white">
+  <div v-else class="bg-white dark:bg-gray-900 dark:text-gray-400">
     <div class="max-w-2xl mx-auto py-2 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8">
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
@@ -23,7 +23,7 @@
           <!-- Image selector -->
           <div class="mt-6 w-full max-w-2xl mx-auto sm:block">
             <TabList class="grid grid-cols-3 md:grid-cols-4 gap-3">
-              <Tab v-for="image in product.images" :key="image.thumbnail_url" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
+              <Tab v-for="image in product.images" :key="image.thumbnail_url" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 dark:text-gray-400 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
                 </span>
@@ -35,24 +35,24 @@
 
         <!-- Product info -->
         <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0 col-span-2">
-          <a class="text-sm tracking-tight text-gray-900" href="#" @click="goBack">&#8592;Wszystkie Motocykle</a>
-          <h1 class="text-3xl font-extrabold tracking-tight text-gray-900">{{ product.make + ' ' + product.model }}</h1>
+          <a class="text-sm tracking-tight text-gray-900 dark:text-gray-400" href="#" @click="goBack">&#8592;Wszystkie Motocykle</a>
+          <h1 class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-400">{{ product.make + ' ' + product.model }}</h1>
 
           <div class="mt-3">
             <h2 class="sr-only">Product information</h2>
-            <p class="text-3xl text-gray-900">{{ product.price }} zł</p>
+            <p class="text-3xl text-gray-900 dark:text-gray-400">{{ product.price }} zł</p>
           </div>
 
           <div class="mt-6">
             <!-- Description -->
             <h3 class="sr-only">Description</h3>
-            <div class="text-base text-gray-700 space-y-6" v-html="product.description" />
+            <div class="text-base text-gray-700 dark:text-gray-200 space-y-6" v-html="product.description" />
           </div>
 
           <form class="mt-6">
             <!-- Colors -->
             <div>
-              <h3 class="text-sm text-gray-600">Color</h3>
+              <h3 class="text-sm text-gray-600 dark:text-gray-100">Color</h3>
               <div class="flex items-center space-x-3">
                   <div class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center focus:outline-none">
                       <div :class="[colorCss, 'h-8 w-8 border border-black border-opacity-50 rounded-full']" />
@@ -60,12 +60,13 @@
                 </div>
             </div>
             <div class="mt-10 flex sm:flex-col1">
-              <button type="submit" @click="goToContactPage" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Contact Us</button>
+              <button type="submit" @click="goToContactPage" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Skontaktuj się z nami</button>
 
-              <button type="button" class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">
-                <HeartIcon class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
-                <span class="sr-only">Add to favorites</span>
-              </button>
+<!--              <button type="button" class="ml-4 py-3 px-3 rounded-md flex items-center justify-center text-gray-400 hover:bg-gray-100 hover:text-gray-500">-->
+<!--                <HeartIcon class="h-6 w-6 flex-shrink-0" aria-hidden="true" />-->
+<!--                <span class="sr-only">Add to favorites</span>-->
+<!--              </button>-->
+
             </div>
           </form>
         </div>

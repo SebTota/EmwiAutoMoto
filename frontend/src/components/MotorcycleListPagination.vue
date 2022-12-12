@@ -1,6 +1,6 @@
 <template>
   <div class="pt-6">
-    <nav class="bg-white px-4 pt-3 flex items-center justify-between border-t border-gray-200 sm:px-6" aria-label="Pagination">
+    <nav class="bg-white px-4 pt-3 flex items-center justify-between border-t border-gray-200 sm:px-6 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-400" aria-label="Pagination">
 <!--      <div class="hidden sm:block">-->
 <!--        <p class="text-sm text-gray-700">-->
 <!--          Showing-->
