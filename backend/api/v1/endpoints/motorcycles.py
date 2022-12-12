@@ -34,26 +34,8 @@ def read_items(
             detail="You are not authorized to perform this query",
         )
 
-    offset: int = (page - 1) * limit
-    items: List[schemas.Motorcycle] = crud.motorcycle.get_multi_with_filters(db, offset=offset, limit=limit + 1,
-                                                                             show_sold=show_sold,
-                                                                             show_status=show_status)
-
-    if not items:
-        return schemas.MotorcycleList(page=None,
-                                      has_next_page=False,
-                                      motorcycles=[])
-
-    has_next_page = True if len(items) == limit + 1 else False
-
-    # Remove the extra motorcycle we got as a pagination test IFF there is a next page
-    # (indicating we received +1 results back from db)
-    if has_next_page:
-        items.pop()
-
-    return schemas.MotorcycleList(page=page,
-                                  has_next_page=has_next_page,
-                                  motorcycles=items)
+    return crud.motorcycle.get_multi_with_filters(db, page=page, limit=limit,
+                                                  show_sold=show_sold, show_status=show_status)
 
 
 @router.post("", response_model=schemas.Motorcycle)

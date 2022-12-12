@@ -53,9 +53,9 @@ import {ref} from "vue";
 import {useRoute} from "vue-router";
 
 const route = useRoute();
+const motorcycleRefLink: any = route.query.motorcycleRef;
 
 const message = ref('');
-const motorcycleRefLink: any = route.params.motorcycleRef;
 
 function loadTemplate() {
   if (motorcycleRefLink) {

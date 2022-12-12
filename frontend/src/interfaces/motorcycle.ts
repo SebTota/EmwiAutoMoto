@@ -20,7 +20,9 @@ export interface IMotorcycle {
 }
 
 export interface IMotorcycleList {
-    page: number | null,
+    page: number,
     has_next_page: boolean,
+    total_count: number
     motorcycles: IMotorcycle[]
+    count: number
 }

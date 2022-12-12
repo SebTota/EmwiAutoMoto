@@ -15,8 +15,8 @@
 
       <div v-else>
         <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
-          <div v-for="product in motorcycleList.motorcycles" :key="product.id"
-             @click="getProductUrl(product.id)" class="hover:opacity-75">
+          <div v-for="product in motorcycleResponse.motorcycles" :key="product.id"
+               @click="getProductUrl(product.id)" class="hover:opacity-75">
             <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
               <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
             </div>
@@ -48,24 +48,28 @@ import {ref} from "vue";
 import type {IMotorcycleList} from "@/interfaces/motorcycle";
 import {useMainStore} from "@/stores/state";
 import router from "@/router";
-import MotorcycleListCategoryFilter from "@/components/MotorcycleListCategoryFilter.vue";
 import MotorcycleListPagination from "@/components/MotorcycleListPagination.vue";
+import {useRoute} from "vue-router";
+
+const route = useRoute();
+const page: any = route.query.page ? parseInt(route.query.page as string) : 1;
 
 const mainState = useMainStore();
 const isLoadingMotorcycles = ref(true);
 const hasNextPage = ref(false);
 const hasPrevPage = ref(false);
-
 let products = [];
-let motorcycleList: IMotorcycleList;
+
+let motorcycleResponse: IMotorcycleList;
 let errorMessage = null;
 
 function updateMotorcycles(page: number) {
+  isLoadingMotorcycles.value = true;
   mainState.getMotorcycles(page).then((motorcycleListResponse: IMotorcycleList) => {
-    motorcycleList = motorcycleListResponse;
+    motorcycleResponse = motorcycleListResponse;
     products = motorcycleListResponse.motorcycles;
-    hasNextPage.value = motorcycleListResponse.has_next_page;
-    hasPrevPage.value = motorcycleListResponse.page ? motorcycleListResponse.page > 1 : true;
+    hasNextPage.value = motorcycleResponse.has_next_page;
+    hasPrevPage.value = motorcycleResponse.page > 1;
     isLoadingMotorcycles.value = false;
   }).catch(err => {
     errorMessage = "Uh oh. Something went wrong. Please try again later.";
@@ -78,16 +82,20 @@ function getProductUrl(productId: string) {
 }
 
 function navigateToNextPage() {
-  if (motorcycleList && motorcycleList.page && motorcycleList.has_next_page) {
-    updateMotorcycles(motorcycleList.page + 1);
+  if (motorcycleResponse.has_next_page) {
+      router.push({name: 'motorcycleList', query: {
+        page: motorcycleResponse.page + 1
+      }})
   }
 }
 
 function navigateToPreviousPage() {
-  if (motorcycleList && motorcycleList.page && motorcycleList.page < 1) {
-    updateMotorcycles(motorcycleList.page - 1);
+  if (motorcycleResponse.page > 1) {
+    router.push({name: 'motorcycleList', query: {
+        page: motorcycleResponse.page - 1
+      }})
   }
 }
 
-updateMotorcycles(1);
+updateMotorcycles(page);
 </script>

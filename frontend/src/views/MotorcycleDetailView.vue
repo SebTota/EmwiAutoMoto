@@ -89,8 +89,6 @@ import {useMainStore} from "@/stores/state";
 import type {IMotorcycle} from "@/interfaces/motorcycle";
 import {getCssClassFromColor} from "@/utils/colors";
 import router from "@/router";
-import {savedSearchParamsToRouteParams, saveSearchParams} from "@/utils/searchParams";
-import type {ISearchParams} from "@/interfaces/searchParams";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -109,12 +107,12 @@ if (typeof motorcycleId === 'string') {
 }
 
 function goBack() {
-  router.push({name: 'motorcycleList', params: savedSearchParamsToRouteParams()})
+  router.go(-1);
 }
 
 function goToContactPage(event: any) {
   event.preventDefault();
-  router.push({name: 'contact', params: {motorcycleRef: encodeURIComponent(window.location.href)}})
+  router.push({name: 'contact', query: {motorcycleRef: encodeURIComponent(window.location.href)}})
 }
 
 </script>

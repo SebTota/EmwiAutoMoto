@@ -98,6 +98,8 @@ class MotorcycleInDB(MotorcycleInDBBase):
 
 # Used for pagination
 class MotorcycleList(BaseModel):
-    page: Optional[int]
+    page: int
     has_next_page: bool
+    total_count: int
     motorcycles: List[Motorcycle]
+    count: int

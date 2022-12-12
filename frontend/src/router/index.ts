@@ -1,7 +1,7 @@
 import { createRouter, createWebHistory } from "vue-router";
 
 const router = createRouter({
-  history: createWebHistory(import.meta.env.BASE_URL),
+  history: createWebHistory(),
   routes: [
     {
       path: "/login",
@@ -9,7 +9,7 @@ const router = createRouter({
       component: () => import("../views/LoginView.vue"),
     },
     {
-      path: "/",
+      path: "/motorcycles",
       name: "motorcycleList",
       component: () => import("../views/MotorcycleListView.vue"),
     },
@@ -19,9 +19,14 @@ const router = createRouter({
       component: () => import("../views/MotorcycleDetailView.vue"),
     },
     {
-      path: "/contact/:motorcycleRef?",
+      path: "/contact",
       name: "contact",
       component: () => import("../views/ContactPageView.vue"),
+    },
+    {
+      path: "/",
+      name: "home",
+      redirect: '/motorcycles'
     },
     {
       path: "/:pathMatch(.*)*",
