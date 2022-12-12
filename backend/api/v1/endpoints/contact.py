@@ -10,7 +10,7 @@ router = APIRouter()
 
 
 @router.post("/email", response_model=schemas.ContactSendEmail)
-async def login_access_token(contact_send_email: schemas.ContactSendEmail) -> Any:
+async def send_email(contact_send_email: schemas.ContactSendEmail) -> Any:
     """
     Email the website admin from the contact page
     """
