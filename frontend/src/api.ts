@@ -32,7 +32,7 @@ export const api = {
     const body = {
       'refresh_token': refreshToken
     }
-    return client.post<IToken>(`${apiUrl}/api/v1/users/refresh-token`);
+    return client.post<IToken>(`${apiUrl}/api/v1/users/refresh-token`, body);
   },
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
