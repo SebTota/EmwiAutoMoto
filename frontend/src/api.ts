@@ -45,5 +45,15 @@ export const api = {
   },
   async getMotorcycle(id: string) {
     return client.get<IMotorcycle>(`${apiUrl}/api/v1/motorcycles/${id}`);
+  },
+  async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
+    const body = {
+      'first_name': first_name,
+      'last_name': last_name,
+      'email': email,
+      'phone_number': phone_number,
+      'message': email_body
+    }
+    return client.post(`${apiUrl}/api/v1/contact/email`, body)
   }
 };

@@ -9,15 +9,19 @@ from backend.utils.email import fast_mail
 router = APIRouter()
 
 
-@router.post("/email", response_model=schemas.ContactSendEmail)
+@router.post("/email")
 async def send_email(contact_send_email: schemas.ContactSendEmail) -> Any:
     """
     Email the website admin from the contact page
     """
+    body = f'{contact_send_email.message}\n\n' \
+           f'Od: {contact_send_email.first_name} {contact_send_email.last_name} - {contact_send_email.phone_number}'
+
     message = MessageSchema(
-        subject='EMWI Auto Moto Kontakt',
+        subject=f'EMWI Auto Moto Kontakt - {contact_send_email.first_name} {contact_send_email.last_name}',
         recipients=[contact_send_email.email],
-        body=contact_send_email.message,
+        body=body,
         subtype=MessageType.plain)
     await fast_mail.send_message(message)
-    return contact_send_email
+
+    return {'details': 'Email sent'}
