@@ -27,7 +27,7 @@
                     {{ product.make + ' ' + product.model }}
                   </a>
                 </h3>
-                <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{ product.color }}</p>
+                <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{colorToPolish(product.color)}}</p>
               </div>
               <p class="text-medium font-medium text-gray-900 dark:text-gray-300">{{ product.price }}</p>
             </div>
@@ -49,6 +49,7 @@ import type {IMotorcycleList} from "@/interfaces/motorcycle";
 import {useMainStore} from "@/stores/state";
 import router from "@/router";
 import MotorcycleListPagination from "@/components/MotorcycleListPagination.vue";
+import {colorToPolish} from "@/utils/colors";
 import {useRoute} from "vue-router";
 
 const route = useRoute();

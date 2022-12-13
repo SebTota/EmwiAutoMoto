@@ -21,3 +21,25 @@ export function getCssClassFromColor(color: string) {
             return 'bg-blue-400'
     }
 }
+
+
+export function colorToPolish(color: string) {
+    switch (color.toLowerCase().trim()) {
+        case MotorcycleColor.White:
+            return 'Biały'
+        case MotorcycleColor.Silver:
+            return 'Srebro'
+        case MotorcycleColor.Black:
+            return 'Czarny'
+        case MotorcycleColor.Red:
+            return 'Czerwony'
+        case MotorcycleColor.DarkRed:
+            return 'Ciemno Czerwony'
+        case MotorcycleColor.Violet:
+            return 'Fioletowy'
+        case MotorcycleColor.Blue:
+            return 'Niebieski'
+        case MotorcycleColor.LightBlue:
+            return 'Jasny Niebieski'
+    }
+}
