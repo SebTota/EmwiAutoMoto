@@ -1,6 +1,6 @@
 <template>
   <div class="bg-white dark:text-gray-400 dark:bg-gray-900">
-    <div class="mx-auto max-w-2xl py-16 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+    <div class="mx-auto max-w-2xl py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
       <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
 
       <div v-if="isLoadingMotorcycles" class="text-center">
