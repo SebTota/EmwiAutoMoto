@@ -1,4 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
+import {useMainStore} from "@/stores/state";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -17,6 +18,16 @@ const router = createRouter({
       path: "/motorcycle/new",
       name: "newMotorcycle",
       component: () => import("../views/MotorcycleAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({name: 'login'})
+          }
+        })
+      }
     },
     {
       path: "/motorcycle/:id",
