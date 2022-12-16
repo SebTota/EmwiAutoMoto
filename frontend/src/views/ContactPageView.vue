@@ -12,31 +12,31 @@
           <div>
             <label for="first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Imię</label>
             <div class="mt-1">
-              <input type="text" v-model="first_name" :disabled="emailSentStatus === 'sending'" name="first-name" id="first-name" autocomplete="given-name" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
+              <input type="text" v-model="first_name" :disabled="emailSentStatus === 'sending'" required name="first-name" id="first-name" autocomplete="given-name" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
             </div>
           </div>
           <div>
             <label for="last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Nazwisko</label>
             <div class="mt-1">
-              <input type="text" v-model="last_name" :disabled="emailSentStatus === 'sending'" name="last-name" id="last-name" autocomplete="family-name" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
+              <input type="text" v-model="last_name" :disabled="emailSentStatus === 'sending'" required name="last-name" id="last-name" autocomplete="family-name" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
             </div>
           </div>
           <div class="sm:col-span-2">
             <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">E-mail</label>
             <div class="mt-1">
-              <input id="email" v-model="email" :disabled="emailSentStatus === 'sending'" name="email" type="email" autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
+              <input id="email" v-model="email" :disabled="emailSentStatus === 'sending'" required name="email" type="email" autocomplete="email" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" />
             </div>
           </div>
           <div class="sm:col-span-2">
             <label for="phone-number" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Numer telefonu</label>
             <div class="mt-1">
-              <input type="text" v-model="phone_number" :disabled="emailSentStatus === 'sending'" name="phone-number" id="phone-number" autocomplete="tel" class="py-3 px-4 block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" placeholder="+48 (555) 555 555"/>
+              <input type="text" v-model="phone_number" :disabled="emailSentStatus === 'sending'" required name="phone-number" id="phone-number" autocomplete="tel" class="py-3 px-4 block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200" placeholder="+48 (555) 555 555"/>
             </div>
           </div>
           <div class="sm:col-span-2">
             <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Wiadomość</label>
             <div class="mt-1">
-              <textarea id="message" v-model="message" :disabled="emailSentStatus === 'sending'" name="message" rows="4" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md disabled:bg-gray-200" />
+              <textarea id="message" v-model="message" :disabled="emailSentStatus === 'sending'" required name="message" rows="4" class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md disabled:bg-gray-200" />
             </div>
           </div>
           <div class="sm:col-span-2 text-center">

@@ -1,7 +1,7 @@
 import {MotorcycleColor} from "@/enums/motorcycleColor";
 
 
-export function getCssClassFromColor(color: string) {
+export function getCssClassFromColor(color: string): string {
     switch (color.toLowerCase().trim()) {
         case MotorcycleColor.White:
             return 'bg-neutral-50'
@@ -19,6 +19,8 @@ export function getCssClassFromColor(color: string) {
             return 'bg-blue-900'
         case MotorcycleColor.LightBlue:
             return 'bg-blue-400'
+        default:
+            return ''
     }
 }
 

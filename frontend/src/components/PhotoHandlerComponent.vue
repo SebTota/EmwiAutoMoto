@@ -7,7 +7,7 @@
       <div class="flex text-sm text-gray-600">
         <label for="file-upload" class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500">
           <span>Wybierz zdjęcie</span>
-          <input @change="onFileSelect($event.target.files);" id="file-upload" name="file-upload" type="file" accept="image/png, image/jpeg" class="sr-only" />
+          <input @change="onFileSelect" id="file-upload" name="file-upload" type="file" accept="image/png, image/jpeg" class="sr-only" />
         </label>
         <p class="pl-1">lub przeciągnij i upuść zdjęcie tuta</p>
       </div>
@@ -21,8 +21,9 @@ import {onMounted, onUnmounted} from "vue";
 
 const emit = defineEmits(['newFileUploaded'])
 
-function onFileSelect(files: File[]) {
+function onFileSelect(event: any) {
   console.log('New file selected');
+  const files = event.target.files;
   emit('newFileUploaded', files[0]);
 }
 

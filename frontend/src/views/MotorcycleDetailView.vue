@@ -25,7 +25,7 @@
             <TabList class="grid grid-cols-3 md:grid-cols-4 gap-3">
               <Tab v-for="image in product.images" :key="image.thumbnail_url" class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 dark:text-gray-400 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50" v-slot="{ selected }">
                 <span class="absolute inset-0 rounded-md overflow-hidden">
-                  <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
+                  <img :src="image.thumbnail_url ? image.thumbnail_url : undefined" alt="" class="w-full h-full object-center object-cover" />
                 </span>
                 <span :class="[selected ? 'ring-indigo-500' : 'ring-transparent', 'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none']" aria-hidden="true" />
               </Tab>
@@ -96,7 +96,7 @@ const mainStore = useMainStore();
 
 const loadingRequest = ref(true);
 let product: IMotorcycle;
-let colorCss;
+let colorCss: string;
 
 const motorcycleId: any = route.params.id;
 if (typeof motorcycleId === 'string') {

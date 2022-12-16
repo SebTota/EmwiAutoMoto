@@ -1,6 +1,6 @@
 
 export interface IImage {
-    image_url: string | null,
-    thumbnail_url: string | null
-    medium_thumbnail_url: string | null
+    image_url: string,
+    thumbnail_url: string
+    medium_thumbnail_url: string
 }

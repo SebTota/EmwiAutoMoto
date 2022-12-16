@@ -4,7 +4,7 @@
   </button>
 </template>
 
-<script setup>
+<script setup lang="ts">
 import {
   MoonIcon
 } from '@heroicons/vue/24/outline'

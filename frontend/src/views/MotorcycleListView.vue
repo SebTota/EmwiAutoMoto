@@ -18,7 +18,7 @@
           <div v-for="product in motorcycleResponse.motorcycles" :key="product.id"
                @click="getProductUrl(product.id)" class="hover:opacity-75">
             <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
-              <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
+              <img v-if="product.medium_thumbnail_url" :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
             </div>
             <div class="mt-4 flex justify-between">
               <div>

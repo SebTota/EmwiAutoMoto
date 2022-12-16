@@ -19,8 +19,8 @@
 <!--        </p>-->
 <!--      </div>-->
       <div class="flex-1 flex justify-between sm:justify-end">
-        <button :disabled="!props.hasPrevPage" @click="props.prevPage()" type="button" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"> Previous </button>
-        <button :disabled="!props.hasNextPage" @click="props.nextPage()" type="button" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"> Next </button>
+        <button :disabled="!props.hasPrevPage" @click="goBack" type="button" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"> Previous </button>
+        <button :disabled="!props.hasNextPage" @click="nextPage" type="button" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"> Next </button>
       </div>
     </nav>
   </div>
@@ -33,4 +33,16 @@ const props = defineProps({
   nextPage: Function,
   prevPage: Function
 })
+
+function goBack() {
+  if (props.prevPage) {
+    props.prevPage();
+  }
+}
+
+function nextPage() {
+  if (props.nextPage) {
+    props.nextPage();
+  }
+}
 </script>
