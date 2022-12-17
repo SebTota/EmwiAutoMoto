@@ -1,5 +1,4 @@
 import io
-import os
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import as_completed
 
@@ -7,11 +6,12 @@ import boto3
 from botocore.config import Config
 from PIL import Image as PIL_Image
 
+from backend.core.config import settings
 from backend.exceptions import FileUploadError
 from backend.schemas import Image
 
-BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
-BASE_HOST_URL = os.getenv('STORAGE_BASE_HOST_URL')
+BUCKET_NAME = settings.IMAGE_BUCKET_NAME
+BASE_HOST_URL = settings.IMAGE_BUCKET_BASE_HOST_URL
 
 THUMBNAIL_SIZE = [200, 200]
 MEDIUM_THUMBNAIL_SIZE = [600, 600]
@@ -19,17 +19,17 @@ MEDIUM_THUMBNAIL_SIZE = [600, 600]
 
 def _get_storage_resource() -> boto3.resource:
     return boto3.resource(service_name='s3',
-                          endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
-                          aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
-                          aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
+                          endpoint_url=settings.BUCKET_ENDPOINT_URL,
+                          aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
+                          aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
                           config=Config(signature_version='s3v4'))
 
 
 def _get_s3_client() -> boto3.client:
     return boto3.client(service_name='s3',
-                        endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
-                        aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
-                        aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
+                        endpoint_url=settings.BUCKET_ENDPOINT_URL,
+                        aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
+                        aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
                         config=Config(signature_version='s3v4'))
 
 

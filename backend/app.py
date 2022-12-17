@@ -1,5 +1,7 @@
 from dotenv import load_dotenv
-load_dotenv()  # noqa
+import os
+env_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '..', '.env'))  # noqa
+load_dotenv(dotenv_path=env_path)  # noqa
 
 from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware

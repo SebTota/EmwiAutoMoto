@@ -2,10 +2,12 @@ import os
 
 from fastapi_mail import ConnectionConfig, FastMail
 
+from backend.core.config import settings
+
 conf = ConnectionConfig(
-    MAIL_USERNAME=os.getenv('SMTP_EMAIL'),
-    MAIL_PASSWORD=os.getenv('SMTP_PASSWORD'),
-    MAIL_FROM="emwiautomoto@sebtota.com",
+    MAIL_USERNAME=settings.SMTP_USERNAME,
+    MAIL_PASSWORD=settings.SMTP_PASSWORD,
+    MAIL_FROM=settings.SMTP_MAIL_FROM,
     MAIL_PORT=587,
     MAIL_SERVER="email-smtp.us-east-1.amazonaws.com",
     MAIL_FROM_NAME="EMWI Auto Moto",
