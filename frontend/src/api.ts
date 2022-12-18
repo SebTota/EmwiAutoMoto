@@ -2,7 +2,7 @@ import axios from 'axios';
 import {apiUrl} from '@/env'
 import type {IUser} from "@/interfaces/user";
 import type {IToken} from "@/interfaces/token";
-import type {IMotorcycle, IMotorcycleList} from "@/interfaces/motorcycle";
+import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList} from "@/interfaces/motorcycle";
 import {handleDates} from "@/utils/dates";
 
 const client = axios.create({ baseURL: apiUrl });
@@ -45,6 +45,9 @@ export const api = {
   },
   async getMotorcycle(id: string) {
     return client.get<IMotorcycle>(`${apiUrl}/api/v1/motorcycles/${id}`);
+  },
+  async createMotorcycle(token: string, motorcycle: IMotorcycleCreate) {
+    return client.post<IMotorcycle>(`${apiUrl}/api/v1/motorcycles`, motorcycle, authHeaders(token));
   },
   async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
     const body = {

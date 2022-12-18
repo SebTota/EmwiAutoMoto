@@ -5,7 +5,7 @@ import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils/token";
 import router from "@/router";
 import type {IToken} from "@/interfaces/token";
 import axios from "axios";
-import type {IMotorcycle, IMotorcycleList} from "@/interfaces/motorcycle";
+import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList} from "@/interfaces/motorcycle";
 
 
 export interface MainState {
@@ -178,7 +178,23 @@ export const useMainStore = defineStore('mainState', {
                 const response = await api.getMotorcycle(id);
                 return response.data;
             } catch (error) {
+                console.error(error);
                 throw Error('Failed to retrieve motorcycle details.');
+            }
+        },
+        async createMotorcycle(motorcycle: IMotorcycleCreate): Promise<IMotorcycle> {
+            if (this.token && this.tokenIsValid()) {
+                try {
+                    const response = await api.createMotorcycle(this.token.access_token, motorcycle);
+                    return response.data;
+                } catch (error) {
+                    console.error(error);
+                    this.actionCheckApiError(error);
+                    throw Error('Failed to create motorcycle.');
+                }
+            } else {
+                this.actionLogout();
+                throw Error('User can not perform this action. Not signed in.');
             }
         }
     }
