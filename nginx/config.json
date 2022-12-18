@@ -5,7 +5,10 @@
             "pass": "routes"
         },
         "*:443": {
-            "pass": "routes"
+            "pass": "routes",
+            "tls": {
+                "certificate": "bundle"
+            }
         }
     },
     "routes": [

@@ -13,7 +13,8 @@ RUN pip install -r requirements.txt
 RUN pip install -U python-dotenv
 
 COPY /backend /backend
-COPY .env .env
+COPY backend/.env .env
 COPY --from=frontend-build-stage /front/dist /frontend
 
 COPY nginx/config.json /docker-entrypoint.d/config.json
+COPY nginx/bundle.pem /docker-entrypoint.d/bundle.pem

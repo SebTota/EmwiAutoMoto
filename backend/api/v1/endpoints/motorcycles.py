@@ -22,7 +22,7 @@ def read_items(
         show_sold: bool = False,
         show_status: ProductStatusEnum = ProductStatusEnum.active.value,
         page: int = 1,
-        limit: int = 15,
+        limit: int = 8,
         current_user: Optional[models.User] = Depends(deps.get_current_active_superuser_if_signed_in),
 ) -> Any:
     """
