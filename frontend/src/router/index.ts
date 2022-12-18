@@ -14,7 +14,7 @@ const router = createRouter({
       name: "motorcycleList",
       component: () => import("../views/MotorcycleListView.vue"),
     },
-      {
+    {
       path: "/motorcycle/new",
       name: "newMotorcycle",
       component: () => import("../views/MotorcycleAdminView.vue"),
@@ -28,6 +28,11 @@ const router = createRouter({
           }
         })
       }
+    },
+    {
+      path: "/motorcycle/:id/edit",
+      name: "motorcycleEdit",
+      component: () => import("../views/MotorcycleAdminView.vue"),
     },
     {
       path: "/motorcycle/:id",

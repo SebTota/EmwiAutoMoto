@@ -32,6 +32,19 @@ export interface IMotorcycleCreate {
     status: string
 }
 
+export interface IMotorcycleUpdate {
+    year: number,
+    make: string,
+    model: string,
+    odometer: number,
+    odometer_measurement: string,
+    color: string,
+    price: number,
+    description: string,
+    sold: boolean,
+    status: string
+}
+
 export interface IMotorcycleList {
     page: number,
     has_next_page: boolean,

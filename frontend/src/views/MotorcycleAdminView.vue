@@ -65,9 +65,10 @@
 
               <div v-if="isUpdate()" class="col-span-6 sm:col-span-3 md:col-span-2">
                 <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
-                <select v-model="status" disabled id="status" name="status" required class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
+                <select v-model="status" id="status" name="status" required class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm">
                   <option value="active">Aktywny</option>
                   <option value="inactive">Nieaktywny</option>
+                  <option value="draft">Projekt</option>
                 </select>
               </div>
             </div>
@@ -107,16 +108,16 @@
 import { ref } from "vue";
 import router from "@/router";
 import { MotorcycleColor } from "@/enums/motorcycleColor";
-import {colorToPolish} from "@/utils/colors";
+import {colorToPolish, getCssClassFromColor} from "@/utils/colors";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
-import type {IMotorcycle, IMotorcycleCreate} from "@/interfaces/motorcycle";
+import type {IMotorcycle, IMotorcycleCreate, IMotorcycleUpdate} from "@/interfaces/motorcycle";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import {useRoute} from "vue-router";
 import {useMainStore} from "@/stores/state";
 
 const route = useRoute();
 const mainStore = useMainStore();
-const loadingRequest = ref(false);
+const loadingRequest = ref(true);
 const error = ref('');
 
 const colors: string[] = Object.values(MotorcycleColor);
@@ -132,14 +133,37 @@ const sold = ref();
 const status = ref();
 const description = ref();
 
+const motorcycleId: any = route.params.id;
+async function onStartUp() {
+  if (isAddNew()) {
+    loadingRequest.value = false;
+  } else {
+    try {
+      const motorcycle: IMotorcycle = await mainStore.getMotorcycle(motorcycleId)
+      year.value = motorcycle.year;
+      make.value = motorcycle.make;
+      model.value = motorcycle.model;
+      odometer.value = motorcycle.odometer;
+      odometerMeasurement.value = motorcycle.odometer_measurement;
+      color.value = motorcycle.color;
+      price.value = motorcycle.price;
+      sold.value = motorcycle.sold;
+      status.value = motorcycle.status;
+      description.value = motorcycle.description;
+      loadingRequest.value = false;
+    } catch (err: any) {
+      await router.push({name: 'motorcycleList'})
+    }
+  }
+}
+onStartUp();
+
 
 function isAddNew() {
-  console.log(router.currentRoute.value.path);
   return router.currentRoute.value.path.startsWith('/motorcycle/new');
 }
 
 function isUpdate() {
-  console.log(router.currentRoute.value.path);
   return !isAddNew();
 }
 
@@ -152,6 +176,8 @@ function submit() {
 
   if (isAddNew()) {
     saveDraft();
+  } else {
+    updateMotorcycle();
   }
 }
 
@@ -172,9 +198,34 @@ async function saveDraft() {
   try {
     loadingRequest.value = true;
     const createdMotorcycle: IMotorcycle = await mainStore.createMotorcycle(motorcycle);
-    await router.push({name: 'motorcycleDetail', params: {id: createdMotorcycle.id}})
+    await router.push({name: 'motorcycleUpdate', params: {id: createdMotorcycle.id}})
   } catch (err: any) {
     error.value = 'Failed to create motorcycle.';
+  } finally {
+    loadingRequest.value = false;
+  }
+}
+
+async function updateMotorcycle() {
+  const motorcycle: IMotorcycleUpdate = {
+    year: year.value,
+    make: make.value,
+    model: model.value,
+    odometer: odometer.value,
+    odometer_measurement: odometerMeasurement.value,
+    color: color.value,
+    price: price.value,
+    description: description.value,
+    sold: sold.value,
+    status: status.value
+  }
+
+  try {
+    loadingRequest.value = true;
+    const updatedMotorcycle: IMotorcycle = await mainStore.updateMotorcycle(motorcycleId, motorcycle);
+    await router.push({name: 'motorcycleDetail', params: {id: updatedMotorcycle.id}})
+  } catch (err: any) {
+    error.value = 'Failed to update motorcycle.';
   } finally {
     loadingRequest.value = false;
   }

@@ -196,6 +196,21 @@ export const useMainStore = defineStore('mainState', {
                 this.actionLogout();
                 throw Error('User can not perform this action. Not signed in.');
             }
+        },
+        async updateMotorcycle(motorcycleId: string, motorcycle: IMotorcycleCreate): Promise<IMotorcycle> {
+            if (this.token && this.tokenIsValid()) {
+                try {
+                    const response = await api.updateMotorcycle(this.token.access_token, motorcycleId, motorcycle);
+                    return response.data;
+                } catch (error) {
+                    console.error(error);
+                    this.actionCheckApiError(error);
+                    throw Error('Failed to create motorcycle.');
+                }
+            } else {
+                this.actionLogout();
+                throw Error('User can not perform this action. Not signed in.');
+            }
         }
     }
 
