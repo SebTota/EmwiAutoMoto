@@ -122,6 +122,9 @@ def read_item(
     Get item by ID.
     """
     item = crud.motorcycle.get(db=db, id=id)
+
+    # TODO: Check if user is active if the motorcycle status is not active
+
     if not item:
         raise HTTPException(status_code=404, detail="Item not found")
     return item

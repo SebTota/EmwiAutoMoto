@@ -33,6 +33,16 @@ const router = createRouter({
       path: "/motorcycle/:id/edit",
       name: "motorcycleEdit",
       component: () => import("../views/MotorcycleAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({name: 'login'})
+          }
+        })
+      }
     },
     {
       path: "/motorcycle/:id",

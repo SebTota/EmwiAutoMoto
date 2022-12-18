@@ -68,6 +68,9 @@
 <!--              </button>-->
 
             </div>
+            <div v-if="isAdmin()" class="mt-2">
+              <button type="submit" @click="goToEditMotorcyclePage" class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full">Edytuj motocykl</button>
+            </div>
           </form>
         </div>
       </div>
@@ -90,15 +93,24 @@ import {useMainStore} from "@/stores/state";
 import type {IMotorcycle} from "@/interfaces/motorcycle";
 import {getCssClassFromColor} from "@/utils/colors";
 import router from "@/router";
+import {storeToRefs} from "pinia";
+
 
 const route = useRoute();
 const mainStore = useMainStore();
+const { isLoggedIn } = storeToRefs(mainStore);
+
 
 const loadingRequest = ref(true);
+const mainStateLoaded = ref(false);
+const motorcycleId: any = route.params.id;
 let product: IMotorcycle;
 let colorCss: string;
 
-const motorcycleId: any = route.params.id;
+mainStore.actionCheckLoggedIn().then(() => {
+  mainStateLoaded.value = true;
+})
+
 if (typeof motorcycleId === 'string') {
   mainStore.getMotorcycle(motorcycleId).then(response => {
     product = response;
@@ -114,6 +126,15 @@ function goBack() {
 function goToContactPage(event: any) {
   event.preventDefault();
   router.push({name: 'contact', query: {motorcycleRef: encodeURIComponent(window.location.href)}})
+}
+
+function goToEditMotorcyclePage(event: any) {
+  event.preventDefault();
+  router.push({name: 'motorcycleEdit', params: {id: motorcycleId}})
+}
+
+function isAdmin() {
+  return mainStateLoaded.value && isLoggedIn.value;
 }
 
 </script>
