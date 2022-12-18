@@ -15,12 +15,12 @@
           </PopoverButton>
         </div>
         <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
-          <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800">
+          <a v-for="item in tabs" :key="item.name" href="#" @click="item.onClickHandler()" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800">
             <a class="text-base font-medium">{{ item.name }}</a>
           </a>
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <a v-if="mainStateLoaded && !isLoggedIn" href="/login" class="whitespace-nowrap text-base font-medium">Sign in</a>
+          <a v-if="mainStateLoaded && !isLoggedIn" href="#" @click="goToLogin()" class="whitespace-nowrap text-base font-medium">Sign in</a>
           <p v-if="mainStateLoaded && isLoggedIn">{{ getUsername() }}</p>
         </div>
       </div>
@@ -43,7 +43,7 @@
             </div>
             <div class="mt-6">
               <nav class="grid gap-y-8">
-                <a v-for="item in tabs" :key="item.name" :href="item.href" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700">
+                <a v-for="item in tabs" :key="item.name" href="#" @click="item.onClickHandler()" class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700">
                   <component :is="item.icon" class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
                   <span class="ml-3 text-base font-medium">{{ item.name }}</span>
                 </a>
@@ -53,7 +53,7 @@
           <div class="space-y-5 py-5 px-5">
             <div>
               <link>
-              <a v-if="mainStateLoaded && !isLoggedIn" href="/login" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Sign in</a>
+              <a v-if="mainStateLoaded && !isLoggedIn" href="#" @click="goToLogin" class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2">Sign in</a>
             </div>
           </div>
         </div>
@@ -72,6 +72,7 @@ import {
 import {useMainStore} from "@/stores/state";
 import {storeToRefs} from "pinia";
 import {ref} from "vue";
+import router from "@/router";
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
@@ -81,21 +82,21 @@ let tabs = [
   {
     name: 'Motocykle',
     description: 'Motocykle',
-    href: '/',
+    onClickHandler: goHome,
     icon: ArrowLongRightIcon,
   },
   {
     name: 'Kontakt',
     description: 'Kontakt',
-    href: '/contact',
+    onClickHandler: goToContactPage,
     icon: ArrowLongRightIcon,
   },
 ]
 
 const addMotorcycleTab = {
-  name: 'Nowy Motocykle',
-  description: 'Nowy Motocykle',
-  href: '/motorcycle/new',
+  name: 'Nowy Motocykl',
+  description: 'Nowy Motocykl',
+  onClickHandler: goToNewMotorcyclePage,
   icon: ArrowLongRightIcon,
 };
 
@@ -106,6 +107,22 @@ mainState.actionCheckLoggedIn().then(() => {
 
 function getUsername() {
   return mainState.user?.username;
+}
+
+function goToLogin() {
+  router.push({name: 'login'})
+}
+
+function goHome() {
+  router.push({name: 'motorcycleList'})
+}
+
+function goToContactPage() {
+  router.push({name: 'contact'})
+}
+
+function goToNewMotorcyclePage() {
+  router.push({name: 'newMotorcycle'})
 }
 
 </script>
