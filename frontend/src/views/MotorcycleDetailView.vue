@@ -120,7 +120,8 @@ if (typeof motorcycleId === 'string') {
 }
 
 function goBack() {
-  router.go(-1);
+  // TODO: Save the last search preferences (page, filters, etc.) in local storage and reference them here
+  router.push({name: 'motorcycleList'});
 }
 
 function goToContactPage(event: any) {

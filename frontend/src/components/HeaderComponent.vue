@@ -101,7 +101,9 @@ const addMotorcycleTab = {
 };
 
 mainState.actionCheckLoggedIn().then(() => {
-  tabs = [tabs[0], addMotorcycleTab, tabs[1]];
+  if (mainState.isAdmin){
+      tabs = [tabs[0], addMotorcycleTab, tabs[1]];
+  }
   mainStateLoaded.value = true;
 })
 
