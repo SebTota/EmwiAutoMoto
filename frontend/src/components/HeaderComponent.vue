@@ -77,24 +77,32 @@ const mainState = useMainStore();
 const mainStateLoaded = ref(false);
 const { isLoggedIn, user } = storeToRefs(mainState);
 
-mainState.actionCheckLoggedIn().then(() => {
-  mainStateLoaded.value = true;
-})
-
-const tabs = [
+let tabs = [
   {
     name: 'Motocykle',
     description: 'Motocykle',
     href: '/',
     icon: ArrowLongRightIcon,
   },
-    {
+  {
     name: 'Kontakt',
     description: 'Kontakt',
     href: '/contact',
     icon: ArrowLongRightIcon,
   },
 ]
+
+const addMotorcycleTab = {
+  name: 'Nowy Motocykle',
+  description: 'Nowy Motocykle',
+  href: '/motorcycle/new',
+  icon: ArrowLongRightIcon,
+};
+
+mainState.actionCheckLoggedIn().then(() => {
+  tabs = [tabs[0], addMotorcycleTab, tabs[1]];
+  mainStateLoaded.value = true;
+})
 
 function getUsername() {
   return mainState.user?.username;
