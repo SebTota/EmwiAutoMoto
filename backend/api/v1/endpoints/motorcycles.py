@@ -70,7 +70,7 @@ def update_item(
     return item
 
 
-@router.post('/{id}/productImage')
+@router.post('/{id}/productImage', response_model=schemas.Image)
 def add_product_image(
         *,
         db: Session = Depends(deps.get_db),

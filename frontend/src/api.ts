@@ -5,6 +5,7 @@ import type {IToken} from "@/interfaces/token";
 import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList, IMotorcycleUpdate} from "@/interfaces/motorcycle";
 import {handleDates} from "@/utils/dates";
 import type {ProductStatusEnum} from "@/enums/productStatusEnum";
+import type {IImage} from "@/interfaces/image";
 
 const client = axios.create({ baseURL: apiUrl });
 
@@ -72,6 +73,11 @@ export const api = {
   },
   async updateMotorcycle(token: string, motorcycleId: string, motorcycle: IMotorcycleUpdate) {
     return client.put<IMotorcycle>(`${apiUrl}/api/v1/motorcycles/${motorcycleId}`, motorcycle, authHeaders(token));
+  },
+  async addImageToMotorcycle(token: string, motorcycleId: string, file: File) {
+    const formData = new FormData();
+    formData.append('file', file);
+    return client.post<IImage>(`${apiUrl}/api/v1/motorcycles/${motorcycleId}/productImage`, formData, authHeaders(token));
   },
   async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
     const body = {

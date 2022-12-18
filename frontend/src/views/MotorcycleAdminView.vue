@@ -114,6 +114,7 @@ import type {IMotorcycle, IMotorcycleCreate, IMotorcycleUpdate} from "@/interfac
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import {useRoute} from "vue-router";
 import {useMainStore} from "@/stores/state";
+import type {IImage} from "@/interfaces/image";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -231,8 +232,16 @@ async function updateMotorcycle() {
   }
 }
 
-function newFileUpload(file: File) {
-  console.log('New file uploaded!!!')
-  console.log(file)
+async function newFileUpload(file: File) {
+  error.value = '';
+
+  loadingRequest.value = true;
+  try {
+    const newImage: IImage = await mainStore.addImageToMotorcycle(motorcycleId, file);
+  } catch (err: any) {
+    error.value = 'Failed to add image to motorcycle.';
+  } finally {
+    loadingRequest.value = false;
+  }
 }
 </script>
