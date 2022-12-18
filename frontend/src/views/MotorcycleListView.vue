@@ -1,9 +1,24 @@
 <template>
   <div class="bg-white dark:text-gray-400 dark:bg-gray-900">
-    <div class="mx-auto max-w-2xl py-8 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
-      <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
+    <div class="mx-auto max-w-2xl pt-4 px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+      <div>
+        <div class="text-center relative z-0">
+          <section aria-labelledby="filter-heading" class="border-b border-gray-200 py-6">
+            <h2 id="filter-heading" class="sr-only">Product filters</h2>
 
-      <div v-if="isLoadingMotorcycles" class="text-center">
+            <div class="flex items-center justify-between">
+              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
+
+              <div v-if="isAdmin" class="text-left">
+                <input v-model="showAll" @click="toggleShowAll()" id="show_all" type="checkbox" value="" class="w-4 h-4 text-indigo-500 rounded border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-indigo-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
+                <label @click="toggleShowAll()" for="show_all" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pokaż wszystkie</label>
+              </div>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div v-if="isLoadingMotorcycles" class="text-center pt-4">
         <div class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 inline-flex items-center">
             <svg class="inline mr-3 w-4 h-4 text-white animate-spin" viewBox="0 0 100 101" fill="none" xmlns="http://www.w3.org/2000/svg">
             <path d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z" fill="#E5E7EB"/>
@@ -28,6 +43,7 @@
                   </a>
                 </h3>
                 <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{colorToPolish(product.color)}}</p>
+                <p v-if="showExtraDetails()" class="mt-1 text-medium text-gray-500 dark:text-gray-400">{{product.status}}</p>
               </div>
               <p class="text-medium font-medium text-gray-900 dark:text-gray-300">{{ product.price }} zł</p>
             </div>
@@ -51,9 +67,12 @@ import router from "@/router";
 import MotorcycleListPagination from "@/components/MotorcycleListPagination.vue";
 import {colorToPolish} from "@/utils/colors";
 import {useRoute} from "vue-router";
+import {storeToRefs} from "pinia";
+import {ProductStatusEnum} from "@/enums/productStatusEnum";
 
 const route = useRoute();
-const page: any = route.query.page ? parseInt(route.query.page as string) : 1;
+const page = ref(route.query.page ? parseInt(route.query.page as string) : 1);
+const showAll = ref(route.query.showAll ? JSON.parse(route.query.showAll as string) : false);
 
 const mainState = useMainStore();
 const isLoadingMotorcycles = ref(true);
@@ -64,9 +83,28 @@ let products = [];
 let motorcycleResponse: IMotorcycleList;
 let errorMessage = null;
 
+const mainStore = useMainStore();
+const { isAdmin } = storeToRefs(mainStore);
+const mainStateLoaded = ref(false);
+mainStore.actionCheckLoggedIn().then(() => {
+  mainStateLoaded.value = true;
+})
+
+function toggleShowAll() {
+  showAll.value = !showAll.value;
+  updateMotorcycles(1);
+}
+
 function updateMotorcycles(page: number) {
+  let showStatus = [];
+  if (showAll.value) {
+    showStatus = [ProductStatusEnum.active, ProductStatusEnum.inactive, ProductStatusEnum.draft];
+  } else {
+    showStatus = [ProductStatusEnum.active];
+  }
+
   isLoadingMotorcycles.value = true;
-  mainState.getMotorcycles(page).then((motorcycleListResponse: IMotorcycleList) => {
+  mainState.getMotorcycles(page, showStatus).then((motorcycleListResponse: IMotorcycleList) => {
     motorcycleResponse = motorcycleListResponse;
     products = motorcycleListResponse.motorcycles;
     hasNextPage.value = motorcycleResponse.has_next_page;
@@ -85,7 +123,8 @@ function getProductUrl(productId: string) {
 function navigateToNextPage() {
   if (motorcycleResponse.has_next_page) {
       router.push({name: 'motorcycleList', query: {
-        page: motorcycleResponse.page + 1
+        page: motorcycleResponse.page + 1,
+        showAll: showAll.value
       }})
   }
 }
@@ -93,10 +132,15 @@ function navigateToNextPage() {
 function navigateToPreviousPage() {
   if (motorcycleResponse.page > 1) {
     router.push({name: 'motorcycleList', query: {
-        page: motorcycleResponse.page - 1
+        page: motorcycleResponse.page - 1,
+        showAll: showAll.value
       }})
   }
 }
 
-updateMotorcycles(page);
+function showExtraDetails() {
+  return isAdmin.value;
+}
+
+updateMotorcycles(page.value);
 </script>

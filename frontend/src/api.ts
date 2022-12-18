@@ -4,6 +4,7 @@ import type {IUser} from "@/interfaces/user";
 import type {IToken} from "@/interfaces/token";
 import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList, IMotorcycleUpdate} from "@/interfaces/motorcycle";
 import {handleDates} from "@/utils/dates";
+import type {ProductStatusEnum} from "@/enums/productStatusEnum";
 
 const client = axios.create({ baseURL: apiUrl });
 
@@ -37,9 +38,12 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getMotorcycles(page: number) {
+  async getMotorcycles(page: number, status: ProductStatusEnum[]) {
     const params = new URLSearchParams();
     params.append('page', page.toString());
+    status.forEach(s => {
+      params.append('show_status', s)
+    })
 
     return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, { params });
   },

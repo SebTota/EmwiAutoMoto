@@ -1,16 +1,18 @@
 import {defineStore} from "pinia";
 import type {IUser} from "@/interfaces/user";
 import {api} from "@/api";
-import {getLocalToken, saveLocalToken, removeLocalToken} from "@/utils/token";
+import {getLocalToken, removeLocalToken, saveLocalToken} from "@/utils/token";
 import router from "@/router";
 import type {IToken} from "@/interfaces/token";
 import axios from "axios";
 import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList} from "@/interfaces/motorcycle";
+import {ProductStatusEnum} from "@/enums/productStatusEnum";
 
 
 export interface MainState {
     token: IToken | null;
     isLoggedIn: boolean | null;
+    isAdmin: boolean | null;
     loginError: string | null;
     user: IUser | null;
 }
@@ -21,6 +23,7 @@ export const useMainStore = defineStore('mainState', {
         return {
             token: null,
             isLoggedIn: false,
+            isAdmin: false,
             loginError: null,
             user: null
         }
@@ -63,6 +66,7 @@ export const useMainStore = defineStore('mainState', {
                     const response = await api.getMe(this.token.access_token);
                     if (response.data) {
                         this.user = response.data;
+                        this.isAdmin = response.data.is_superuser;
                     }
                 } catch (error) {
                     console.error('Failed to retrieve signed in user information.', error);
@@ -89,6 +93,7 @@ export const useMainStore = defineStore('mainState', {
                     const response = await api.getMe(this.token.access_token);
                     this.isLoggedIn = true;
                     this.user = response.data;
+                    this.isAdmin = response.data.is_superuser;
                 } catch (error) {
                     console.error('Failed to retrieve signed in user information.', error);
                     await this.actionRemoveLogIn();
@@ -136,6 +141,7 @@ export const useMainStore = defineStore('mainState', {
             this.token = null;
             this.user = null;
             this.isLoggedIn = false;
+            this.isAdmin = false;
             removeLocalToken();
         },
         actionRouteLoggedIn() {
@@ -164,9 +170,9 @@ export const useMainStore = defineStore('mainState', {
             }
             return false;
         },
-        async getMotorcycles(page: number): Promise<IMotorcycleList> {
+        async getMotorcycles(page: number, status: ProductStatusEnum[] = [ProductStatusEnum.active, ProductStatusEnum.inactive]): Promise<IMotorcycleList> {
             try {
-                const response = await api.getMotorcycles(page);
+                const response = await api.getMotorcycles(page, status);
                 return response.data;
             } catch (error) {
                 console.error('Failed to retrieve motorcycle list.', error);

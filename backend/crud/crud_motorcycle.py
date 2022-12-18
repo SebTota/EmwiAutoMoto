@@ -38,13 +38,13 @@ class CRUDMotorcycle(CRUDBase[Motorcycle, MotorcycleCreate, MotorcycleUpdate]):
     motorcycle_count: int
 
     def get_multi_with_filters(
-        self, db: Session, *, page: int, limit: int, show_sold: bool, show_status: ProductStatusEnum
+        self, db: Session, *, page: int, limit: int, show_sold: bool, show_status: List[ProductStatusEnum]
     ) -> schemas.MotorcycleList:
         offset: int = (page - 1) * limit
 
         q = db.query(self.model) \
             .where(Motorcycle.sold == show_sold) \
-            .where(Motorcycle.status == show_status) \
+            .filter(Motorcycle.status.in_(show_status)) \
             .order_by(desc(Motorcycle.date_created))
         total_count: int = q.count()
         motorcycles: List[schemas.Motorcycle] = q.offset(offset).limit(limit + 1).all()

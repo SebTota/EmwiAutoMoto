@@ -2,7 +2,7 @@ import io
 import uuid
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
 from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
 from starlette import status
@@ -20,7 +20,7 @@ router = APIRouter()
 def read_items(
         db: Session = Depends(deps.get_db),
         show_sold: bool = False,
-        show_status: ProductStatusEnum = ProductStatusEnum.active.value,
+        show_status: List[ProductStatusEnum] = Query(default=[ProductStatusEnum.active.value]),
         page: int = 1,
         limit: int = 8,
         current_user: Optional[models.User] = Depends(deps.get_current_active_superuser_if_signed_in),
@@ -28,7 +28,7 @@ def read_items(
     """
     Retrieve motorcycle items.
     """
-    if show_status is not ProductStatusEnum.active.value and current_user is None:
+    if not (len(show_status) == 1 and show_status[0] == ProductStatusEnum.active.value):
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to perform this query",
