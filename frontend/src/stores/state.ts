@@ -146,7 +146,8 @@ export const useMainStore = defineStore('mainState', {
         },
         actionRouteLoggedIn() {
             if (router.currentRoute.value.path === '/login') {
-                router.push({path: '/'});
+                // Nav using href after login to refresh header auth check
+                window.location.href = '/';
             }
         },
         actionRouteLogOut() {
@@ -171,8 +172,12 @@ export const useMainStore = defineStore('mainState', {
             return false;
         },
         async getMotorcycles(page: number, status: ProductStatusEnum[] = [ProductStatusEnum.active, ProductStatusEnum.inactive]): Promise<IMotorcycleList> {
+            let token;
+            if (this.token && this.tokenIsValid()) {
+                token = this.token.access_token;
+            }
             try {
-                const response = await api.getMotorcycles(page, status);
+                const response = await api.getMotorcycles(page, status, token);
                 return response.data;
             } catch (error) {
                 console.error('Failed to retrieve motorcycle list.', error);

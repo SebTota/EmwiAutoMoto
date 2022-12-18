@@ -21,6 +21,21 @@ function authHeaders(token: string) {
   };
 }
 
+function configFromAuthHeadersAndParams(auth: { headers: { Authorization: string } } | null, params: URLSearchParams) {
+  const config: any = {
+    'params': {},
+    'headers': {}
+  };
+
+  config.params = params;
+
+  if (auth) {
+    config.headers = auth.headers
+  }
+
+  return config;
+}
+
 export const api = {
   async logInGetToken(username: string, password: string) {
     const params = new URLSearchParams();
@@ -38,14 +53,16 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getMotorcycles(page: number, status: ProductStatusEnum[]) {
+  async getMotorcycles(page: number, status: ProductStatusEnum[], token: string | null = null) {
     const params = new URLSearchParams();
     params.append('page', page.toString());
     status.forEach(s => {
       params.append('show_status', s)
     })
 
-    return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, { params });
+    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
+    const config = configFromAuthHeadersAndParams(auth, params);
+    return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, config);
   },
   async getMotorcycle(id: string) {
     return client.get<IMotorcycle>(`${apiUrl}/api/v1/motorcycles/${id}`);

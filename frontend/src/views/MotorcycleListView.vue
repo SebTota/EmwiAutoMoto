@@ -11,7 +11,7 @@
 
               <div v-if="isAdmin" class="text-left">
                 <input v-model="showAll" @click="toggleShowAll()" id="show_all" type="checkbox" value="" class="w-4 h-4 text-indigo-500 rounded border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-indigo-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600">
-                <label @click="toggleShowAll()" for="show_all" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pokaż wszystkie</label>
+                <label for="show_all" class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Pokaż wszystkie</label>
               </div>
             </div>
           </section>
@@ -28,8 +28,8 @@
         </div>
       </div>
 
-      <div v-else>
-        <div class="mt-6 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
+      <div v-if="!isLoadingMotorcycles && motorcycleResponse">
+        <div class="mt-4 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
           <div v-for="product in motorcycleResponse.motorcycles" :key="product.id"
                @click="getProductUrl(product.id)" class="hover:opacity-75">
             <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
@@ -53,6 +53,12 @@
                                 :hasPrevPage="hasPrevPage"
                                 :nextPage="navigateToNextPage"
                                 :prevPage="navigateToPreviousPage"/>
+      </div>
+
+      <div v-if="errorMessage" class="pt-4">
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
+          <span class="block sm:inline">{{ errorMessage }}</span>
+        </div>
       </div>
     </div>
   </div>
@@ -81,7 +87,7 @@ const hasPrevPage = ref(false);
 let products = [];
 
 let motorcycleResponse: IMotorcycleList;
-let errorMessage = null;
+let errorMessage = ref('');
 
 const mainStore = useMainStore();
 const { isAdmin } = storeToRefs(mainStore);
@@ -111,7 +117,8 @@ function updateMotorcycles(page: number) {
     hasPrevPage.value = motorcycleResponse.page > 1;
     isLoadingMotorcycles.value = false;
   }).catch(err => {
-    errorMessage = "Uh oh. Something went wrong. Please try again later.";
+    isLoadingMotorcycles.value = false;
+    errorMessage.value = "Coś poszło nie tak. Spróbuj ponownie później.";
     console.log('Failed to load motorcycles', err);
   })
 }
@@ -122,19 +129,19 @@ function getProductUrl(productId: string) {
 
 function navigateToNextPage() {
   if (motorcycleResponse.has_next_page) {
-      router.push({name: 'motorcycleList', query: {
-        page: motorcycleResponse.page + 1,
-        showAll: showAll.value
-      }})
+    router.push({name: 'motorcycleList', query: {
+      page: motorcycleResponse.page + 1,
+      showAll: showAll.value
+    }})
   }
 }
 
 function navigateToPreviousPage() {
   if (motorcycleResponse.page > 1) {
     router.push({name: 'motorcycleList', query: {
-        page: motorcycleResponse.page - 1,
-        showAll: showAll.value
-      }})
+      page: motorcycleResponse.page - 1,
+      showAll: showAll.value
+    }})
   }
 }
 

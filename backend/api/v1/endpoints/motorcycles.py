@@ -28,7 +28,7 @@ def read_items(
     """
     Retrieve motorcycle items.
     """
-    if not (len(show_status) == 1 and show_status[0] == ProductStatusEnum.active.value):
+    if not (len(show_status) == 1 and show_status[0] == ProductStatusEnum.active.value) and not current_user:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="You are not authorized to perform this query",
