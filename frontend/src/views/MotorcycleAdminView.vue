@@ -81,10 +81,10 @@
             </div>
 
             <div v-if="isUpdate()">
+              <ImageGallery :images="images" :onDelete="deleteImage"/>
               <label class="block text-sm font-medium text-gray-700">Photo</label>
               <PhotoHandlerComponent @newFileUploaded="newFileUpload"/>
             </div>
-
           </div>
 
           <div v-if="showError" class="text-sm mb-0 w-100 text-red-400 text-right">
@@ -105,16 +105,17 @@
 
 
 <script setup lang="ts">
-import { ref } from "vue";
+import {ref} from "vue";
 import router from "@/router";
 import { MotorcycleColor } from "@/enums/motorcycleColor";
-import {colorToPolish, getCssClassFromColor} from "@/utils/colors";
+import {colorToPolish} from "@/utils/colors";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
 import type {IMotorcycle, IMotorcycleCreate, IMotorcycleUpdate} from "@/interfaces/motorcycle";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import {useRoute} from "vue-router";
 import {useMainStore} from "@/stores/state";
 import type {IImage} from "@/interfaces/image";
+import ImageGallery from "@/components/ImageGallery.vue";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -135,6 +136,8 @@ const status = ref();
 const description = ref();
 
 const motorcycleId: any = route.params.id;
+const images: any = ref([]);
+
 async function onStartUp() {
   if (isAddNew()) {
     loadingRequest.value = false;
@@ -152,6 +155,7 @@ async function onStartUp() {
       status.value = motorcycle.status;
       description.value = motorcycle.description;
       loadingRequest.value = false;
+      images.value = motorcycle.images ? motorcycle.images : [];
     } catch (err: any) {
       await router.push({name: 'motorcycleList'})
     }
@@ -208,6 +212,9 @@ async function saveDraft() {
 }
 
 async function updateMotorcycle() {
+  const thumbnail_url = images.value && images.value.length > 0 ? images.value[0].thumbnail_url : null;
+  const medium_thumbnail_url = images.value && images.value.length > 0 ? images.value[0].medium_thumbnail_url : null;
+
   const motorcycle: IMotorcycleUpdate = {
     year: year.value,
     make: make.value,
@@ -218,7 +225,10 @@ async function updateMotorcycle() {
     price: price.value,
     description: description.value,
     sold: sold.value,
-    status: status.value
+    status: status.value,
+    images: images.value,
+    thumbnail_url: thumbnail_url,
+    medium_thumbnail_url: medium_thumbnail_url
   }
 
   try {
@@ -238,8 +248,22 @@ async function newFileUpload(file: File) {
   loadingRequest.value = true;
   try {
     const newImage: IImage = await mainStore.addImageToMotorcycle(motorcycleId, file);
+    images.value.push(newImage);
   } catch (err: any) {
     error.value = 'Failed to add image to motorcycle.';
+  } finally {
+    loadingRequest.value = false;
+  }
+}
+
+async function deleteImage(imageId: string) {
+  error.value = '';
+  loadingRequest.value = true;
+  try {
+    await mainStore.deleteImageFromMotorcycle(motorcycleId, imageId);
+    await onStartUp();
+  } catch (err: any) {
+    error.value = 'Failed to remote image from motorcycle.';
   } finally {
     loadingRequest.value = false;
   }

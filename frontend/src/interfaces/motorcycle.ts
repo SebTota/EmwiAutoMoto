@@ -42,7 +42,10 @@ export interface IMotorcycleUpdate {
     price: number,
     description: string,
     sold: boolean,
-    status: string
+    status: string,
+    thumbnail_url: string | null,
+    medium_thumbnail_url: string | null,
+    images: IImage[] | null
 }
 
 export interface IMotorcycleList {

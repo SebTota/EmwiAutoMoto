@@ -10,6 +10,9 @@ from backend.utils.deps import get_random_string
 
 
 class CRUDImage(CRUDBase[Image, ImageCreate, ImageUpdate]):
+    def get_by_image_and_motorcycle_id(self, db: Session, image_id: str, motorcycle_id: str):
+        return db.query(self.model).where(Image.id == image_id).where(Image.motorcycle_id == motorcycle_id).first()
+
     def create(self, db: Session, *, obj_in: ImageCreate) -> Image:
         obj_in_data = jsonable_encoder(obj_in)
         db_obj = self.model(**obj_in_data, id=get_random_string(12))

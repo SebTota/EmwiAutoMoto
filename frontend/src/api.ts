@@ -79,6 +79,16 @@ export const api = {
     formData.append('file', file);
     return client.post<IImage>(`${apiUrl}/api/v1/motorcycles/${motorcycleId}/productImage`, formData, authHeaders(token));
   },
+  async deleteImageFromMotorcycle(token: string, motorcycleId: string, imageId: string) {
+    const params = new URLSearchParams();
+    params.append('motorcycle_id', motorcycleId);
+    params.append('image_id', imageId);
+
+    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
+    const config = configFromAuthHeadersAndParams(auth, params);
+
+    return client.delete<IImage>(`${apiUrl}/api/v1/motorcycles/${motorcycleId}/productImage/${imageId}`, config);
+  },
   async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
     const body = {
       'first_name': first_name,

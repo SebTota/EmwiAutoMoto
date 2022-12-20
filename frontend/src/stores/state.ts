@@ -7,6 +7,7 @@ import type {IToken} from "@/interfaces/token";
 import axios from "axios";
 import type {IMotorcycle, IMotorcycleCreate, IMotorcycleList} from "@/interfaces/motorcycle";
 import {ProductStatusEnum} from "@/enums/productStatusEnum";
+import type {IMotorcycleUpdate} from "@/interfaces/motorcycle";
 
 
 export interface MainState {
@@ -208,7 +209,7 @@ export const useMainStore = defineStore('mainState', {
                 throw Error('User can not perform this action. Not signed in.');
             }
         },
-        async updateMotorcycle(motorcycleId: string, motorcycle: IMotorcycleCreate): Promise<IMotorcycle> {
+        async updateMotorcycle(motorcycleId: string, motorcycle: IMotorcycleUpdate): Promise<IMotorcycle> {
             if (this.token && this.tokenIsValid()) {
                 try {
                     const response = await api.updateMotorcycle(this.token.access_token, motorcycleId, motorcycle);
@@ -232,6 +233,21 @@ export const useMainStore = defineStore('mainState', {
                     console.error(error);
                     this.actionCheckApiError(error);
                     throw Error('Failed to add image to motorcycle.');
+                }
+            } else {
+                this.actionLogout();
+                throw Error('User can not perform this action. Not signed in.');
+            }
+        },
+        async deleteImageFromMotorcycle(motorcycleId: string, imageId: string) {
+            if (this.token && this.tokenIsValid()) {
+                try {
+                    const response = await api.deleteImageFromMotorcycle(this.token.access_token, motorcycleId, imageId);
+                    return response.data;
+                } catch (error) {
+                    console.error(error);
+                    this.actionCheckApiError(error);
+                    throw Error('Failed to delete image from motorcycle.');
                 }
             } else {
                 this.actionLogout();

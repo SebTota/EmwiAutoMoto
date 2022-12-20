@@ -112,6 +112,26 @@ def add_product_image(
         raise HTTPException(status_code=500, detail='Failed to process image.')
 
 
+@router.delete('/{motorcycle_id}/productImage/{image_id}', response_model=schemas.Image)
+def add_product_image(
+        *,
+        db: Session = Depends(deps.get_db),
+        motorcycle_id: str,
+        image_id: str,
+        current_user: models.User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Delete photo from motorcycle listing.
+    """
+    image: schemas.Image = crud.image.get_by_image_and_motorcycle_id(db, image_id, motorcycle_id)
+    if not image:
+        raise HTTPException(status_code=404, detail="No image found with this id for the specified motorcycle.")
+
+    db.delete(image)
+    db.commit()
+    return image
+
+
 @router.get("/{id}", response_model=schemas.Motorcycle)
 def read_item(
         *,

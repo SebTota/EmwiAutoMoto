@@ -22,7 +22,6 @@ import {onMounted, onUnmounted} from "vue";
 const emit = defineEmits(['newFileUploaded'])
 
 function onFileSelect(event: any) {
-  console.log('New file selected');
   const files = event.target.files;
   emit('newFileUploaded', files[0]);
 }
