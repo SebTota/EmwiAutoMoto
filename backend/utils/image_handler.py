@@ -8,7 +8,7 @@ from PIL import Image as PIL_Image
 
 from backend.core.config import settings
 from backend.exceptions import FileUploadError
-from backend.schemas import Image
+from backend.models import Image
 
 BUCKET_NAME = settings.IMAGE_BUCKET_NAME
 BASE_HOST_URL = settings.IMAGE_BUCKET_BASE_HOST_URL

@@ -7,8 +7,7 @@ from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
 from starlette import status
 
-from backend import crud, models, schemas
-from backend.enums import ProductStatusEnum
+from backend import crud, models
 from backend.exceptions import FileUploadError
 from backend.utils import deps
 from backend.utils.image_handler import delete_image, process_image
@@ -16,57 +15,70 @@ from backend.utils.image_handler import delete_image, process_image
 router = APIRouter()
 
 
-@router.get("", response_model=schemas.MotorcycleList)
+@router.get("/", response_model=models.MotorcycleList)
 def read_items(
         db: Session = Depends(deps.get_db),
         show_sold: bool = False,
-        show_status: List[ProductStatusEnum] = Query(default=[ProductStatusEnum.active.value]),
-        page: int = 1,
-        limit: int = 8,
-        current_user: Optional[models.User] = Depends(deps.get_current_active_superuser_if_signed_in),
+        show_status: models.MotorcycleStatus = models.MotorcycleStatus.active.value,
+        page: int = 0,
+        limit: int = 15,
 ) -> Any:
     """
     Retrieve motorcycle items.
     """
-    if not (len(show_status) == 1 and show_status[0] == ProductStatusEnum.active.value) and not current_user:
-        raise HTTPException(
-            status_code=status.HTTP_403_FORBIDDEN,
-            detail="You are not authorized to perform this query",
-        )
+    offset: int = (page - 1) * limit
+    items: List[models.Motorcycle] = crud.motorcycle.get_multi_with_filters(db, offset=offset, limit=limit + 1,
+                                                                            show_sold=show_sold,
+                                                                            show_status=show_status)
 
-    return crud.motorcycle.get_multi_with_filters(db, page=page, limit=limit,
-                                                  show_sold=show_sold, show_status=show_status)
+    if not items:
+        return models.MotorcycleList(page=0,
+                                     has_next_page=False,
+                                     total_count=0,
+                                     motorcycles=[],
+                                     count=0)
+
+    has_next_page = True if len(items) == limit + 1 else False
+
+    # Remove the extra motorcycle we got as a pagination test IFF there is a next page
+    # (indicating we received +1 results back from db)
+    if has_next_page:
+        items.pop()
+
+    return models.MotorcycleList(page=page,
+                                 has_next_page=has_next_page,
+                                 motorcycles=items)
 
 
-@router.post("", response_model=schemas.Motorcycle)
+@router.post("/", response_model=models.MotorcycleRead)
 def create_item(
         *,
         db: Session = Depends(deps.get_db),
-        item_in: schemas.MotorcycleCreate,
+        item_in: models.MotorcycleCreate,
         current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new motorcycle.
     """
-    item = crud.motorcycle.create(db=db, obj_in=item_in)
+    item = crud.motorcycle.create(db, item_in)
     return item
 
 
-@router.put("/{id}", response_model=schemas.Motorcycle)
+@router.put("/{id}", response_model=models.MotorcycleRead)
 def update_item(
         *,
         db: Session = Depends(deps.get_db),
         id: str,
-        item_in: schemas.MotorcycleUpdate,
+        item_in: models.MotorcycleUpdate,
         current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Update a motorcycle.
     """
-    item = crud.motorcycle.get(db=db, id=id)
+    item = crud.motorcycle.get(db, id)
     if not item:
         raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
-    item = crud.motorcycle.update(db=db, db_obj=item, obj_in=item_in)
+    item = crud.motorcycle.update(db, item, item_in)
     return item
 
 
@@ -81,9 +93,9 @@ def add_product_image(
     """
     Add a product image to a motorcycle.
     """
-    motorcycle = crud.motorcycle.get(db=db, id=id)
+    motorcycle = crud.motorcycle.get(db, id)
     if not motorcycle:
-        raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
+        raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
 
     image_content = file.file.read()
     img = PIL_Image.open(io.BytesIO(image_content))
@@ -96,15 +108,13 @@ def add_product_image(
 
         # Set the photo as the thumbnail if the item doesn't already have a thumbnail
         if motorcycle.thumbnail_url is None:
-            update: schemas.MotorcycleUpdate = schemas.MotorcycleUpdate(thumbnail_url=thumbnail_url,
-                                                                        medium_thumbnail_url=medium_thumbnail_url)
-            motorcycle = crud.motorcycle.update(db=db, db_obj=motorcycle, obj_in=update)
+            update: models.MotorcycleUpdate = models.MotorcycleUpdate(thumbnail_url=thumbnail_url)
+            motorcycle = crud.motorcycle.update(db, motorcycle, update)
 
-        image: schemas.ImageCreate = schemas.ImageCreate(image_url=image_url,
-                                                         thumbnail_url=thumbnail_url,
-                                                         medium_thumbnail_url=medium_thumbnail_url)
-        i = crud.image.create_and_add_to_motorcycle(db=db, db_obj=motorcycle, obj_in=image)
-        return i
+        image: models.ImageCreate = models.ImageCreate(image_url=image_url,
+                                                       thumbnail_url=thumbnail_url,
+                                                       motorcycle_id=motorcycle.id)
+        return crud.image.create(db, image)
     except FileUploadError as e:
         print(e)
         img.close()
@@ -112,27 +122,28 @@ def add_product_image(
         raise HTTPException(status_code=500, detail='Failed to process image.')
 
 
-@router.delete('/{motorcycle_id}/productImage/{image_id}', response_model=schemas.Image)
-def add_product_image(
-        *,
-        db: Session = Depends(deps.get_db),
-        motorcycle_id: str,
-        image_id: str,
-        current_user: models.User = Depends(deps.get_current_active_superuser),
-) -> Any:
-    """
-    Delete photo from motorcycle listing.
-    """
-    image: schemas.Image = crud.image.get_by_image_and_motorcycle_id(db, image_id, motorcycle_id)
-    if not image:
-        raise HTTPException(status_code=404, detail="No image found with this id for the specified motorcycle.")
+# TODO: below...
+# @router.delete('/{motorcycle_id}/productImage/{image_id}', response_model=schemas.Image)
+# def delete_product_image(
+#         *,
+#         db: Session = Depends(deps.get_db),
+#         motorcycle_id: str,
+#         image_id: str,
+#         current_user: models.User = Depends(deps.get_current_active_superuser),
+# ) -> Any:
+#     """
+#     Delete photo from motorcycle listing.
+#     """
+#     image: schemas.Image = crud.image.get_by_image_and_motorcycle_id(db, image_id, motorcycle_id)
+#     if not image:
+#         raise HTTPException(status_code=404, detail="No image found with this id for the specified motorcycle.")
+#
+#     db.delete(image)
+#     db.commit()
+#     return image
 
-    db.delete(image)
-    db.commit()
-    return image
 
-
-@router.get("/{id}", response_model=schemas.Motorcycle)
+@router.get("/{id}", response_model=models.MotorcycleRead)
 def read_item(
         *,
         db: Session = Depends(deps.get_db),
@@ -141,16 +152,14 @@ def read_item(
     """
     Get item by ID.
     """
-    item = crud.motorcycle.get(db=db, id=id)
-
     # TODO: Check if user is active if the motorcycle status is not active
-
+    item = crud.motorcycle.get(db, id)
     if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
     return item
 
 
-@router.delete("/{id}", response_model=schemas.Motorcycle)
+@router.delete("/{id}", response_model=models.MotorcycleRead)
 def delete_item(
         *,
         db: Session = Depends(deps.get_db),
@@ -160,12 +169,12 @@ def delete_item(
     """
     Delete an item.
     """
-    item: schemas.Motorcycle = crud.motorcycle.get(db=db, id=id)
+    item: models.Motorcycle = crud.motorcycle.get(db, id)
     if not item:
-        raise HTTPException(status_code=404, detail="Item not found")
+        raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
 
-    for image in item.images:
-        delete_image(image)
+    # Mark item as deleted rather than deleting the item from the DB
+    update: models.MotorcycleUpdate = models.MotorcycleUpdate(status=models.MotorcycleStatus.DELETED)
 
-    item = crud.motorcycle.remove(db=db, id=id)
+    item = crud.motorcycle.update(db, item, update)
     return item
