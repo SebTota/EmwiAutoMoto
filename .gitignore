@@ -3,6 +3,7 @@ backend/.env
 config.ini
 config.yaml
 bundle.pem
+.env
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
