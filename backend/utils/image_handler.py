@@ -1,31 +1,66 @@
 import io
-import os
+from concurrent.futures import ProcessPoolExecutor
+from concurrent.futures import as_completed
+
 import boto3
 from botocore.config import Config
-from boto3.s3.transfer import TransferConfig
 from PIL import Image as PIL_Image
 
+from backend.core.config import settings
 from backend.exceptions import FileUploadError
 from backend.models import Image
 
-BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
-BASE_HOST_URL = os.getenv('STORAGE_BASE_HOST_URL')
+BUCKET_NAME = settings.IMAGE_BUCKET_NAME
+BASE_HOST_URL = settings.IMAGE_BUCKET_BASE_HOST_URL
+
+THUMBNAIL_SIZE = [200, 200]
+MEDIUM_THUMBNAIL_SIZE = [600, 600]
 
 
 def _get_storage_resource() -> boto3.resource:
     return boto3.resource(service_name='s3',
-                          endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
-                          aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
-                          aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
+                          endpoint_url=settings.BUCKET_ENDPOINT_URL,
+                          aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
+                          aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
                           config=Config(signature_version='s3v4'))
 
 
 def _get_s3_client() -> boto3.client:
     return boto3.client(service_name='s3',
-                        endpoint_url=os.getenv('STORAGE_ENDPOINT_URL'),
-                        aws_access_key_id=os.getenv('STORAGE_ACCESS_KEY_ID'),
-                        aws_secret_access_key=os.getenv('STORAGE_SECRET_ACCESS_KEY'),
+                        endpoint_url=settings.BUCKET_ENDPOINT_URL,
+                        aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
+                        aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
                         config=Config(signature_version='s3v4'))
+
+
+def process_image(image: PIL_Image, image_name: str):
+    sizes = [None, THUMBNAIL_SIZE, MEDIUM_THUMBNAIL_SIZE]
+
+    with ProcessPoolExecutor(3) as exe:
+        futures = [exe.submit(_thread_process_image_task, image, image_name, size) for size in sizes]
+
+    urls = [None, None, None]  # original, thumbnail, medium thumbnail
+
+    for future in as_completed(futures):
+        url: str = future.result()
+
+        if f'{THUMBNAIL_SIZE[0]}-{THUMBNAIL_SIZE[1]}-{image_name}' in url:
+            urls[1] = url
+        elif f'{MEDIUM_THUMBNAIL_SIZE[0]}-{MEDIUM_THUMBNAIL_SIZE[1]}-{image_name}' in url:
+            urls[2] = url
+        else:
+            urls[0] = url
+
+    return urls
+
+
+def _thread_process_image_task(image: PIL_Image, name: str, size: [int, int] = None) -> str:
+    if not size:
+        url = upload_image_to_cloud_storage(image, name)
+    else:
+        url = create_thumbnail_for_image(image, name, size)
+
+    return url
 
 
 def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
@@ -42,13 +77,9 @@ def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
         raise FileUploadError(e)
 
 
-def create_thumbnail_for_image(image: PIL_Image, image_name: str, size: [int, int] = None) -> str:
-    if size is None:
-        size = [350, 350]
-
+def create_thumbnail_for_image(image: PIL_Image, image_name: str, size: [int, int]) -> str:
     image_name = f'{size[0]}-{size[1]}-{image_name}'
 
-    f = image.format
     img: PIL_Image = image.copy()
     img.thumbnail((size[0], size[1]))
     img.format = image.format

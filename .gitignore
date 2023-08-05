@@ -1,5 +1,8 @@
 credentials.json
-.env
+backend/.env
+config.ini
+config.yaml
+bundle.pem
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
@@ -123,7 +126,7 @@ celerybeat.pid
 *.sage.py
 
 # Environments
-.env
+backend/.env
 .venv
 env/
 venv/

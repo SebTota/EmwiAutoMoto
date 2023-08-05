@@ -1,15 +1,16 @@
 import io
 import uuid
-from typing import Any, List
+from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
 from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
+from starlette import status
 
 from backend import crud, models
 from backend.exceptions import FileUploadError
 from backend.utils import deps
-from backend.utils.image_handler import upload_image_to_cloud_storage, create_thumbnail_for_image, delete_image
+from backend.utils.image_handler import delete_image, process_image
 
 router = APIRouter()
 
@@ -81,7 +82,7 @@ def update_item(
     return item
 
 
-@router.post('/{id}/productImage')
+@router.post('/{id}/productImage', response_model=schemas.Image)
 def add_product_image(
         *,
         db: Session = Depends(deps.get_db),
@@ -101,8 +102,7 @@ def add_product_image(
 
     try:
         name: str = f'{str(uuid.uuid4())}.{file.filename.split(".")[-1]}'
-        thumbnail_url = create_thumbnail_for_image(img, name)
-        image_url = upload_image_to_cloud_storage(img, name)
+        [image_url, thumbnail_url, medium_thumbnail_url] = process_image(img, name)
         img.close()
         file.file.close()
 
@@ -114,13 +114,33 @@ def add_product_image(
         image: models.ImageCreate = models.ImageCreate(image_url=image_url,
                                                        thumbnail_url=thumbnail_url,
                                                        motorcycle_id=motorcycle.id)
-        i = crud.image.create(db, image)
-        return i
+        return crud.image.create(db, image)
     except FileUploadError as e:
         print(e)
         img.close()
         file.file.close()
         raise HTTPException(status_code=500, detail='Failed to process image.')
+
+
+# TODO: below...
+# @router.delete('/{motorcycle_id}/productImage/{image_id}', response_model=schemas.Image)
+# def delete_product_image(
+#         *,
+#         db: Session = Depends(deps.get_db),
+#         motorcycle_id: str,
+#         image_id: str,
+#         current_user: models.User = Depends(deps.get_current_active_superuser),
+# ) -> Any:
+#     """
+#     Delete photo from motorcycle listing.
+#     """
+#     image: schemas.Image = crud.image.get_by_image_and_motorcycle_id(db, image_id, motorcycle_id)
+#     if not image:
+#         raise HTTPException(status_code=404, detail="No image found with this id for the specified motorcycle.")
+#
+#     db.delete(image)
+#     db.commit()
+#     return image
 
 
 @router.get("/{id}", response_model=models.MotorcycleRead)
@@ -132,6 +152,7 @@ def read_item(
     """
     Get item by ID.
     """
+    # TODO: Check if user is active if the motorcycle status is not active
     item = crud.motorcycle.get(db, id)
     if not item:
         raise HTTPException(status_code=404, detail="No motorcycle found with this ID")

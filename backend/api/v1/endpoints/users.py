@@ -1,12 +1,17 @@
+<<<<<<< HEAD
 from typing import Any, List, Optional
+=======
+from typing import Any, Optional
+>>>>>>> 6e391b258bb8c115b098697b5858fd335f74492f
 
-from fastapi import APIRouter, Body, Depends, HTTPException
-from fastapi.encoders import jsonable_encoder
-from pydantic.networks import EmailStr
+from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend import crud, models
+<<<<<<< HEAD
 from backend.core import security
+=======
+>>>>>>> 6e391b258bb8c115b098697b5858fd335f74492f
 from backend.utils import deps
 
 router = APIRouter()
@@ -26,7 +31,7 @@ def create_user(
     if user:
         raise HTTPException(
             status_code=400,
-            detail="The user with this username already exists in the system.",
+            detail="The user with this email or username already exists in the system.",
         )
     user = crud.user.create(db, user_in)
     return user

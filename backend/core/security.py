@@ -1,6 +1,4 @@
-import secrets
 from datetime import datetime, timedelta
-from typing import Any, Union
 from sqlalchemy.orm import Session
 
 from jose import jwt
@@ -8,7 +6,6 @@ from passlib.context import CryptContext
 
 from backend.core.config import settings
 from backend import models
-from backend import crud
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
