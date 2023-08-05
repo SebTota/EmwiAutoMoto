@@ -1,17 +1,9 @@
-<<<<<<< HEAD
-from typing import Any, List, Optional
-=======
 from typing import Any, Optional
->>>>>>> 6e391b258bb8c115b098697b5858fd335f74492f
 
 from fastapi import APIRouter, Depends, HTTPException
 from sqlalchemy.orm import Session
 
 from backend import crud, models
-<<<<<<< HEAD
-from backend.core import security
-=======
->>>>>>> 6e391b258bb8c115b098697b5858fd335f74492f
 from backend.utils import deps
 
 router = APIRouter()

@@ -7,7 +7,6 @@ from sqlalchemy.orm import Session
 from backend import crud, models
 from backend.utils import deps
 from backend.core import security
-from backend.utils.deps import get_user_from_refresh_token
 
 router = APIRouter()
 
@@ -20,34 +19,8 @@ def login_access_token(db: Session = Depends(deps.get_db), form_data: OAuth2Pass
     user: Optional[models.User] = crud.user.get_by_email(db, form_data.username)
     if not user or not security.validate_password(form_data.password, user.hashed_password):
         raise HTTPException(status_code=400, detail="Incorrect user credentials or user doesn't exist")
-<<<<<<< HEAD
 
     if not user.is_active:
         raise HTTPException(status_code=400, detail="Inactive user")
 
     return security.create_auth_token(db=db, user=user)
-
-
-# @router.post("/login/refresh-token", response_model=models.Token)
-# def refresh_access_token(refresh_token_request: schemas.TokenRefreshRequest, db: Session = Depends(deps.get_db)) -> Any:
-#     """
-#     Refresh access token.
-#     """
-#     user = crud.user.get_by_username(db=db, username=refresh_token_request.username)
-#     if not user:
-#         # Do not give error specific to username being invalid to avoid username guessing abuse
-#         raise HTTPException(status_code=400, detail="Invalid refresh credentials")
-#     elif not crud.user.is_active(user):
-#         raise HTTPException(status_code=400, detail="Inactive user")
-#
-#     if security.verify_refresh_token_valid(user, refresh_token_request.refresh_token):
-#         return security.create_auth_token(db=db, user=user)
-#     else:
-#         raise HTTPException(status_code=400, detail="Invalid refresh credentials")
-=======
-
-    if not user.is_active:
-        raise HTTPException(status_code=400, detail="Inactive user")
-
-    return security.create_auth_token(db=db, user=user)
->>>>>>> 6e391b258bb8c115b098697b5858fd335f74492f
