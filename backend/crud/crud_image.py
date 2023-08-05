@@ -1,47 +1,19 @@
-from typing import Any, Dict, Union
-import string
-import random
+from typing import Optional
 
-from fastapi.encoders import jsonable_encoder
-from sqlalchemy.orm import Session
+from sqlmodel import Session
 
-from backend.crud.base import CRUDBase
-from backend.models.image import Image
-from backend.schemas.image import ImageCreate, ImageUpdate
+from backend.models.image import Image, ImageCreate
+from backend.utils import get_random_alphanumeric_string
 
 
-def _get_random_string(length):
-    return ''.join(random.choice(string.ascii_letters) for _ in range(length))
+def get(db: Session, obj_id: str) -> Optional[Image]:
+    return db.query(Image).filter(Image.id == obj_id).first()
 
 
-class CRUDImage(CRUDBase[Image, ImageCreate, ImageUpdate]):
-    def create(self, db: Session, *, obj_in: ImageCreate) -> Image:
-        obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data, id=_get_random_string(12))
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
-
-    def create_and_add_to_motorcycle(
-            self, db: Session, *, db_obj: Any, obj_in: ImageCreate
-    ) -> Image:
-        obj_in_data = jsonable_encoder(obj_in)
-        db_obj = self.model(**obj_in_data, id=_get_random_string(12), motorcycle_id=db_obj.id)
-        db.add(db_obj)
-        db.commit()
-        db.refresh(db_obj)
-        return db_obj
-
-    def update(
-            self, db: Session, *, db_obj: Image, obj_in: Union[ImageUpdate, Dict[str, Any]]
-    ) -> Image:
-        if isinstance(obj_in, dict):
-            update_data = obj_in
-        else:
-            update_data = obj_in.dict(exclude_unset=True)
-        return super().update(db, db_obj=db_obj, obj_in=update_data)
-
-
-
-image = CRUDImage(Image)
+def create(db: Session, obj: ImageCreate) -> Image:
+    db_obj: Image = Image.from_orm(obj)
+    db_obj.id = get_random_alphanumeric_string(12)
+    db.add(db_obj)
+    db.commit()
+    db.refresh(db_obj)
+    return db_obj

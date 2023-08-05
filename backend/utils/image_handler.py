@@ -6,7 +6,7 @@ from boto3.s3.transfer import TransferConfig
 from PIL import Image as PIL_Image
 
 from backend.exceptions import FileUploadError
-from backend.schemas import Image
+from backend.models import Image
 
 BUCKET_NAME = os.getenv('STORAGE_BUCKET_NAME')
 BASE_HOST_URL = os.getenv('STORAGE_BASE_HOST_URL')
