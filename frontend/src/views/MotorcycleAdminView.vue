@@ -87,7 +87,7 @@
             </div>
           </div>
 
-          <div v-if="showError" class="text-sm mb-0 w-100 text-red-400 text-right">
+          <div v-if="showError()" class="text-sm mb-0 w-100 text-red-400 text-right">
             <p>{{error}}</p>
           </div>
           <div v-if="isAddNew()" class="px-4 py-3 text-right sm:px-6">
