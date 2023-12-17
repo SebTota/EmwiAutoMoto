@@ -116,6 +116,7 @@ def add_product_image(
 
         image: models.ImageCreate = models.ImageCreate(image_url=image_url,
                                                        thumbnail_url=thumbnail_url,
+                                                       medium_thumbnail_url=medium_thumbnail_url,
                                                        motorcycle_id=motorcycle.id)
         return crud.image.create(db, image)
     except FileUploadError as e:

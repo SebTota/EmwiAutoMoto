@@ -6,8 +6,9 @@ if TYPE_CHECKING:
 
 
 class ImageBase(SQLModel):
-    image_url: str = Field(index=True, nullable=False)
-    thumbnail_url: str = Field(index=True, nullable=False)
+    image_url: str = Field(nullable=False)
+    thumbnail_url: str = Field(nullable=False)
+    medium_thumbnail_url: str = Field(nullable=False)
     motorcycle_id: str = Field(foreign_key="motorcycle.id", nullable=False)
     motorcycle: "Motorcycle" = Relationship(back_populates="images")
 
@@ -26,3 +27,4 @@ class ImageRead(SQLModel):
     id: str
     image_url: str
     thumbnail_url: str
+    medium_thumbnail_url: str
