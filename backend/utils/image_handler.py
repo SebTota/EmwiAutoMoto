@@ -1,4 +1,5 @@
 import io
+import mimetypes
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import as_completed
 
@@ -70,8 +71,13 @@ def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
     image.save(buffer, format=image.format)
     buffer.seek(0)
 
+    # Use mimetypes to determine the content type dynamically
+    content_type, _ = mimetypes.guess_type(image_name)
+
     try:
-        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name)
+        print("Uploading file to cloud storage...")
+        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, ExtraArgs={'ContentType': content_type})
+        print("Upload complete!")
         return f'{BASE_HOST_URL}/{image_name}'
     except Exception as e:
         raise FileUploadError(e)
