@@ -29,10 +29,9 @@ def update(db: Session, db_obj: Motorcycle, obj_update: MotorcycleUpdate) -> Mot
     return db_obj
 
 
-def get_multi_with_filters(db: Session, offset: int = 0, limit: int = 100, show_sold: bool = False,
-                           show_status: MotorcycleStatus = MotorcycleStatus.active.value) -> List[Motorcycle]:
-    return db.query(Motorcycle)\
-        .filter(Motorcycle.sold == show_sold)\
+def get_multi_with_filters(db: Session, offset: int = 0, limit: int = 100,
+                           show_status: MotorcycleStatus = MotorcycleStatus.for_sale.value) -> List[Motorcycle]:
+    return db.query(Motorcycle) \
         .filter(Motorcycle.status == show_status)\
         .order_by(Motorcycle.date_created)\
         .offset(offset)\

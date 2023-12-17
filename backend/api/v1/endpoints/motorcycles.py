@@ -1,42 +1,45 @@
 import io
 import uuid
-from typing import Any, List, Optional
+from typing import Any, List
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
+from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from sqlalchemy.orm import Session
 from PIL import Image as PIL_Image
-from starlette import status
 
 from backend import crud, models
 from backend.exceptions import FileUploadError
 from backend.utils import deps
-from backend.utils.image_handler import delete_image, process_image
+from backend.utils.image_handler import process_image
 
 router = APIRouter()
 
 
-@router.get("/", response_model=models.MotorcycleList)
+@router.get("", response_model=models.MotorcycleList)
 def read_items(
         db: Session = Depends(deps.get_db),
-        show_sold: bool = False,
-        show_status: models.MotorcycleStatus = models.MotorcycleStatus.active.value,
-        page: int = 0,
+        show_status: models.MotorcycleStatus = models.MotorcycleStatus.for_sale.value,
+        page: int = 1,
         limit: int = 15,
 ) -> Any:
     """
     Retrieve motorcycle items.
     """
+    if page < 1:
+        raise HTTPException(status_code=400, detail="Page must be greater than 0")
+
     offset: int = (page - 1) * limit
-    items: List[models.Motorcycle] = crud.motorcycle.get_multi_with_filters(db, offset=offset, limit=limit + 1,
-                                                                            show_sold=show_sold,
+    items: List[models.Motorcycle] = crud.motorcycle.get_multi_with_filters(db,
+                                                                            offset=offset,
+                                                                            limit=limit + 1,
                                                                             show_status=show_status)
+
+    print(items)
+    print(items[0].images)
 
     if not items:
         return models.MotorcycleList(page=0,
                                      has_next_page=False,
-                                     total_count=0,
-                                     motorcycles=[],
-                                     count=0)
+                                     motorcycles=[])
 
     has_next_page = True if len(items) == limit + 1 else False
 
@@ -50,7 +53,7 @@ def read_items(
                                  motorcycles=items)
 
 
-@router.post("/", response_model=models.MotorcycleRead)
+@router.post("", response_model=models.MotorcycleRead)
 def create_item(
         *,
         db: Session = Depends(deps.get_db),
@@ -107,7 +110,7 @@ def add_product_image(
         file.file.close()
 
         # Set the photo as the thumbnail if the item doesn't already have a thumbnail
-        if motorcycle.thumbnail_url is None:
+        if motorcycle.thumbnail_url is None or motorcycle.thumbnail_url == '':
             update: models.MotorcycleUpdate = models.MotorcycleUpdate(thumbnail_url=thumbnail_url)
             motorcycle = crud.motorcycle.update(db, motorcycle, update)
 
@@ -120,27 +123,6 @@ def add_product_image(
         img.close()
         file.file.close()
         raise HTTPException(status_code=500, detail='Failed to process image.')
-
-
-# TODO: below...
-# @router.delete('/{motorcycle_id}/productImage/{image_id}', response_model=schemas.Image)
-# def delete_product_image(
-#         *,
-#         db: Session = Depends(deps.get_db),
-#         motorcycle_id: str,
-#         image_id: str,
-#         current_user: models.User = Depends(deps.get_current_active_superuser),
-# ) -> Any:
-#     """
-#     Delete photo from motorcycle listing.
-#     """
-#     image: schemas.Image = crud.image.get_by_image_and_motorcycle_id(db, image_id, motorcycle_id)
-#     if not image:
-#         raise HTTPException(status_code=404, detail="No image found with this id for the specified motorcycle.")
-#
-#     db.delete(image)
-#     db.commit()
-#     return image
 
 
 @router.get("/{id}", response_model=models.MotorcycleRead)
@@ -174,7 +156,7 @@ def delete_item(
         raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
 
     # Mark item as deleted rather than deleting the item from the DB
-    update: models.MotorcycleUpdate = models.MotorcycleUpdate(status=models.MotorcycleStatus.DELETED)
+    update: models.MotorcycleUpdate = models.MotorcycleUpdate(status=models.MotorcycleStatus.deleted)
 
     item = crud.motorcycle.update(db, item, update)
     return item

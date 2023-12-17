@@ -14,6 +14,8 @@ class ImageBase(SQLModel):
 
 class Image(ImageBase, table=True):
     id: Optional[str] = Field(default=None, primary_key=True, index=True)
+    motorcycle_id: str = Field(foreign_key="motorcycle.id", nullable=False)
+    motorcycle: "Motorcycle" = Relationship(back_populates="images")
 
 
 class ImageCreate(ImageBase):
