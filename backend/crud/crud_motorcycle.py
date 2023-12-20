@@ -2,6 +2,7 @@ from typing import Optional, List
 
 from sqlmodel import Session
 
+from backend.models import Image
 from backend.models.motorcycle import Motorcycle, MotorcycleCreate, MotorcycleStatus, MotorcycleUpdate
 from backend.utils import get_random_alphanumeric_string
 
@@ -20,10 +21,29 @@ def create(db: Session, obj: MotorcycleCreate) -> Motorcycle:
 
 
 def update(db: Session, db_obj: Motorcycle, obj_update: MotorcycleUpdate) -> Motorcycle:
-    obj_update_data: dict = obj_update.dict(exclude_unset=True)
+    obj_update_data = obj_update.dict(exclude_unset=True)
+
+    # Update the simple attributes of Motorcycle
     for k, v in obj_update_data.items():
-        setattr(db_obj, k, v)
-    db.add(db_obj)
+        if k != "images":
+            setattr(db_obj, k, v)
+
+    # Handle the images relationship separately
+    if "images" in obj_update_data:
+        updated_image_ids: [str] = [image.id for image in obj_update.images]
+        removed_image_ids: [str] = []
+        for image in db_obj.images:
+            if image.id not in updated_image_ids:
+                removed_image_ids.append(image.id)
+
+        print(f'Removing images: {removed_image_ids} for motorcycle id: {db_obj.id}')
+
+        for removed_image_id in removed_image_ids:
+            # TODO: Also remove the image from object storage
+            db.query(Image).filter(Image.id == removed_image_id).delete()
+
+    # TODO: Update the thumbnail url if the thumbnail image was removed
+
     db.commit()
     db.refresh(db_obj)
     return db_obj

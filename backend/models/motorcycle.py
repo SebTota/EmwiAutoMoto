@@ -50,7 +50,6 @@ class MotorcycleUpdate(SQLModel):
     make: Optional[str] = None
     model: Optional[str] = None
     odometer_miles: Optional[int] = None
-    km: Optional[int] = None
     color: Optional[str] = None
     price: Optional[condecimal(decimal_places=2)] = None
     description: Optional[str] = None

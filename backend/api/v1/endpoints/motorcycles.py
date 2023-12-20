@@ -33,9 +33,6 @@ def read_items(
                                                                             limit=limit + 1,
                                                                             show_status=show_status)
 
-    print(items)
-    print(items[0].images)
-
     if not items:
         return models.MotorcycleList(page=0,
                                      has_next_page=False,
