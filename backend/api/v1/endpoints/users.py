@@ -11,7 +11,7 @@ router = APIRouter()
 @router.post("", response_model=schemas.UserRead)
 async def create_user(
     user_in: schemas.UserCreate,
-    current_user: schemas.User = Depends(deps.get_current_active_superuser),
+    current_user: models.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new user.
