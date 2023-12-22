@@ -10,9 +10,8 @@ from backend.db.init_db import init_db
 from backend.core.config import settings
 from backend.api.v1.api import api_router
 
-init_db()
-
 app = FastAPI()
+init_db(app)
 
 app.add_middleware(
         CORSMiddleware,

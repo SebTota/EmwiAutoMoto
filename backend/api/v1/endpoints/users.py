@@ -1,38 +1,34 @@
 from typing import Any, Optional
 
 from fastapi import APIRouter, Depends, HTTPException
-from sqlalchemy.orm import Session
 
-from backend import crud, models
+from backend import crud, models, schemas
 from backend.utils import deps
 
 router = APIRouter()
 
 
-@router.post("/", response_model=models.UserRead)
-def create_user(
-    *,
-    db: Session = Depends(deps.get_db),
-    user_in: models.UserCreate,
-    current_user: models.User = Depends(deps.get_current_active_superuser),
+@router.post("", response_model=schemas.UserRead)
+async def create_user(
+    user_in: schemas.UserCreate,
+    current_user: schemas.User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
     Create new user.
     """
-    user: Optional[models.User] = crud.user.get_by_email(db, email=user_in.email)
+    user: Optional[models.User] = await crud.user.get_by_email(email=user_in.email)
     if user:
         raise HTTPException(
             status_code=400,
             detail="The user with this email or username already exists in the system.",
         )
-    user = crud.user.create(db, user_in)
+    user = await crud.user.create(user_in)
     return user
 
 
-@router.get("/me", response_model=models.UserRead)
-def read_user_me(
-    db: Session = Depends(deps.get_db),
-    current_user: models.User = Depends(deps.get_current_active_user),
+@router.get("/me", response_model=schemas.UserRead)
+async def read_user_me(
+    current_user: models.User = Depends(deps.get_current_user),
 ) -> Any:
     """
     Get current user.
