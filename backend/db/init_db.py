@@ -1,10 +1,13 @@
-from sqlmodel import SQLModel
+from tortoise.contrib.fastapi import register_tortoise
 
-from backend.db.session import engine
-from backend import models  # DO NOT DELETE THIS!
+from backend.core.config import settings
 
 
-def init_db() -> None:
-    print("Creating db connection and init engine...")
-    SQLModel.metadata.create_all(engine)
-    print("Created db connection...")
+def init_db(app) -> None:
+    register_tortoise(
+        app,
+        db_url=settings.DATABASE_URL,
+        modules={'models': ["backend.models"]},
+        generate_schemas=True,
+        add_exception_handlers=True,
+    )
