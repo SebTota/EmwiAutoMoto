@@ -10,18 +10,19 @@ from backend.utils import get_random_alphanumeric_string
 
 async def get(obj_id: str) -> Optional[MotorcycleReadWithImages]:
     async with transactions.in_transaction():
-        motorcycle = await Motorcycle.filter(id=obj_id).first()
-        images: [ImageRead] = []
+        motorcycle: Optional[Motorcycle] = await Motorcycle.filter(id=obj_id).first()
 
-        if motorcycle:
-            # Preload and sort the images
-            db_images = await Image.filter(motorcycle=motorcycle).order_by("order").all()
-            images = [ImageRead(id=img.id,
-                                image_url=img.image_url,
-                                thumbnail_url=img.thumbnail_url,
-                                medium_thumbnail_url=img.medium_thumbnail_url,
-                                order=img.order)
-                      for img in db_images]
+        if not motorcycle:
+            return None
+
+        # Preload and sort the images
+        db_images = await Image.filter(motorcycle=motorcycle).order_by("order").all()
+        images: [ImageRead] = [ImageRead(id=img.id,
+                                         image_url=img.image_url,
+                                         thumbnail_url=img.thumbnail_url,
+                                         medium_thumbnail_url=img.medium_thumbnail_url,
+                                         order=img.order)
+                               for img in db_images]
 
         return MotorcycleReadWithImages(id=motorcycle.id,
                                         date_created=motorcycle.date_created,
