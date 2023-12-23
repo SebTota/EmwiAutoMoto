@@ -14,8 +14,8 @@ from backend.models import Image
 BUCKET_NAME = settings.IMAGE_BUCKET_NAME
 BASE_HOST_URL = settings.IMAGE_BUCKET_BASE_HOST_URL
 
-THUMBNAIL_SIZE = [200, 200]
-MEDIUM_THUMBNAIL_SIZE = [600, 600]
+THUMBNAIL_SIZE = [400, 400]
+MEDIUM_THUMBNAIL_SIZE = [900, 900]
 
 
 def _get_storage_resource() -> boto3.resource:
