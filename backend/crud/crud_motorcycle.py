@@ -9,7 +9,10 @@ from backend.schemas.motorcycle import MotorcycleCreate
 from backend.utils import get_random_alphanumeric_string
 
 
-async def get(obj_id: str) -> Optional[MotorcycleReadWithImages]:
+async def get(obj_id: str) -> Optional[Motorcycle]:
+    return await Motorcycle.filter(id=obj_id).prefetch_related('images').first()
+
+async def get_with_images(obj_id: str) -> Optional[MotorcycleReadWithImages]:
     async with transactions.in_transaction():
         motorcycle: Optional[Motorcycle] = await Motorcycle.filter(id=obj_id).first()
 
@@ -68,36 +71,39 @@ async def create(motorcycle_create: MotorcycleCreate) -> Optional[Motorcycle]:
 
             await Image.bulk_create(images)
 
-        return await get(motorcycle.id)
+    return await get(motorcycle.id)
 
 
-# def update(db: Session, db_obj: Motorcycle, obj_update: MotorcycleUpdate) -> Motorcycle:
-#     obj_update_data = obj_update.dict(exclude_unset=True)
-#
-#     # Update the simple attributes of Motorcycle
-#     for k, v in obj_update_data.items():
-#         if k != "images":
-#             setattr(db_obj, k, v)
-#
-#     # Handle the images relationship separately
-#     if "images" in obj_update_data:
-#         updated_image_ids: [str] = [image.id for image in obj_update.images]
-#         removed_image_ids: [str] = []
-#         for image in db_obj.images:
-#             if image.id not in updated_image_ids:
-#                 removed_image_ids.append(image.id)
-#
-#         print(f'Removing images: {removed_image_ids} for motorcycle id: {db_obj.id}')
-#
-#         for removed_image_id in removed_image_ids:
-#             # TODO: Also remove the image from object storage
-#             db.query(Image).filter(Image.id == removed_image_id).delete()
-#
-#     # TODO: Update the thumbnail url if the thumbnail image was removed
-#
-#     db.commit()
-#     db.refresh(db_obj)
-#     return db_obj
+async def update(db_obj: Motorcycle, new_obj: MotorcycleCreate) -> Optional[MotorcycleReadWithImages]:
+    # Update the Motorcycle attributes
+    update_dict: dict = new_obj.model_dump(exclude={"images", "thumbnail_url", "medium_thumbnail_url"})
+    update_dict['thumbnail_url'] = new_obj.images[0].thumbnail_url if new_obj.images else ''
+    update_dict['medium_thumbnail_url'] = new_obj.images[0].medium_thumbnail_url if new_obj.images else ''
+
+    print(update_dict)
+
+    await db_obj.update_from_dict(update_dict)
+    await db_obj.save()
+
+    async with transactions.in_transaction():
+        for image in db_obj.images:
+            # TODO: Make sure we remove any actually deleted items from object storage
+            await image.delete()
+
+        if new_obj.images:
+            i, images = 0, []
+            for image in new_obj.images:
+                image: ImageCreate = image
+                images.append(Image(motorcycle=db_obj,
+                                    id=get_random_alphanumeric_string(20),
+                                    image_url=image.image_url,
+                                    thumbnail_url=image.thumbnail_url,
+                                    medium_thumbnail_url=image.medium_thumbnail_url,
+                                    order=i))
+
+            await Image.bulk_create(images)
+
+    return await get(db_obj.id)
 
 
 async def get_multi_with_filters(offset: int, limit: int, show_status: [MotorcycleStatus]) -> List[MotorcycleReadNoImages]:

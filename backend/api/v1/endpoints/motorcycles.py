@@ -1,12 +1,12 @@
 import io
 import uuid
-from typing import Any, List
+from typing import Any, List, Optional
 
 from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from PIL import Image as PIL_Image
 
 from backend import crud
-from backend.models import User, MotorcycleStatus
+from backend.models import User, MotorcycleStatus, Motorcycle
 from backend.schemas import MotorcycleCreate, MotorcycleReadWithImages, MotorcycleReadNoImages, MotorcycleList
 from backend.exceptions import FileUploadError
 from backend.utils import deps
@@ -62,22 +62,20 @@ async def create_item(
     return motorcycle
 
 
-# @router.put("/{id}", response_model=models.MotorcycleRead)
-# def update_item(
-#         *,
-#         db: Session = Depends(deps.get_db),
-#         id: str,
-#         item_in: models.MotorcycleUpdate,
-#         current_user: models.User = Depends(deps.get_current_active_superuser),
-# ) -> Any:
-#     """
-#     Update a motorcycle.
-#     """
-#     item = crud.motorcycle.get(db, id)
-#     if not item:
-#         raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
-#     item = crud.motorcycle.update(db, item, item_in)
-#     return item
+@router.put("/{id}", response_model=MotorcycleReadWithImages)
+async def update_item(
+        id: str,
+        item_in: MotorcycleCreate,
+        current_user: User = Depends(deps.get_current_active_superuser),
+) -> Any:
+    """
+    Update a motorcycle.
+    """
+    item: Optional[Motorcycle] = await crud.motorcycle.get(id)
+    if not item:
+        raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
+    item = await crud.motorcycle.update(item, item_in)
+    return item
 
 
 # @router.post('/{id}/productImage', response_model=models.Image)
@@ -131,7 +129,7 @@ async def read_item(id: str) -> Any:
     Get item by ID.
     """
     # TODO: Check if user is active if the motorcycle status is not active
-    item = await crud.motorcycle.get(id)
+    item = await crud.motorcycle.get_with_images(id)
     if not item:
         raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
 
