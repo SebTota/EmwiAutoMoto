@@ -2,6 +2,7 @@ from pydantic.main import BaseModel
 
 
 class UserRead(BaseModel):
+    id: str
     first_name: str
     last_name: str
     email: str
