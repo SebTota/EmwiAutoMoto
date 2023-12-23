@@ -1,30 +1,17 @@
-from typing import TYPE_CHECKING, Optional
-from sqlmodel import SQLModel, Field, Relationship
+from typing import TYPE_CHECKING
+
+from tortoise import fields, models
 
 if TYPE_CHECKING:
-    from .motorcycle import Motorcycle  # noqa: F401
+    from backend.models import Motorcycle
 
 
-class ImageBase(SQLModel):
-    image_url: str = Field(nullable=False)
-    thumbnail_url: str = Field(nullable=False)
-    medium_thumbnail_url: str = Field(nullable=False)
-    motorcycle_id: str = Field(foreign_key="motorcycle.id", nullable=False)
-    motorcycle: "Motorcycle" = Relationship(back_populates="images")
-
-
-class Image(ImageBase, table=True):
-    id: Optional[str] = Field(default=None, primary_key=True, index=True)
-    motorcycle_id: str = Field(foreign_key="motorcycle.id", nullable=False)
-    motorcycle: "Motorcycle" = Relationship(back_populates="images")
-
-
-class ImageCreate(ImageBase):
-    pass
-
-
-class ImageRead(SQLModel):
-    id: str
-    image_url: str
-    thumbnail_url: str
-    medium_thumbnail_url: str
+class Image(models.Model):
+    id: str = fields.CharField(max_length=20, pk=True)
+    image_url: str = fields.CharField(max_length=512)
+    thumbnail_url: str = fields.CharField(max_length=512)
+    medium_thumbnail_url: str = fields.CharField(max_length=512)
+    order: int = fields.IntField()
+    motorcycle: fields.ForeignKeyRelation["Motorcycle"] = fields.ForeignKeyField(
+        'models.Motorcycle', related_name='images'
+    )

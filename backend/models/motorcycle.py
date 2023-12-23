@@ -1,64 +1,30 @@
 import enum
-from datetime import datetime
-from typing import TYPE_CHECKING, Optional, List
-from sqlmodel import SQLModel, Field, Relationship
-from pydantic import BaseModel, condecimal
 
-from .image import Image
-if TYPE_CHECKING:
-    from .image import Image  # noqa: F401
+from backend.models.image import Image
+
+from tortoise import fields, models
 
 
 class MotorcycleStatus(str, enum.Enum):
-    draft = 'draft'
-    for_sale = 'for_sale'
-    sold = 'sold'
-    deleted = 'deleted'
+    DRAFT = 'DRAFT'
+    FOR_SALE = 'FOR_SALE'
+    SOLD = 'SOLD'
+    DELETED = 'DELETED'
 
 
-class MotorcycleBase(SQLModel):
-    date_created: datetime = Field(default=datetime.utcnow(), nullable=False)
-    date_last_updated: datetime = Field(default_factory=datetime.utcnow, nullable=False)
-    year: int = Field(nullable=False)
-    make: str = Field(nullable=False)
-    model: str = Field(nullable=False)
-    odometer_miles: int = Field(nullable=False)
-    color: str = Field(nullable=False)
-    price: int = Field(nullable=False)
-    description: str = Field(nullable=False)
-    status: MotorcycleStatus = Field(index=True, nullable=False)
-    thumbnail_url: str = Field(nullable=False)
-    images: List["Image"] = Relationship(back_populates="motorcycle")
+class Motorcycle(models.Model):
+    id = fields.CharField(max_length=12, pk=True)
+    date_created = fields.DatetimeField(auto_now_add=True)
+    date_last_updated = fields.DatetimeField(auto_now=True)
+    year = fields.IntField()
+    make = fields.CharField(max_length=100)
+    model = fields.CharField(max_length=100)
+    odometer_miles = fields.IntField()
+    color = fields.CharField(max_length=100)
+    price = fields.IntField()
+    description = fields.TextField()
+    status = fields.CharEnumField(MotorcycleStatus)
+    thumbnail_url = fields.CharField(max_length=512)
+    medium_thumbnail_url = fields.CharField(max_length=512)
+    images = fields.ReverseRelation[Image]
 
-
-class Motorcycle(MotorcycleBase, table=True):
-    id: Optional[str] = Field(default=None, primary_key=True, index=True)
-    images: List["Image"] = Relationship(back_populates="motorcycle")
-
-
-class MotorcycleCreate(MotorcycleBase):
-    pass
-
-
-class MotorcycleRead(MotorcycleBase):
-    id: str
-    images: List[Image]
-
-
-class MotorcycleUpdate(SQLModel):
-    year: Optional[int] = None
-    make: Optional[str] = None
-    model: Optional[str] = None
-    odometer_miles: Optional[int] = None
-    color: Optional[str] = None
-    price: Optional[condecimal(decimal_places=2)] = None
-    description: Optional[str] = None
-    status: Optional[MotorcycleStatus] = None
-    thumbnail_url: Optional[str] = None
-    images: Optional[List["Image"]] = None
-
-
-class MotorcycleList(BaseModel):
-    page: int
-    has_next_page: bool
-    motorcycles: List[MotorcycleRead]
