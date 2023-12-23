@@ -1,9 +1,10 @@
-from typing import Optional
+from typing import Optional, List
 from tortoise import transactions
+from tortoise.queryset import QuerySet
 
 from backend.models import Image
-from backend.models.motorcycle import Motorcycle
-from backend.schemas import ImageRead, MotorcycleReadWithImages, ImageCreate
+from backend.models.motorcycle import Motorcycle, MotorcycleStatus
+from backend.schemas import ImageRead, MotorcycleReadWithImages, MotorcycleReadNoImages, ImageCreate
 from backend.schemas.motorcycle import MotorcycleCreate
 from backend.utils import get_random_alphanumeric_string
 
@@ -69,6 +70,7 @@ async def create(motorcycle_create: MotorcycleCreate) -> Optional[Motorcycle]:
 
         return await get(motorcycle.id)
 
+
 # def update(db: Session, db_obj: Motorcycle, obj_update: MotorcycleUpdate) -> Motorcycle:
 #     obj_update_data = obj_update.dict(exclude_unset=True)
 #
@@ -98,11 +100,10 @@ async def create(motorcycle_create: MotorcycleCreate) -> Optional[Motorcycle]:
 #     return db_obj
 
 
-# def get_multi_with_filters(db: Session, offset: int = 0, limit: int = 100,
-#                            show_status: MotorcycleStatus = MotorcycleStatus.for_sale.value) -> List[Motorcycle]:
-#     return db.query(Motorcycle) \
-#         .filter(Motorcycle.status == show_status)\
-#         .order_by(Motorcycle.date_created)\
-#         .offset(offset)\
-#         .limit(limit)\
-#         .all()
+async def get_multi_with_filters(offset: int, limit: int, show_status: [MotorcycleStatus]) -> List[MotorcycleReadNoImages]:
+    query: QuerySet = (Motorcycle.filter(status__in=show_status)
+                       .offset(offset)
+                       .limit(limit)
+                       .order_by("-date_created"))
+    motorcycles: List[Motorcycle] = await query
+    return [MotorcycleReadNoImages(**m.__dict__) for m in motorcycles]

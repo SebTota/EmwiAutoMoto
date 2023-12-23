@@ -49,3 +49,9 @@ class MotorcycleCreate(BaseModel):
     description: str
     status: MotorcycleStatus
     images: list[ImageCreate]
+
+
+class MotorcycleList(BaseModel):
+    page: int
+    has_next_page: bool
+    motorcycles: list[MotorcycleReadNoImages]

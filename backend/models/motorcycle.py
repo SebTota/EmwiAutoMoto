@@ -13,9 +13,9 @@ class MotorcycleStatus(str, enum.Enum):
 
 
 class Motorcycle(models.Model):
-    id = fields.CharField(max_length=12, pk=True)
-    date_created = fields.DatetimeField(auto_now_add=True)
-    date_last_updated = fields.DatetimeField(auto_now=True)
+    id = fields.CharField(max_length=12, pk=True, index=True)
+    date_created = fields.DatetimeField(auto_now_add=True, index=True)
+    date_last_updated = fields.DatetimeField(auto_now=True, index=True)
     year = fields.IntField()
     make = fields.CharField(max_length=100)
     model = fields.CharField(max_length=100)
@@ -23,7 +23,7 @@ class Motorcycle(models.Model):
     color = fields.CharField(max_length=100)
     price = fields.IntField()
     description = fields.TextField()
-    status = fields.CharEnumField(MotorcycleStatus)
+    status = fields.CharEnumField(MotorcycleStatus, index=True)
     thumbnail_url = fields.CharField(max_length=512)
     medium_thumbnail_url = fields.CharField(max_length=512)
     images = fields.ReverseRelation[Image]

@@ -6,8 +6,8 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile
 from PIL import Image as PIL_Image
 
 from backend import crud
-from backend.models import User
-from backend.schemas import MotorcycleCreate, MotorcycleReadWithImages
+from backend.models import User, MotorcycleStatus
+from backend.schemas import MotorcycleCreate, MotorcycleReadWithImages, MotorcycleReadNoImages, MotorcycleList
 from backend.exceptions import FileUploadError
 from backend.utils import deps
 from backend.utils.image_handler import process_image
@@ -15,40 +15,39 @@ from backend.utils.image_handler import process_image
 router = APIRouter()
 
 
-# @router.get("", response_model=models.MotorcycleList)
-# def read_items(
-#         db: Session = Depends(deps.get_db),
-#         show_status: models.MotorcycleStatus = models.MotorcycleStatus.for_sale.value,
-#         page: int = 1,
-#         limit: int = 15,
-# ) -> Any:
-#     """
-#     Retrieve motorcycle items.
-#     """
-#     if page < 1:
-#         raise HTTPException(status_code=400, detail="Page must be greater than 0")
-#
-#     offset: int = (page - 1) * limit
-#     items: List[models.Motorcycle] = crud.motorcycle.get_multi_with_filters(db,
-#                                                                             offset=offset,
-#                                                                             limit=limit + 1,
-#                                                                             show_status=show_status)
-#
-#     if not items:
-#         return models.MotorcycleList(page=0,
-#                                      has_next_page=False,
-#                                      motorcycles=[])
-#
-#     has_next_page = True if len(items) == limit + 1 else False
-#
-#     # Remove the extra motorcycle we got as a pagination test IFF there is a next page
-#     # (indicating we received +1 results back from db)
-#     if has_next_page:
-#         items.pop()
-#
-#     return models.MotorcycleList(page=page,
-#                                  has_next_page=has_next_page,
-#                                  motorcycles=items)
+@router.get("", response_model=MotorcycleList)
+async def read_items(
+        show_status: MotorcycleStatus = MotorcycleStatus.FOR_SALE,
+        page: int = 1,
+        limit: int = 12,
+) -> Any:
+    """
+    Retrieve motorcycle items.
+    """
+    if page < 1:
+        raise HTTPException(status_code=400, detail="Page must be greater than 0")
+
+    if limit < 1:
+        raise HTTPException(status_code=400, detail="Limit must be greater than 0")
+
+    offset: int = (page - 1) * limit
+    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit, [show_status])
+
+    if not items:
+        return MotorcycleList(page=page,
+                              has_next_page=False,
+                              motorcycles=[])
+
+    has_next_page = True if len(items) == limit + 1 else False
+
+    # Remove the extra motorcycle we got as a pagination test IFF there is a next page
+    # (indicating we received +1 results back from db)
+    if has_next_page:
+        items.pop()
+
+    return MotorcycleList(page=page,
+                          has_next_page=has_next_page,
+                          motorcycles=items)
 
 
 @router.post("", response_model=MotorcycleReadWithImages)
@@ -140,7 +139,6 @@ async def read_item(id: str) -> Any:
     # print(m)
     # print(m.images)
     return item
-
 
 # @router.delete("/{id}", response_model=models.MotorcycleRead)
 # def delete_item(
