@@ -241,7 +241,7 @@ const status = ref();
 const description = ref();
 
 const motorcycleId: any = route.params.id;
-const images: any = ref([]);
+const images = ref<IImage[]>([]);
 
 async function onStartUp() {
   if (isAddNew()) {
@@ -331,17 +331,12 @@ async function updateMotorcycle() {
     images: images.value,
   };
 
-  console.log("Updating motorcycle: ", motorcycle);
-
   try {
     loadingRequest.value = true;
-    const updatedMotorcycle: IMotorcycle = await mainStore.updateMotorcycle(
-      motorcycleId,
-      motorcycle
-    );
+    await mainStore.updateMotorcycle(motorcycleId, motorcycle);
     await router.push({
       name: "motorcycleDetail",
-      params: { id: updatedMotorcycle.id },
+      params: { id: motorcycleId },
     });
   } catch (err: any) {
     error.value = "Failed to update motorcycle.";
@@ -366,9 +361,9 @@ async function newFileUpload(file: File) {
   }
 }
 
-async function deleteImage(imageId: string) {
+async function deleteImage(imageUrl: string) {
   for (let i = 0; i < images.value.length; i++) {
-    if (images.value[i].id === imageId) {
+    if (images.value[i].image_url === imageUrl) {
       images.value.splice(i, 1);
       break;
     }
