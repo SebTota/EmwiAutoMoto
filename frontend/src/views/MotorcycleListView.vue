@@ -96,11 +96,18 @@
                   {{ statusToPolish(product.status) }}
                 </p>
               </div>
-              <p
-                class="text-medium font-medium text-gray-900 dark:text-gray-300"
-              >
-                {{ product.price }} zł
-              </p>
+              <div class="text-right">
+                <p
+                  class="text-medium font-medium text-gray-900 dark:text-gray-300"
+                >
+                  {{ product.price.toLocaleString("pl-PL") }} zł
+                </p>
+                <p
+                  class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400"
+                >
+                  {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
+                </p>
+              </div>
             </div>
           </div>
         </div>

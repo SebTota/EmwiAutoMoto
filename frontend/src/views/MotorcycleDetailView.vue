@@ -85,7 +85,7 @@
           <div class="mt-1">
             <h2 class="sr-only">Price</h2>
             <p class="text-3xl text-gray-900 dark:text-gray-400">
-              {{ product.price }} zł
+              {{ product.price.toLocaleString("pl-PL") }} zł
             </p>
           </div>
 
@@ -95,7 +95,8 @@
           <div class="mt-5">
             <h3 class="sr-only">Odometer</h3>
             <p class="text-l text-gray-900 dark:text-gray-400">
-              Drogomierz: {{ product.odometer_miles }} mill
+              Drogomierz: {{ product.odometer_miles.toLocaleString("pl-PL") }}
+              mill
             </p>
           </div>
 
