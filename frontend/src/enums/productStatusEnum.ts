@@ -1,7 +1,6 @@
-
 export enum ProductStatusEnum {
-    active = "active",
-    inactive = "inactive",
-    deleted = "deleted",
-    draft = "draft"
+  DRAFT = "DRAFT",
+  FOR_SALE = "FOR_SALE",
+  SOLD = "SOLD",
+  DELETED = "DELETED",
 }

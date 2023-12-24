@@ -84,3 +84,10 @@ def get_current_active_superuser(
             status_code=400, detail="The user doesn't have enough privileges"
         )
     return current_user
+
+def get_current_active_superuser_no_exception(
+    current_user: models.User = Depends(get_current_user_if_signed_in),
+) -> Optional[models.User]:
+    if not current_user or not current_user.is_superuser:
+        return None
+    return current_user

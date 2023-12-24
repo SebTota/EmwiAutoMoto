@@ -2,7 +2,7 @@ import io
 import uuid
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
 from PIL import Image as PIL_Image
 
 from backend import crud
@@ -18,9 +18,10 @@ router = APIRouter()
 
 @router.get("", response_model=MotorcycleList)
 async def read_items(
-        show_status: MotorcycleStatus = MotorcycleStatus.FOR_SALE,
+        show_status: List[MotorcycleStatus] = Query([MotorcycleStatus.FOR_SALE]),
         page: int = 1,
         limit: int = 12,
+        current_user: User = Depends(deps.get_current_active_superuser_no_exception),
 ) -> Any:
     """
     Retrieve motorcycle items.
@@ -31,8 +32,14 @@ async def read_items(
     if limit < 1:
         raise HTTPException(status_code=400, detail="Limit must be greater than 0")
 
+    if len(show_status) == 1 and show_status[0] == MotorcycleStatus.FOR_SALE:
+        ...
+    else:
+        if not current_user or not current_user.is_superuser:
+            raise HTTPException(status_code=403, detail="You must be a superuser to view these items")
+
     offset: int = (page - 1) * limit
-    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit, [show_status])
+    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit, show_status)
 
     if not items:
         return MotorcycleList(page=page,
