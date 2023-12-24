@@ -15,7 +15,7 @@
     "@heroicons/vue": "^2.0.13",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.3",
-    "axios": "^1.2.0",
+    "axios": "^1.6.0",
     "pinia": "^2.0.27",
     "vue": "^3.2.45",
     "vue-draggable-next": "^2.2.1",
