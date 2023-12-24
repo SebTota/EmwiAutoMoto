@@ -5,14 +5,14 @@
         class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10"
       >
         <div class="flex justify-start lg:w-0 lg:flex-1">
-          <a href="/">
-            <span class="sr-only">EMWI AUto Moto</span>
+          <router-link :to="{ name: 'home' }">
+            <span class="sr-only">EMWI Auto Moto</span>
             <img
               class="h-8 w-auto sm:h-10"
               src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
               alt=""
             />
-          </a>
+          </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
           <PopoverButton
@@ -23,24 +23,23 @@
           </PopoverButton>
         </div>
         <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
-          <a
+          <router-link
             v-for="item in tabs"
             :key="item.name"
-            href="#"
-            @click="item.onClickHandler()"
+            :to="{ name: item.page }"
             class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <a class="text-base font-medium">{{ item.name }}</a>
-          </a>
+          </router-link>
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <a
+          <router-link
             v-if="mainStateLoaded && !isLoggedIn"
-            href="#"
-            @click="goToLogin()"
+            :to="{ name: 'login' }"
             class="whitespace-nowrap text-base font-medium"
-            >Sign in</a
           >
+            Sign in
+          </router-link>
           <p v-if="mainStateLoaded && isLoggedIn">{{ getUsername() }}</p>
         </div>
       </div>
@@ -55,6 +54,7 @@
       leave-to-class="opacity-0 scale-95"
     >
       <PopoverPanel
+        v-slot="{ close }"
         focus
         class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
       >
@@ -81,11 +81,11 @@
             </div>
             <div class="mt-6">
               <nav class="grid gap-y-8">
-                <a
+                <router-link
                   v-for="item in tabs"
                   :key="item.name"
-                  href="#"
-                  @click="item.onClickHandler()"
+                  :to="{ name: item.page }"
+                  @click="close"
                   class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <component
@@ -96,20 +96,20 @@
                   <span class="ml-3 text-base font-medium">{{
                     item.name
                   }}</span>
-                </a>
+                </router-link>
               </nav>
             </div>
           </div>
           <div class="space-y-5 py-5 px-5">
             <div>
               <link />
-              <a
+              <router-link
                 v-if="mainStateLoaded && !isLoggedIn"
-                href="#"
-                @click="goToLogin"
+                :to="{ name: 'login' }"
                 class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >Sign in</a
               >
+                Sign in
+              </router-link>
             </div>
           </div>
         </div>
@@ -133,7 +133,6 @@ import {
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import router from "@/router";
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
@@ -143,22 +142,22 @@ let tabs = [
   {
     name: "Motocykle",
     description: "Motocykle",
-    onClickHandler: goHome,
     icon: ArrowLongRightIcon,
+    page: "motorcycleList",
   },
   {
     name: "Kontakt",
     description: "Kontakt",
-    onClickHandler: goToContactPage,
     icon: ArrowLongRightIcon,
+    page: "contact",
   },
 ];
 
 const addMotorcycleTab = {
   name: "Nowy Motocykl",
   description: "Nowy Motocykl",
-  onClickHandler: goToNewMotorcyclePage,
   icon: ArrowLongRightIcon,
+  page: "newMotorcycle",
 };
 
 mainState.actionCheckLoggedIn().then(() => {
@@ -170,21 +169,5 @@ mainState.actionCheckLoggedIn().then(() => {
 
 function getUsername() {
   return mainState.user?.username;
-}
-
-function goToLogin() {
-  router.push({ name: "login" });
-}
-
-function goHome() {
-  router.push({ name: "motorcycleList" });
-}
-
-function goToContactPage() {
-  router.push({ name: "contact" });
-}
-
-function goToNewMotorcyclePage() {
-  router.push({ name: "newMotorcycle" });
 }
 </script>

@@ -68,12 +68,13 @@
 
         <!-- Product info -->
         <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0 col-span-2">
-          <a
+          <router-link
+            :to="{ name: 'motorcycleList' }"
             class="text-sm tracking-tight text-gray-900 dark:text-gray-400"
-            href="#"
-            @click="goBack"
-            >&#8592;Wszystkie Motocykle</a
           >
+            &#8592; Wszystkie Motocykle
+          </router-link>
+
           <h1
             class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-400"
           >

@@ -153,9 +153,9 @@
           E-mail wysłany.
         </h1>
         <div class="mt-6">
-          <a href="/" class="text-base text-gray-500"
-            >Wróć do listy motocykli.</a
-          >
+          <router-link to="/" class="text-base text-gray-500">
+            Wróć do listy motocykli.
+          </router-link>
         </div>
       </div>
     </div>
