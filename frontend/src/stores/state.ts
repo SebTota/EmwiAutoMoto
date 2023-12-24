@@ -45,12 +45,12 @@ export const useMainStore = defineStore("mainState", {
           this.actionRouteLoggedIn();
           return this.user;
         } else {
-          this.actionLogout();
+          this.actionLogoutAndNavigateToLogin();
         }
       } catch (error) {
         console.error("Failed to log in user.", error);
         this.loginError = "Failed to sign in. Please try again.";
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
       }
       if (this.loginError) {
         throw Error(this.loginError);
@@ -58,7 +58,7 @@ export const useMainStore = defineStore("mainState", {
     },
     async actionGetUserProfile() {
       if (!this.isLoggedIn) {
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
       }
 
       // await this.refreshToken();
@@ -78,7 +78,7 @@ export const useMainStore = defineStore("mainState", {
           this.actionCheckApiError(error);
         }
       } else {
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
       }
     },
     async actionCheckLoggedIn() {
@@ -110,14 +110,17 @@ export const useMainStore = defineStore("mainState", {
         await this.actionRemoveLogIn();
       }
     },
-    actionLogout() {
+    actionLogoutAndNavigateToLogin() {
       this.actionRemoveLogIn();
       this.actionRouteLogOut();
+    },
+    actionLogout() {
+      this.actionRemoveLogIn();
     },
     actionCheckApiError(payload: any) {
       if (axios.isAxiosError(payload)) {
         if (payload.response!.status === 401) {
-          this.actionLogout();
+          this.actionLogoutAndNavigateToLogin();
         }
       }
     },
@@ -222,7 +225,7 @@ export const useMainStore = defineStore("mainState", {
           throw Error("Failed to create motorcycle.");
         }
       } else {
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
         throw Error("User can not perform this action. Not signed in.");
       }
     },
@@ -244,7 +247,7 @@ export const useMainStore = defineStore("mainState", {
           throw Error("Failed to create motorcycle.");
         }
       } else {
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
         throw Error("User can not perform this action. Not signed in.");
       }
     },
@@ -262,7 +265,7 @@ export const useMainStore = defineStore("mainState", {
           throw Error("Failed to add image to motorcycle.");
         }
       } else {
-        this.actionLogout();
+        this.actionLogoutAndNavigateToLogin();
         throw Error("User can not perform this action. Not signed in.");
       }
     },

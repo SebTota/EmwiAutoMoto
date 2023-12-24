@@ -33,13 +33,23 @@
           </router-link>
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
-          <router-link
-            v-if="mainStateLoaded && !isLoggedIn"
-            :to="{ name: 'login' }"
-            class="whitespace-nowrap text-base font-medium"
-          >
-            Sign in
-          </router-link>
+          <div v-if="mainStateLoaded && !isLoggedIn">
+            <router-link
+              :to="{ name: 'login' }"
+              class="whitespace-nowrap text-base font-medium"
+            >
+              Zaloguj się
+            </router-link>
+          </div>
+          <div v-else>
+            <button
+              @click="handleLogout"
+              type="submit"
+              class="whitespace-nowrap text-base font-medium"
+            >
+              Wyloguj się
+            </button>
+          </div>
           <p v-if="mainStateLoaded && isLoggedIn">{{ getUsername() }}</p>
         </div>
       </div>
@@ -103,13 +113,24 @@
           <div class="space-y-5 py-5 px-5">
             <div>
               <link />
-              <router-link
-                v-if="mainStateLoaded && !isLoggedIn"
-                :to="{ name: 'login' }"
-                class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-              >
-                Sign in
-              </router-link>
+              <div v-if="mainStateLoaded && !isLoggedIn">
+                <router-link
+                  @click="close"
+                  :to="{ name: 'login' }"
+                  class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Zaloguj się
+                </router-link>
+              </div>
+              <div v-else>
+                <button
+                  @click="handleLogout"
+                  type="submit"
+                  class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  Wyloguj się
+                </button>
+              </div>
             </div>
           </div>
         </div>
@@ -169,5 +190,11 @@ mainState.actionCheckLoggedIn().then(() => {
 
 function getUsername() {
   return mainState.user?.username;
+}
+
+async function handleLogout(event: Event) {
+  event.preventDefault();
+  await mainState.actionLogout();
+  window.location.reload();
 }
 </script>
