@@ -39,14 +39,16 @@ async def read_items(
             raise HTTPException(status_code=403, detail="You must be a superuser to view these items")
 
     offset: int = (page - 1) * limit
-    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit, show_status)
+
+    # Add 1 to the limit to see if there is a next page.
+    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit + 1, show_status)
 
     if not items:
         return MotorcycleList(page=page,
                               has_next_page=False,
                               motorcycles=[])
 
-    has_next_page = True if len(items) == limit + 1 else False
+    has_next_page = True if len(items) > limit else False
 
     # Remove the extra motorcycle we got as a pagination test IFF there is a next page
     # (indicating we received +1 results back from db)
