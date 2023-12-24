@@ -18,6 +18,12 @@ export function getCssClassFromColor(color: string): string {
       return "bg-blue-900";
     case MotorcycleColor.LightBlue:
       return "bg-blue-400";
+    case MotorcycleColor.Green:
+      return "bg-green-900";
+    case MotorcycleColor.LightGreen:
+      return "bg-green-300";
+    case MotorcycleColor.Yellow:
+      return "bg-yellow-600";
     default:
       return "";
   }
@@ -34,12 +40,18 @@ export function colorToPolish(color: string) {
     case MotorcycleColor.Red:
       return "Czerwony";
     case MotorcycleColor.DarkRed:
-      return "Ciemno Czerwony";
+      return "Ciemnoczerwony";
     case MotorcycleColor.Violet:
       return "Fioletowy";
     case MotorcycleColor.Blue:
       return "Niebieski";
     case MotorcycleColor.LightBlue:
-      return "Jasny Niebieski";
+      return "Jasnoniebieski";
+    case MotorcycleColor.Green:
+      return "Zielony";
+    case MotorcycleColor.LightGreen:
+      return "Jasnozielony";
+    case MotorcycleColor.Yellow:
+      return "Żółty";
   }
 }
