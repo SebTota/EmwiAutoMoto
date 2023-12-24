@@ -123,22 +123,36 @@
 
           <form class="mt-6">
             <div class="mt-10 flex sm:flex-col1">
-              <button
-                type="submit"
-                @click="goToContactPage"
-                class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+              <router-link
+                class="w-full"
+                :to="{
+                  name: 'contact',
+                  query: {
+                    motorcycleRef: encodeURIComponent(getCurrentHref()),
+                  },
+                }"
               >
-                Skontaktuj się z nami
-              </button>
+                <button
+                  type="button"
+                  class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                >
+                  Skontaktuj się z nami
+                </button>
+              </router-link>
             </div>
+
             <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
-              <button
-                type="submit"
-                @click="goToEditMotorcyclePage"
-                class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+              <router-link
+                class="w-full"
+                :to="{ name: 'motorcycleEdit', params: { id: motorcycleId } }"
               >
-                Edytuj motocykl
-              </button>
+                <button
+                  type="button"
+                  class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                >
+                  Edytuj motocykl
+                </button>
+              </router-link>
             </div>
           </form>
         </div>
@@ -154,7 +168,6 @@ import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
 import type { IMotorcycleWithImages } from "@/interfaces/motorcycle";
 import { colorToPolish, getCssClassFromColor } from "@/utils/colors";
-import router from "@/router";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();
@@ -179,25 +192,11 @@ if (typeof motorcycleId === "string") {
   });
 }
 
-function goBack() {
-  // TODO: Save the last search preferences (page, filters, etc.) in local storage and reference them here
-  router.push({ name: "motorcycleList" });
-}
-
-function goToContactPage(event: any) {
-  event.preventDefault();
-  router.push({
-    name: "contact",
-    query: { motorcycleRef: encodeURIComponent(window.location.href) },
-  });
-}
-
-function goToEditMotorcyclePage(event: any) {
-  event.preventDefault();
-  router.push({ name: "motorcycleEdit", params: { id: motorcycleId } });
-}
-
 function isAdmin() {
   return mainStateLoaded.value && isLoggedIn.value;
+}
+
+function getCurrentHref() {
+  return window.location.href;
 }
 </script>
