@@ -88,7 +88,8 @@
             </p>
           </div>
 
-          <hr>
+
+          <hr />
 
           <!-- Odometer -->
           <div class="mt-5">
@@ -104,24 +105,13 @@
             <p class="text-l text-gray-900 dark:text-gray-400">
               Kolor: {{ colorToPolish(product.color) }}
             </p>
+            <div
+              :class="[
+                colorCss,
+                'h-8 w-8 border border-black border-opacity-50 rounded-full',
+              ]"
+            />
           </div>
-
-<!--          <div>-->
-<!--            <h3 class="text-sm text-gray-600 dark:text-gray-100">Color</h3>-->
-<!--            <div class="flex items-center space-x-3">-->
-<!--              <div-->
-<!--                class="-m-0.5 relative p-0.5 rounded-full flex items-center justify-center focus:outline-none"-->
-<!--              >-->
-<!--                <div-->
-<!--                  :class="[-->
-<!--                    colorCss,-->
-<!--                    'h-8 w-8 border border-black border-opacity-50 rounded-full',-->
-<!--                  ]"-->
-<!--                />-->
-<!--              </div>-->
-<!--            </div>-->
-<!--          </div>-->
-
           <div class="mt-6">
             <!-- Description -->
             <h3 class="sr-only">Description</h3>
@@ -141,7 +131,7 @@
                 Skontaktuj się z nami
               </button>
             </div>
-            <div v-if="isAdmin()" class="mt-2">
+            <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
               <button
                 type="submit"
                 @click="goToEditMotorcyclePage"
@@ -163,7 +153,7 @@ import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
 import type { IMotorcycleWithImages } from "@/interfaces/motorcycle";
-import { colorToPolish, getCssClassFromColor } from '@/utils/colors'
+import { colorToPolish, getCssClassFromColor } from "@/utils/colors";
 import router from "@/router";
 import { storeToRefs } from "pinia";
 
