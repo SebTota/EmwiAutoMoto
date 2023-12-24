@@ -12,14 +12,14 @@
         <h2
           class="mt-6 text-center text-3xl font-bold tracking-tight text-gray-900"
         >
-          Sign in to your account
+          Zaloguj się na swoje konto
         </h2>
       </div>
       <form class="mt-8 space-y-6" action="#" method="POST">
         <input type="hidden" name="remember" value="true" />
         <div class="-space-y-px rounded-md shadow-sm">
           <div>
-            <label for="username" class="sr-only">Username</label>
+            <label for="username" class="sr-only">Nazwa użytkownika</label>
             <input
               v-model="username"
               id="username"
@@ -31,7 +31,7 @@
             />
           </div>
           <div>
-            <label for="password" class="sr-only">Password</label>
+            <label for="password" class="sr-only">Hasło</label>
             <input
               v-model="password"
               id="password"
@@ -50,11 +50,11 @@
             type="submit"
             class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            Sign in
+            Zaloguj się
           </button>
         </div>
         <div v-if="showLoginError" class="text-sm mb-4 w-max text-red-400">
-          Invalid username or password.
+          Nieprawidłowa nazwa użytkownika lub hasło.
         </div>
       </form>
     </div>
