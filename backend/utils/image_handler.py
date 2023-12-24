@@ -76,7 +76,8 @@ def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
 
     try:
         print("Uploading file to cloud storage...")
-        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, ExtraArgs={'ContentType': content_type})
+        s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, ExtraArgs={'ContentType': content_type,
+                                                                             'CacheControl': 'max-age=31536000'})
         print("Upload complete!")
         return f'{BASE_HOST_URL}/{image_name}'
     except Exception as e:
