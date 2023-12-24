@@ -1,5 +1,5 @@
 import { createRouter, createWebHistory } from "vue-router";
-import {useMainStore} from "@/stores/state";
+import { useMainStore } from "@/stores/state";
 
 const router = createRouter({
   history: createWebHistory(),
@@ -24,10 +24,10 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({name: 'login'})
+            next({ name: "login" });
           }
-        })
-      }
+        });
+      },
     },
     {
       path: "/motorcycle/:id/edit",
@@ -39,10 +39,10 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({name: 'login'})
+            next({ name: "login" });
           }
-        })
-      }
+        });
+      },
     },
     {
       path: "/motorcycle/:id",
@@ -57,13 +57,13 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: '/motorcycles'
+      redirect: "/motorcycles",
     },
     {
       path: "/:pathMatch(.*)*",
       name: "404",
-      component: () => import("../views/NotFound.vue")
-    }
+      component: () => import("../views/NotFound.vue"),
+    },
   ],
 });
 

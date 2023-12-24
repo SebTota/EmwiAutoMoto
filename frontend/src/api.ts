@@ -5,8 +5,9 @@ import type { IToken } from "@/interfaces/token";
 import type {
   IMotorcycle,
   IMotorcycleCreate,
-  IMotorcycleList, IMotorcycleWithImages
-} from '@/interfaces/motorcycle'
+  IMotorcycleList,
+  IMotorcycleWithImages,
+} from "@/interfaces/motorcycle";
 import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IImage } from "@/interfaces/image";
@@ -79,7 +80,9 @@ export const api = {
     return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, config);
   },
   async getMotorcycle(id: string) {
-    return client.get<IMotorcycleWithImages>(`${apiUrl}/api/v1/motorcycles/${id}`);
+    return client.get<IMotorcycleWithImages>(
+      `${apiUrl}/api/v1/motorcycles/${id}`
+    );
   },
   async createMotorcycle(token: string, motorcycle: IMotorcycleCreate) {
     return client.post<IMotorcycleWithImages>(

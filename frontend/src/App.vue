@@ -8,5 +8,4 @@ import HeaderComponent from "@/components/HeaderComponent.vue";
   <RouterView :key="$route.fullPath" />
 </template>
 
-<style scoped>
-</style>
+<style scoped></style>
