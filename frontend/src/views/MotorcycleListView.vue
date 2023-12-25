@@ -1,11 +1,11 @@
 <template>
-  <div class="bg-white dark:text-gray-400 dark:bg-gray-900">
-    <div class="mx-auto max-w-2xl px-4 sm:px-6 lg:max-w-7xl lg:px-8">
+  <div class="relative bg-white dark:text-gray-400 dark:bg-gray-900">
+    <div class="mx-auto max-w-2xl sm:px-5 lg:max-w-7xl">
       <div>
         <div class="text-center relative z-0">
           <section
             aria-labelledby="filter-heading"
-            class="border-b border-gray-200 py-6"
+            class="border-b border-gray-200 pt-6 pb-2"
           >
             <h2 id="filter-heading" class="sr-only">Product filters</h2>
 

@@ -22,9 +22,9 @@
     </div>
   </div>
 
-  <div v-else class="bg-white dark:bg-gray-900 dark:text-gray-400">
+  <div v-else class="relative bg-white dark:bg-gray-900 dark:text-gray-400">
     <div
-      class="max-w-2xl mx-auto py-2 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
+      class="max-w-2xl mx-auto py-2 sm:py-8 sm:px-5 lg:max-w-7xl"
     >
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
