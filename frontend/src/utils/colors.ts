@@ -34,23 +34,23 @@ export function colorToPolish(color: string) {
     case MotorcycleColor.White:
       return "Biały";
     case MotorcycleColor.Silver:
-      return "Srebro";
+      return "Srebrny";
     case MotorcycleColor.Black:
       return "Czarny";
     case MotorcycleColor.Red:
       return "Czerwony";
     case MotorcycleColor.DarkRed:
-      return "Ciemnoczerwony";
+      return "Ciemno czerwony";
     case MotorcycleColor.Violet:
       return "Fioletowy";
     case MotorcycleColor.Blue:
       return "Niebieski";
     case MotorcycleColor.LightBlue:
-      return "Jasnoniebieski";
+      return "Jasno niebieski";
     case MotorcycleColor.Green:
       return "Zielony";
     case MotorcycleColor.LightGreen:
-      return "Jasnozielony";
+      return "Jasno zielony";
     case MotorcycleColor.Yellow:
       return "Żółty";
   }
