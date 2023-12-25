@@ -1,6 +1,6 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
-    <div class="mx-auto max-w-7xl px-5">
+    <div class="mx-auto max-w-7xl sm:px-5">
       <div
         class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10"
       >
@@ -9,7 +9,7 @@
             <span class="sr-only">EMWI Auto Moto</span>
             <img
               class="h-8 w-auto sm:h-10"
-              src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+              src="/logo-no-border.png"
               alt=""
             />
           </router-link>
@@ -76,7 +76,7 @@
               <div>
                 <img
                   class="h-8 w-auto"
-                  src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
+                  src="/logo-no-border.png"
                   alt="EMWI Auto Moto"
                 />
               </div>
