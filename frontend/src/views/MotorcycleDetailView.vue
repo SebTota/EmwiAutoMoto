@@ -33,7 +33,7 @@
           <TabPanels class="w-full aspect-w-5 aspect-h-3">
             <TabPanel v-for="image in product.images" :key="image.image_url">
               <img
-                :src="image.image_url"
+                :src="image.medium_thumbnail_url"
                 class="w-full h-full object-center object-cover sm:rounded-lg"
               />
             </TabPanel>
