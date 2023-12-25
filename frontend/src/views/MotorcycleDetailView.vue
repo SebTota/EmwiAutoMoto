@@ -18,7 +18,7 @@
           fill="currentColor"
         />
       </svg>
-      Loading...
+      Ładowanie...
     </div>
   </div>
 
