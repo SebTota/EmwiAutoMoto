@@ -78,7 +78,7 @@
           <h1
             class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-400"
           >
-            {{ product.make + " " + product.model }}
+            {{ product.year + " " + product.make + " " + product.model }}
           </h1>
 
           <!-- Price -->
@@ -95,8 +95,8 @@
           <div class="mt-5">
             <h3 class="sr-only">Odometer</h3>
             <p class="text-l text-gray-900 dark:text-gray-400">
-              Drogomierz: {{ product.odometer_miles.toLocaleString("pl-PL") }}
-              mill
+              Przebieg: {{ product.odometer_miles.toLocaleString("pl-PL") }}
+              mil
             </p>
           </div>
 
@@ -106,12 +106,6 @@
             <p class="text-l text-gray-900 dark:text-gray-400">
               Kolor: {{ colorToPolish(product.color) }}
             </p>
-            <div
-              :class="[
-                colorCss,
-                'h-8 w-8 border border-black border-opacity-50 rounded-full',
-              ]"
-            />
           </div>
           <div class="mt-6">
             <!-- Description -->

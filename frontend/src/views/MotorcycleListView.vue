@@ -83,14 +83,14 @@
                   class="text-medium font-medium text-gray-900 dark:text-gray-300"
                 >
                   <a>
-                    {{ product.make + " " + product.model }}
+                    {{ product.year + " " + product.make }}
                   </a>
                 </h3>
                 <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">
-                  {{ colorToPolish(product.color) }}
+                  {{ product.model }}
                 </p>
                 <p
-                  v-if="showExtraDetails()"
+                  v-if="showExtraDetails() && showAll"
                   class="mt-1 text-medium text-gray-500 dark:text-gray-400"
                 >
                   {{ statusToPolish(product.status) }}

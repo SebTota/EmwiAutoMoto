@@ -80,7 +80,7 @@
                 <label
                   for="odometer_miles"
                   class="block text-sm font-medium text-gray-700"
-                  >Drogomierz (Mil)</label
+                  >Przebieg (Mil)</label
                 >
                 <input
                   v-model="odometer_miles"
