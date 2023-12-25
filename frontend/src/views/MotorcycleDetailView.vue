@@ -1,7 +1,7 @@
 <template>
   <div v-if="loadingRequest" class="text-center">
     <div
-      class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 inline-flex items-center"
+      class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 my-6 mr-2 inline-flex items-center"
     >
       <svg
         class="inline mr-3 w-4 h-4 text-white animate-spin"
@@ -24,7 +24,7 @@
 
   <div v-else class="bg-white dark:bg-gray-900 dark:text-gray-400">
     <div
-      class="max-w-2xl mx-auto py-2 px-4 sm:py-12 sm:px-6 lg:max-w-7xl lg:px-8"
+      class="max-w-2xl mx-auto py-2 px-4 sm:py-8 sm:px-6 lg:max-w-7xl lg:px-8"
     >
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
@@ -49,7 +49,7 @@
               >
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <img
-                    :src="image.thumbnail_url ? image.thumbnail_url : undefined"
+                    :src="image.thumbnail_url"
                     alt=""
                     class="w-full h-full object-center object-cover"
                   />
@@ -76,7 +76,7 @@
           </router-link>
 
           <h1
-            class="text-3xl font-extrabold tracking-tight text-gray-900 dark:text-gray-400"
+            class="text-3xl font-extrabold mt-2 tracking-tight text-gray-900 dark:text-gray-400"
           >
             {{ product.year + " " + product.make + " " + product.model }}
           </h1>
@@ -84,42 +84,79 @@
           <!-- Price -->
           <div class="mt-1">
             <h2 class="sr-only">Price</h2>
-            <p class="text-3xl text-gray-900 dark:text-gray-400">
+            <p class="text-2xl text-gray-900 dark:text-gray-400">
               {{ product.price.toLocaleString("pl-PL") }} zł
             </p>
           </div>
 
-          <hr />
-
-          <!-- Odometer -->
-          <div class="mt-5">
-            <h3 class="sr-only">Odometer</h3>
-            <p class="text-l text-gray-900 dark:text-gray-400">
-              Przebieg: {{ product.odometer_miles.toLocaleString("pl-PL") }}
-              mil
-            </p>
+          <div>
+            <div class="mt-2 border-t border-gray-100">
+              <dl class="divide-y divide-gray-100">
+                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Rok
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ product.year }}
+                  </dd>
+                </div>
+                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Marka
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ product.make }}
+                  </dd>
+                </div>
+                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Model
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ product.model }}
+                  </dd>
+                </div>
+                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Przebieg
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
+                  </dd>
+                </div>
+                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Kolor
+                  </dt>
+                  <dd
+                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
+                  >
+                    {{ colorToPolish(product.color) }}
+                  </dd>
+                </div>
+                <div class="px-2 py-2 sm:gap-4 sm:px-0">
+                  <dt class="text-sm font-medium leading-6 text-gray-900">
+                    Opis
+                  </dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700">
+                    {{ product.description }}
+                  </dd>
+                </div>
+              </dl>
+            </div>
           </div>
 
-          <!-- Colors -->
-          <div class="mt-1">
-            <h3 class="sr-only">Color</h3>
-            <p class="text-l text-gray-900 dark:text-gray-400">
-              Kolor: {{ colorToPolish(product.color) }}
-            </p>
-          </div>
-          <div class="mt-6">
-            <!-- Description -->
-            <h3 class="sr-only">Description</h3>
-            <div
-              class="text-base text-gray-700 dark:text-gray-200 space-y-6"
-              v-html="product.description"
-            />
-          </div>
-
-          <form class="mt-6">
-            <div class="mt-10 flex sm:flex-col1">
+          <form class="mt-2">
+            <div >
               <router-link
-                class="w-full"
                 :to="{
                   name: 'contact',
                   query: {
