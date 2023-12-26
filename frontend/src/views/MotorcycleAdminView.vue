@@ -1,5 +1,5 @@
 <template>
-  <div class="my-8">
+  <div>
     <div v-if="loadingRequest" class="text-center">
       <div
         class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 mr-2 inline-flex items-center"
