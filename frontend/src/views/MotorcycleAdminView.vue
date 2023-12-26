@@ -269,8 +269,15 @@ function showError() {
   return error.value && error.value.length > 0;
 }
 
+function trimFormValues() {
+  make.value = make.value?.trim();
+  model.value = model.value?.trim();
+  description.value = description.value?.trim();
+}
+
 function submit() {
   error.value = "";
+  trimFormValues();
 
   if (isAddNew()) {
     createMotorcycle();
