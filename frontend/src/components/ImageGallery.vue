@@ -1,7 +1,7 @@
 <template>
   <div>
     <VueDraggableNext
-      class="grid grid-cols-6 gap-4"
+      class="grid grid-cols-1 md:grid-cols-4 lg:grid-cols-6 gap-4"
       :list="props.images"
       v-bind="dragOptions"
     >

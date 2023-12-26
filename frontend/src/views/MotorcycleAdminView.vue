@@ -26,7 +26,7 @@
     <div v-else>
       <form @submit.prevent="submit">
         <div class="sm:overflow-hidden sm:rounded-md">
-          <div class="space-y-6 bg-white px-4 py-5 sm:p-6">
+          <div class="space-y-6 bg-white py-5 sm:p-6">
             <div class="grid grid-cols-6 gap-6">
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
                 <label
@@ -186,14 +186,6 @@
           >
             <p>{{ error }}</p>
           </div>
-          <!--          <div v-if="isAddNew()" class="px-4 py-3 text-right sm:px-6">-->
-          <!--            <button-->
-          <!--              type="submit"-->
-          <!--              class="inline-flex justify-center rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"-->
-          <!--            >-->
-          <!--              Dalej-->
-          <!--            </button>-->
-          <!--          </div>-->
           <div class="px-4 py-3 text-right sm:px-6">
             <button
               type="submit"

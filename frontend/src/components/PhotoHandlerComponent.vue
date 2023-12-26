@@ -23,7 +23,7 @@
           for="file-upload"
           class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
         >
-          <span>Wybierz zdjęcia</span>
+          <span>Wybierz zdjęcia lub przeciągnij i upuść zdjęcie tutaj</span>
           <input
             @change="onFileSelect"
             id="file-upload"
@@ -34,7 +34,6 @@
             class="sr-only"
           />
         </label>
-        <p class="pl-1">lub przeciągnij i upuść zdjęcie tuta</p>
       </div>
       <p class="text-xs text-gray-500">PNG lub JPG</p>
     </div>
