@@ -41,11 +41,12 @@
         </div>
         <div>
           <button
+            :disabled="showLoading"
             @click="handleLogin"
             type="submit"
-            class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 disabled:bg-indigo-400 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
           >
-            Zaloguj się
+            {{ showLoading ? "Ładowanie..." : "Zaloguj się" }}
           </button>
         </div>
         <div v-if="showLoginError" class="text-sm mb-4 w-max text-red-400">
@@ -63,15 +64,19 @@ import { ref } from "vue";
 const mainStore = useMainStore();
 
 const showLoginError = ref(false);
+const showLoading = ref(false);
 const username = ref("");
 const password = ref("");
 
 async function handleLogin(event: Event) {
   event.preventDefault();
+
+  showLoading.value = true;
   showLoginError.value = false;
   try {
     await mainStore.actionLogIn(username.value, password.value);
   } catch (error) {
+    showLoading.value = false;
     showLoginError.value = true;
   }
 }
