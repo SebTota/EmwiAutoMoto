@@ -176,6 +176,7 @@ function updateMotorcycles(page: number) {
   if (showAll.value) {
     showStatus = [
       ProductStatusEnum.FOR_SALE,
+      ProductStatusEnum.RESERVED,
       ProductStatusEnum.SOLD,
       ProductStatusEnum.DRAFT,
     ];

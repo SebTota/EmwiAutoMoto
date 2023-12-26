@@ -9,6 +9,7 @@ class MotorcycleStatus(str, enum.Enum):
     DRAFT = 'DRAFT'
     FOR_SALE = 'FOR_SALE'
     SOLD = 'SOLD'
+    RESERVED = 'RESERVED'
     DELETED = 'DELETED'
 
 
