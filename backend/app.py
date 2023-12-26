@@ -15,7 +15,7 @@ init_db(app)
 
 app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost", "http://localhost:5173"],
+        allow_origins=["http://localhost", "http://localhost:5173", "https://emwiautomoto.sebtota.com"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
