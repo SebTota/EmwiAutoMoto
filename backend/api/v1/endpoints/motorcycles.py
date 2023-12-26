@@ -1,8 +1,9 @@
+import concurrent.futures
 import io
 import uuid
 from typing import Any, List, Optional
 
-from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query
+from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query, BackgroundTasks
 from PIL import Image as PIL_Image
 
 from backend import crud
@@ -88,28 +89,34 @@ async def update_item(
     return item
 
 
-@router.post('/image', response_model=ImageRead)
+@router.post('/image', response_model=List[ImageRead])
 def generate_product_images(
-        file: UploadFile,
-        current_user: User = Depends(deps.get_current_active_superuser),
+        files: List[UploadFile],
+        background_tasks: BackgroundTasks,
+        current_user: User = Depends(deps.get_current_active_superuser)
 ) -> Any:
-    image_content = file.file.read()
-    img = PIL_Image.open(io.BytesIO(image_content))
+    def process_single_image(file):
+        image_content = file.file.read()
+        img = PIL_Image.open(io.BytesIO(image_content))
 
-    try:
-        name: str = f'{str(uuid.uuid4())}.{file.filename.split(".")[-1]}'
-        [image_url, thumbnail_url, medium_thumbnail_url] = process_image(img, name)
-        img.close()
-        file.file.close()
-        return ImageRead(image_url=image_url,
-                         thumbnail_url=thumbnail_url,
-                         medium_thumbnail_url=medium_thumbnail_url)
+        try:
+            name: str = f'{str(uuid.uuid4())}.{file.filename.split(".")[-1]}'
+            [image_url, thumbnail_url, medium_thumbnail_url] = process_image(img, name)
+            img.close()
+            file.file.close()
+            return ImageRead(image_url=image_url,
+                             thumbnail_url=thumbnail_url,
+                             medium_thumbnail_url=medium_thumbnail_url)
+        except FileUploadError as e:
+            print("Failed to process image.", e)
+            img.close()
+            file.file.close()
+            raise HTTPException(status_code=500, detail='Failed to process image.')
 
-    except FileUploadError as e:
-        print("Failed to process image.", e)
-        img.close()
-        file.file.close()
-        raise HTTPException(status_code=500, detail='Failed to process image.')
+    with concurrent.futures.ThreadPoolExecutor() as executor:
+        image_results = list(executor.map(process_single_image, files))
+
+    return image_results
 
 
 @router.get("/{id}", response_model=MotorcycleReadWithImages)

@@ -23,13 +23,14 @@
           for="file-upload"
           class="relative cursor-pointer rounded-md bg-white font-medium text-indigo-600 focus-within:outline-none focus-within:ring-2 focus-within:ring-indigo-500 focus-within:ring-offset-2 hover:text-indigo-500"
         >
-          <span>Wybierz zdjęcie</span>
+          <span>Wybierz zdjęcia</span>
           <input
             @change="onFileSelect"
             id="file-upload"
             name="file-upload"
             type="file"
             accept="image/png, image/jpeg"
+            multiple
             class="sr-only"
           />
         </label>
@@ -45,15 +46,16 @@ import { onMounted, onUnmounted } from "vue";
 
 const emit = defineEmits(["newFileUploaded"]);
 
+const events = ["dragenter", "dragover", "dragleave", "drop"];
+
 function onFileSelect(event: any) {
   const files = event.target.files;
-  emit("newFileUploaded", files[0]);
+  emit("newFileUploaded", files);
 }
 
-const events = ["dragenter", "dragover", "dragleave", "drop"];
 function onFileDrop(e: any) {
-  console.log("New file dropped");
-  emit("newFileUploaded", e.dataTransfer.files[0]);
+  console.log("New files dropped");
+  emit("newFileUploaded", e.dataTransfer.files);
 }
 
 onMounted(() => {

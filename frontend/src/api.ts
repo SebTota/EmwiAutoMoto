@@ -3,7 +3,6 @@ import { apiUrl } from "@/env";
 import type { IUser } from "@/interfaces/user";
 import type { IToken } from "@/interfaces/token";
 import type {
-  IMotorcycle,
   IMotorcycleCreate,
   IMotorcycleList,
   IMotorcycleWithImages,
@@ -102,10 +101,12 @@ export const api = {
       authHeaders(token)
     );
   },
-  async uploadProductImage(token: string, file: File) {
+  async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();
-    formData.append("file", file);
-    return client.post<IImage>(
+    Array.from(files).forEach((file, index) => {
+      formData.append('files', file);
+    });
+    return client.post<[IImage]>(
       `${apiUrl}/api/v1/motorcycles/image`,
       formData,
       authHeaders(token)

@@ -251,12 +251,12 @@ export const useMainStore = defineStore("mainState", {
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async uploadProductImage(file: File) {
+    async uploadProductImage(files: FileList) {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.uploadProductImage(
+          const response = await api.uploadProductImages(
             this.token.access_token,
-            file
+            files
           );
           return response.data;
         } catch (error) {
