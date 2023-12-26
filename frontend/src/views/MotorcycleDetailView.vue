@@ -67,7 +67,7 @@
         </TabGroup>
 
         <!-- Product info -->
-        <div class="mt-10 px-4 sm:px-0 sm:mt-16 lg:mt-0 col-span-2">
+        <div class="mt-8 lg:mt-0 col-span-2">
           <router-link
             :to="{ name: 'motorcycleList' }"
             class="text-sm tracking-tight text-gray-900 dark:text-gray-400"
@@ -92,7 +92,7 @@
           <div>
             <div class="mt-2 border-t border-gray-100">
               <dl class="divide-y divide-gray-100">
-                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Rok
                   </dt>
@@ -102,7 +102,7 @@
                     {{ product.year }}
                   </dd>
                 </div>
-                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Marka
                   </dt>
@@ -112,7 +112,7 @@
                     {{ product.make }}
                   </dd>
                 </div>
-                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Model
                   </dt>
@@ -122,7 +122,7 @@
                     {{ product.model }}
                   </dd>
                 </div>
-                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Przebieg
                   </dt>
@@ -132,7 +132,7 @@
                     {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
                   </dd>
                 </div>
-                <div class="px-2 py-2 sm:grid sm:grid-cols-3 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Kolor
                   </dt>
@@ -142,7 +142,7 @@
                     {{ colorToPolish(product.color) }}
                   </dd>
                 </div>
-                <div class="px-2 py-2 sm:gap-4 sm:px-0">
+                <div class="py-2 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Opis
                   </dt>
