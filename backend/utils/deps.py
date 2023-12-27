@@ -1,3 +1,4 @@
+import logging
 import string
 import random
 from typing import Generator, Optional
@@ -73,6 +74,8 @@ async def get_current_user(
     user = await crud.user.get(token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="Could not authenticate user. User not found")
+
+    logging.info(f"Logged in user: {user.email}")
     return user
 
 

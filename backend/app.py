@@ -1,5 +1,5 @@
-import logging
-import time
+from backend.core.logging import establish_request_detail_logging
+from backend.core.logging import logger  # noqa
 
 from dotenv import load_dotenv
 import os
@@ -13,32 +13,9 @@ from backend.db.init_db import init_db
 from backend.core.config import settings
 from backend.api.v1.api import api_router
 
-app = FastAPI()
+app: FastAPI = FastAPI()
 init_db(app)
-
-# Configure logging
-logging.basicConfig(
-    level=logging.INFO,
-    format="%(asctime)s - %(levelname)s - %(message)s",
-)
-
-# Create a logger
-logger = logging.getLogger(__name__)
-
-# Middleware for logging request and response times
-@app.middleware("http")
-async def log_request(request: Request, call_next):
-    start_time = time.time()
-    response = await call_next(request)
-    process_time = time.time() - start_time
-
-    logger.info(
-        f"Path: {request.url.path}, Method: {request.method}, "
-        f"Status Code: {response.status_code}, "
-        f"Process Time: {process_time:.5f} seconds"
-    )
-
-    return response
+establish_request_detail_logging(app)
 
 app.add_middleware(
         CORSMiddleware,
