@@ -80,8 +80,6 @@ async def update(db_obj: Motorcycle, new_obj: MotorcycleCreate) -> Optional[Moto
     update_dict['thumbnail_url'] = new_obj.images[0].thumbnail_url if new_obj.images else ''
     update_dict['medium_thumbnail_url'] = new_obj.images[0].medium_thumbnail_url if new_obj.images else ''
 
-    print(update_dict)
-
     await db_obj.update_from_dict(update_dict)
     await db_obj.save()
 

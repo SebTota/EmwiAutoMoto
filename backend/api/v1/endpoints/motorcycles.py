@@ -3,6 +3,7 @@ import io
 import uuid
 from typing import Any, List, Optional
 
+from backend.core.logging import logger
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query, BackgroundTasks
 from PIL import Image as PIL_Image
 
@@ -108,7 +109,7 @@ def generate_product_images(
                              thumbnail_url=thumbnail_url,
                              medium_thumbnail_url=medium_thumbnail_url)
         except FileUploadError as e:
-            print("Failed to process image.", e)
+            logger.error("Failed to process image.", e)
             img.close()
             file.file.close()
             raise HTTPException(status_code=500, detail='Failed to process image.')
