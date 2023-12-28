@@ -7,11 +7,7 @@
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <img
-              class="h-8 w-auto sm:h-10"
-              src="/logo-no-border.png"
-              alt=""
-            />
+            <img class="h-6 w-auto sm:h-8" src="/logo-no-border.png" alt="" />
           </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
