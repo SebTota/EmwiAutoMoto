@@ -1,7 +1,7 @@
 <template>
   <div class="pt-6">
     <nav
-      class="bg-white px-4 pt-3 flex items-center justify-between border-t border-gray-200 sm:px-6 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-400"
+      class="bg-white px-4 pt-3 flex items-center justify-between sm:px-6 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-400"
       aria-label="Pagination"
     >
       <div class="flex-1 flex justify-between sm:justify-end">
