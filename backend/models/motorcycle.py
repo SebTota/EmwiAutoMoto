@@ -20,6 +20,7 @@ class Motorcycle(models.Model):
     year = fields.IntField()
     make = fields.CharField(max_length=100)
     model = fields.CharField(max_length=100)
+    vin = fields.CharField(max_length=100)
     odometer_miles = fields.IntField()
     color = fields.CharField(max_length=100)
     price = fields.IntField()

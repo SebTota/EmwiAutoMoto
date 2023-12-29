@@ -8,6 +8,7 @@ export interface IMotorcycle {
   year: number;
   make: string;
   model: string;
+  vin: string;
   odometer_miles: number;
   color: string;
   price: number;
@@ -25,6 +26,7 @@ export interface IMotorcycleCreate {
   year: number;
   make: string;
   model: string;
+  vin: string;
   odometer_miles: number;
   color: string;
   price: number;

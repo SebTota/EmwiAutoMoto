@@ -13,6 +13,7 @@ class MotorcycleReadWithImages(BaseModel):
     year: int
     make: str
     model: str
+    vin: str
     odometer_miles: int
     color: str
     price: int
@@ -30,6 +31,7 @@ class MotorcycleReadNoImages(BaseModel):
     year: int
     make: str
     model: str
+    vin: str
     odometer_miles: int
     color: str
     price: int
@@ -43,6 +45,7 @@ class MotorcycleCreate(BaseModel):
     year: int
     make: str
     model: str
+    vin: str
     odometer_miles: int
     color: str
     price: int

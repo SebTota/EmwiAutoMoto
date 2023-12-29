@@ -28,19 +28,7 @@ async def get_with_images(obj_id: str) -> Optional[MotorcycleReadWithImages]:
                                          order=img.order)
                                for img in db_images]
 
-        return MotorcycleReadWithImages(id=motorcycle.id,
-                                        date_created=motorcycle.date_created,
-                                        date_last_updated=motorcycle.date_last_updated,
-                                        year=motorcycle.year,
-                                        make=motorcycle.make,
-                                        model=motorcycle.model,
-                                        odometer_miles=motorcycle.odometer_miles,
-                                        color=motorcycle.color,
-                                        price=motorcycle.price,
-                                        description=motorcycle.description,
-                                        status=motorcycle.status,
-                                        thumbnail_url=motorcycle.thumbnail_url,
-                                        medium_thumbnail_url=motorcycle.medium_thumbnail_url,
+        return MotorcycleReadWithImages(**motorcycle.__dict__,
                                         images=images)
 
 

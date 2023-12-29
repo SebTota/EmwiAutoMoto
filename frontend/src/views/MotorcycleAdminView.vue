@@ -78,6 +78,21 @@
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
                 <label
+                  for="model"
+                  class="block text-sm font-medium text-gray-700"
+                  >VIN</label
+                >
+                <input
+                  v-model="vin"
+                  type="text"
+                  name="vin"
+                  id="vin"
+                  class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                />
+              </div>
+
+              <div class="col-span-6 sm:col-span-3 md:col-span-2">
+                <label
                   for="odometer_miles"
                   class="block text-sm font-medium text-gray-700"
                   >Przebieg (Mil)</label
@@ -227,6 +242,7 @@ const colors: string[] = Object.values(MotorcycleColor);
 const year = ref();
 const make = ref();
 const model = ref();
+const vin = ref();
 const odometer_miles = ref();
 const color = ref();
 const price = ref();
@@ -247,6 +263,7 @@ async function onStartUp() {
       year.value = motorcycle.year;
       make.value = motorcycle.make;
       model.value = motorcycle.model;
+      vin.value = motorcycle.vin;
       odometer_miles.value = motorcycle.odometer_miles;
       color.value = motorcycle.color;
       price.value = motorcycle.price;
@@ -272,7 +289,12 @@ function showError() {
 function trimFormValues() {
   make.value = make.value?.trim();
   model.value = model.value?.trim();
+  vin.value = vin.value?.trim();
   description.value = description.value?.trim();
+
+  if (vin.value === "") {
+    vin.value = "-";
+  }
 }
 
 function submit() {
@@ -293,6 +315,7 @@ async function createMotorcycle() {
     year: year.value,
     make: make.value,
     model: model.value,
+    vin: vin.value,
     odometer_miles: odometer_miles.value,
     color: color.value,
     price: price.value,
@@ -323,6 +346,7 @@ async function updateMotorcycle() {
     year: year.value,
     make: make.value,
     model: model.value,
+    vin: vin.value,
     odometer_miles: odometer_miles.value,
     color: color.value,
     price: price.value,
