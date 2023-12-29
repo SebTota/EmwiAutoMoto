@@ -8,6 +8,4 @@ def init_db(app) -> None:
         app,
         db_url=settings.DATABASE_URL,
         modules={'models': ["backend.models"]},
-        generate_schemas=True,
-        add_exception_handlers=True,
     )
