@@ -86,6 +86,7 @@ async def update(db_obj: Motorcycle, new_obj: MotorcycleCreate) -> Optional[Moto
                                     thumbnail_url=image.thumbnail_url,
                                     medium_thumbnail_url=image.medium_thumbnail_url,
                                     order=i))
+                i += 1
 
             await Image.bulk_create(images)
 
