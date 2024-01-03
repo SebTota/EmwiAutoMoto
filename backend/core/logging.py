@@ -3,6 +3,11 @@ import time
 
 from fastapi import FastAPI, Request
 
+# Configure logging
+logging.basicConfig(
+    level=logging.INFO
+)
+
 # Create a logger
 logger = logging.getLogger(__name__)
 
