@@ -5,7 +5,8 @@ from fastapi import FastAPI, Request
 
 # Configure logging
 logging.basicConfig(
-    level=logging.INFO
+    level=logging.INFO,
+    format="%(asctime)s - %(levelname)s - %(message)s",
 )
 
 # Create a logger
