@@ -51,6 +51,12 @@ StandardError=file:/root/prod_logs/error/error.log
 WantedBy=multi-user.target
 ```
 
+If you add this file, OR make any changes to thsi file, you must run the following command:
+```bash
+systemctl daemon-reload
+systemctl restart emwiautomoto
+```
+
 ## Prod Deployments
 
 1. SSH into the server
