@@ -6,12 +6,12 @@ from backend.core.logging import logger
 from backend.db.init_db import init_db_for_script
 from backend.models import Image
 
+
 async def make_http_request_with_retry(url: str, max_retries: int = 2) -> str:
     retries = 0
     while retries <= max_retries:
         try:
             async with aiohttp.ClientSession() as session:
-                logger.info(f"Making HTTP request to {url}...")
                 async with session.get(url) as response:
                     await response.read()
                     return response.headers.get('cf-cache-status', 'MISS')
@@ -22,6 +22,7 @@ async def make_http_request_with_retry(url: str, max_retries: int = 2) -> str:
             await asyncio.sleep(1)
 
     raise RuntimeError(f"Failed to make HTTP request to {url} after {max_retries + 1} attempts.")
+
 
 async def refresh_cdn_cache(image: Image, concurrent_runs: asyncio.Semaphore):
     try:
@@ -53,8 +54,10 @@ async def refresh_cdn_cache(image: Image, concurrent_runs: asyncio.Semaphore):
     finally:
         pass
 
+
 async def get_all_images() -> [Image]:
     return await Image.all()
+
 
 async def main():
     logger.info("Initializing database...")
@@ -69,6 +72,7 @@ async def main():
     # Refresh CDN cache for all images concurrently
     logger.info("Refreshing CDN cache for all images...")
     await asyncio.gather(*[refresh_cdn_cache(image, concurrent_runs) for image in images])
+
 
 if __name__ == '__main__':
     asyncio.run(main())
