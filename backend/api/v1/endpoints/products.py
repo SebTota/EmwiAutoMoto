@@ -34,9 +34,7 @@ async def read_items(
     if limit < 1:
         raise HTTPException(status_code=400, detail="Limit must be greater than 0")
 
-    if len(show_status) == 1 and show_status[0] == ProductStatus.FOR_SALE:
-        ...
-    else:
+    if ProductStatus.DELETED in show_status or ProductStatus.DRAFT in show_status:
         if not current_user or not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="You must be a superuser to view these items")
 
