@@ -96,7 +96,7 @@
         <!-- Product info -->
         <div class="mt-8 lg:mt-0 col-span-2">
           <router-link
-            :to="{ name: 'motorcycleList' }"
+            :to="getGoBackLink()"
             class="text-sm tracking-tight text-gray-900 dark:text-gray-400"
           >
             &#8592; Wszystkie Motocykle
@@ -109,7 +109,10 @@
           </h1>
 
           <!-- Price -->
-          <div v-if="product.status !== ProductStatusEnum.RESERVED" class="mt-1">
+          <div
+            v-if="product.status !== ProductStatusEnum.RESERVED"
+            class="mt-1"
+          >
             <h2 class="sr-only">Price</h2>
             <p class="text-2xl text-gray-900 dark:text-gray-400">
               {{ product.price.toLocaleString("pl-PL") }} zł
@@ -231,14 +234,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue'
-import { useRoute } from 'vue-router'
-import { useMainStore } from '@/stores/state'
-import type { IProductWithImages } from '@/interfaces/product'
-import { colorToPolish } from '@/utils/colors'
-import { storeToRefs } from 'pinia'
-import { ProductStatusEnum } from '@/enums/productStatusEnum'
+import { ref } from "vue";
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
+import { useRoute } from "vue-router";
+import { useMainStore } from "@/stores/state";
+import type { IProductWithImages } from "@/interfaces/product";
+import { colorToPolish } from "@/utils/colors";
+import { storeToRefs } from "pinia";
+import { ProductStatusEnum } from "@/enums/productStatusEnum";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -270,9 +273,6 @@ if (typeof productId === "string") {
     .getProduct(productId)
     .then((response) => {
       product = response;
-      // for (const image of product.images) {
-      //   new Image().src = image.medium_thumbnail_url;
-      // }
     })
     .finally(() => {
       loadingRequest.value = false;
@@ -285,5 +285,22 @@ function isAdmin() {
 
 function getCurrentHref() {
   return window.location.href;
+}
+
+function getGoBackLink() {
+  const previousRoute = window.history.state.back;
+  const url = new URL(window.location.origin + previousRoute);
+
+  if (url.pathname === "/motocykle") {
+    const query: Record<string, string> = {};
+
+    for (const [key, value] of url.searchParams) {
+      query[key] = value;
+    }
+
+    return { path: previousRoute, query };
+  } else {
+    return { name: "motorcycleList" } as const;
+  }
 }
 </script>
