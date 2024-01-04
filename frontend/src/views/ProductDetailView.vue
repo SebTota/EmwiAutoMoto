@@ -31,8 +31,8 @@
           <TabPanels class="w-full aspect-w-4 aspect-h-3">
             <TabPanel
               v-for="image in product.images"
-              :key="image.image_url"
-              @click="openModal(image.image_url)"
+              :key="image.medium_thumbnail_url"
+              @click="openModal(image.medium_thumbnail_url)"
             >
               <img
                 :src="image.medium_thumbnail_url"
