@@ -7,8 +7,6 @@
             aria-labelledby="filter-heading"
             class="border-b border-gray-200 pt-6 pb-2"
           >
-            <h2 id="filter-heading" class="sr-only">Product filters</h2>
-
             <div class="flex items-center justify-between">
               <h2
                 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200"
@@ -16,20 +14,30 @@
                 Motocykle
               </h2>
 
-              <div v-if="isAdmin" class="text-left">
-                <input
-                  v-model="showAll"
-                  @click="toggleShowAll()"
-                  id="show_all"
-                  type="checkbox"
-                  value=""
-                  class="w-4 h-4 text-indigo-500 rounded border-gray-300 focus:ring-indigo-500 dark:focus:ring-indigo-600 dark:ring-offset-indigo-800 focus:ring-2 dark:bg-gray-700 dark:border-gray-600"
-                />
+              <div class="flex items-center">
                 <label
-                  for="show_all"
-                  class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300"
-                  >Pokaż wszystkie</label
+                  for="statusFilter"
+                  class="text-sm font-medium text-gray-900 hidden sm:block"
+                  >Pokaż:</label
                 >
+                <select
+                  v-model="selectedStatus"
+                  id="statusFilter"
+                  name="statusFilter"
+                  class="ml-2 block w-full pl-3 pr-10 py-2 text-small border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white text-gray-700"
+                  @change="changeStatus"
+                >
+                  <option :value="ProductStatusEnum.FOR_SALE">
+                    Na sprzedaż
+                  </option>
+                  <option :value="ProductStatusEnum.SOLD">Sprzedane</option>
+                  <option :value="ProductStatusEnum.DRAFT" v-if="isAdmin">
+                    Szkic
+                  </option>
+                  <option :value="ProductStatusEnum.DELETED" v-if="isAdmin">
+                    Sunięte
+                  </option>
+                </select>
               </div>
             </div>
           </section>
@@ -69,46 +77,10 @@
             @click="getProductUrl(product.id)"
             class="hover:opacity-75"
           >
-            <div
-              class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80"
-            >
-              <img
-                :src="product.medium_thumbnail_url"
-                class="h-full w-full object-cover object-center lg:h-full lg:w-full"
-              />
-            </div>
-            <div class="mt-4 flex justify-between">
-              <div>
-                <h3
-                  class="text-medium font-medium text-gray-900 dark:text-gray-300"
-                >
-                  <a>
-                    {{ product.year + " " + product.make }}
-                  </a>
-                </h3>
-                <p class="mt-1 text-medium text-gray-500 dark:text-gray-400">
-                  {{ product.model }}
-                </p>
-                <p
-                  v-if="showExtraDetails() && showAll"
-                  class="mt-1 text-medium text-gray-500 dark:text-gray-400"
-                >
-                  {{ statusToPolish(product.status) }}
-                </p>
-              </div>
-              <div class="text-right">
-                <p
-                  class="text-medium font-medium text-gray-900 dark:text-gray-300"
-                >
-                  {{ product.price.toLocaleString("pl-PL") }} zł
-                </p>
-                <p
-                  class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400"
-                >
-                  {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
-                </p>
-              </div>
-            </div>
+            <ProductListComponent
+              :selected-status="selectedStatus"
+              :product="product"
+            />
           </div>
         </div>
         <ProductListPagination
@@ -141,16 +113,16 @@ import ProductListPagination from "@/components/ProductListPagination.vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import { statusToPolish } from "@/utils/status";
+import ProductListComponent from '@/components/ProductListComponent.vue'
 
 const route = useRoute();
 const page = ref(
   route.query.strona ? parseInt(route.query.strona as string) : 1
 );
-const showAll = ref(
-  route.query.pokaszWszystkie
-    ? JSON.parse(route.query.pokaszWszystkie as string)
-    : false
+const selectedStatus = ref<ProductStatusEnum>(
+  route.query.wybranyStatus
+    ? (route.query.wybranyStatus as ProductStatusEnum)
+    : ProductStatusEnum.FOR_SALE
 );
 
 const mainState = useMainStore();
@@ -169,28 +141,20 @@ mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 });
 
-function toggleShowAll() {
-  showAll.value = !showAll.value;
+function changeStatus() {
   router.push({
     name: "motorcycleList",
     query: {
       strona: 1,
-      pokaszWszystkie: showAll.value,
+      wybranyStatus: selectedStatus.value,
     },
   });
 }
 
 function getProductList(page: number) {
-  let showStatus;
-  if (showAll.value) {
-    showStatus = [
-      ProductStatusEnum.FOR_SALE,
-      ProductStatusEnum.RESERVED,
-      ProductStatusEnum.SOLD,
-      ProductStatusEnum.DRAFT,
-    ];
-  } else {
-    showStatus = [ProductStatusEnum.FOR_SALE];
+  let showStatus = [selectedStatus.value];
+  if (selectedStatus.value === ProductStatusEnum.SOLD) {
+    showStatus = [ProductStatusEnum.SOLD, ProductStatusEnum.RESERVED];
   }
 
   isLoading.value = true;
@@ -220,7 +184,7 @@ function navigateToNextPage() {
       name: "motorcycleList",
       query: {
         strona: productListResponse.page + 1,
-        pokaszWszystkie: showAll.value,
+        wybranyStatus: selectedStatus.value,
       },
     });
   }
@@ -232,14 +196,10 @@ function navigateToPreviousPage() {
       name: "motorcycleList",
       query: {
         strona: productListResponse.page - 1,
-        pokaszWszystkie: showAll.value,
+        wybranyStatus: selectedStatus.value,
       },
     });
   }
-}
-
-function showExtraDetails() {
-  return isAdmin.value;
 }
 
 getProductList(page.value);
