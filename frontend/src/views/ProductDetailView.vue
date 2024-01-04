@@ -110,7 +110,7 @@
 
           <!-- Price -->
           <div
-            v-if="product.status !== ProductStatusEnum.RESERVED"
+            v-if="product.price && product.status !== ProductStatusEnum.RESERVED"
             class="mt-1"
           >
             <h2 class="sr-only">Price</h2>
@@ -152,7 +152,7 @@
                     {{ product.model }}
                   </dd>
                 </div>
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+                <div v-if="product.vin" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     VIN
                   </dt>
@@ -182,7 +182,7 @@
                     {{ colorToPolish(product.color) }}
                   </dd>
                 </div>
-                <div class="py-2 sm:gap-4">
+                <div v-if="product.description" class="py-2 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">
                     Opis
                   </dt>

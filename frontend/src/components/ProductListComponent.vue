@@ -20,14 +20,17 @@
         </p>
       </div>
       <div class="text-right">
-        <p v-if="product.status === ProductStatusEnum.SOLD" class="text-medium font-medium text-gray-900 dark:text-gray-300">
+        <p v-if="product.price && product.status === ProductStatusEnum.SOLD" class="text-medium font-medium text-gray-900 dark:text-gray-300">
           {{ statusToPolish(product.status) + " - " + product.price.toLocaleString("pl-PL") }} zł
         </p>
         <p v-else-if="product.status === ProductStatusEnum.RESERVED" class="text-medium font-medium text-gray-900 dark:text-gray-300">
           {{ statusToPolish(product.status) }}
         </p>
-        <p v-else class="text-medium font-medium text-gray-900 dark:text-gray-300">
+        <p v-else-if="product.price" class="text-medium font-medium text-gray-900 dark:text-gray-300">
           {{ product.price.toLocaleString("pl-PL") }} zł
+        </p>
+        <p v-else class="text-medium font-medium text-gray-900 dark:text-gray-300">
+          {{ statusToPolish(product.status) }}
         </p>
         <p
           class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400"

@@ -141,7 +141,6 @@
                   type="number"
                   name="price"
                   id="price"
-                  required
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -163,7 +162,7 @@
                   <option :value="ProductStatusEnum.RESERVED">Zarezerwowany</option>
                   <option :value="ProductStatusEnum.SOLD">Sprzedane</option>
                   <option :value="ProductStatusEnum.DRAFT">Szkic</option>
-                  <option :value="ProductStatusEnum.DELETED">Ssunięte</option>
+                  <option :value="ProductStatusEnum.DELETED">Sunięte</option>
                 </select>
               </div>
             </div>
@@ -180,7 +179,6 @@
                   id="description"
                   name="description"
                   rows="8"
-                  required
                   class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 />
               </div>
@@ -289,10 +287,6 @@ function trimFormValues() {
   model.value = model.value?.trim();
   vin.value = vin.value?.trim();
   description.value = description.value?.trim();
-
-  if (vin.value === "") {
-    vin.value = "-";
-  }
 }
 
 function submit() {
@@ -316,7 +310,7 @@ async function createProduct() {
     vin: vin.value,
     odometer_miles: odometer_miles.value,
     color: color.value,
-    price: price.value,
+    price: price.value ? price.value : null,
     description: description.value,
     status: ProductStatusEnum.FOR_SALE,
     images: images.value,
@@ -347,7 +341,7 @@ async function updateProduct() {
     vin: vin.value,
     odometer_miles: odometer_miles.value,
     color: color.value,
-    price: price.value,
+    price: price.value ? price.value : null,
     description: description.value,
     status: status.value,
     images: images.value,

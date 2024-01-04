@@ -8,11 +8,11 @@ export interface IProduct {
   year: number;
   make: string;
   model: string;
-  vin: string;
+  vin: string | null;
   odometer_miles: number;
   color: string;
-  price: number;
-  description: string;
+  price: number | null;
+  description: string | null;
   status: ProductStatusEnum;
   thumbnail_url: string;
   medium_thumbnail_url: string;
@@ -26,11 +26,11 @@ export interface IProductCreate {
   year: number;
   make: string;
   model: string;
-  vin: string;
+  vin: string | null;
   odometer_miles: number;
   color: string;
-  price: number;
-  description: string;
+  price: number | null;
+  description: string | null;
   status: ProductStatusEnum;
   images: IImage[];
 }
