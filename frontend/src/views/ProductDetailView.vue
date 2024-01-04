@@ -28,7 +28,7 @@
         <!-- Image gallery -->
         <TabGroup as="div" class="flex flex-col grow col-span-3 grid-rows-1">
           <!-- Image View -->
-          <TabPanels class="w-full aspect-w-4 aspect-h-3">
+          <TabPanels class="w-full aspect-w-5 aspect-h-3">
             <TabPanel
               v-for="image in product.images"
               :key="image.medium_thumbnail_url"
