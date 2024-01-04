@@ -7,12 +7,12 @@
     >
       <div
         v-for="image in props.images"
-        :key="image.image_url"
+        :key="image.thumbnail_url"
         class="hover:bg-slate-10"
       >
         <div class="aspect-w-5 aspect-h-3 w-full overflow-hidden">
           <img
-            :src="image.image_url"
+            :src="image.thumbnail_url"
             class="rounded hover:transparency-80 h-full w-full object-cover object-center"
           />
         </div>
