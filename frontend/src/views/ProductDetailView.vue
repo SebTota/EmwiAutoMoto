@@ -109,7 +109,7 @@
           </h1>
 
           <!-- Price -->
-          <div class="mt-1">
+          <div v-if="product.status !== ProductStatusEnum.RESERVED" class="mt-1">
             <h2 class="sr-only">Price</h2>
             <p class="text-2xl text-gray-900 dark:text-gray-400">
               {{ product.price.toLocaleString("pl-PL") }} zł
@@ -231,13 +231,14 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
-import { useRoute } from "vue-router";
-import { useMainStore } from "@/stores/state";
-import type { IProductWithImages } from "@/interfaces/product";
-import { colorToPolish } from "@/utils/colors";
-import { storeToRefs } from "pinia";
+import { ref } from 'vue'
+import { Tab, TabGroup, TabList, TabPanel, TabPanels } from '@headlessui/vue'
+import { useRoute } from 'vue-router'
+import { useMainStore } from '@/stores/state'
+import type { IProductWithImages } from '@/interfaces/product'
+import { colorToPolish } from '@/utils/colors'
+import { storeToRefs } from 'pinia'
+import { ProductStatusEnum } from '@/enums/productStatusEnum'
 
 const route = useRoute();
 const mainStore = useMainStore();
