@@ -5,7 +5,7 @@ from backend.models.image import Image
 from tortoise import fields, models
 
 
-class MotorcycleStatus(str, enum.Enum):
+class ProductStatus(str, enum.Enum):
     DRAFT = 'DRAFT'
     FOR_SALE = 'FOR_SALE'
     SOLD = 'SOLD'
@@ -13,7 +13,7 @@ class MotorcycleStatus(str, enum.Enum):
     DELETED = 'DELETED'
 
 
-class Motorcycle(models.Model):
+class Product(models.Model):
     id = fields.CharField(max_length=12, pk=True, index=True)
     date_created = fields.DatetimeField(auto_now_add=True, index=True)
     date_last_updated = fields.DatetimeField(auto_now=True, index=True)
@@ -25,7 +25,7 @@ class Motorcycle(models.Model):
     color = fields.CharField(max_length=100)
     price = fields.IntField()
     description = fields.TextField()
-    status = fields.CharEnumField(MotorcycleStatus, index=True)
+    status = fields.CharEnumField(ProductStatus, index=True)
     thumbnail_url = fields.CharField(max_length=512)
     medium_thumbnail_url = fields.CharField(max_length=512)
     images = fields.ReverseRelation[Image]

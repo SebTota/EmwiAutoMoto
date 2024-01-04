@@ -3,7 +3,7 @@ from typing import TYPE_CHECKING
 from tortoise import fields, models
 
 if TYPE_CHECKING:
-    from backend.models import Motorcycle
+    from backend.models import Product
 
 
 class Image(models.Model):
@@ -12,6 +12,6 @@ class Image(models.Model):
     thumbnail_url: str = fields.CharField(max_length=512)
     medium_thumbnail_url: str = fields.CharField(max_length=512)
     order: int = fields.IntField()
-    motorcycle: fields.ForeignKeyRelation["Motorcycle"] = fields.ForeignKeyField(
-        'models.Motorcycle', related_name='images'
+    product: fields.ForeignKeyRelation["Product"] = fields.ForeignKeyField(
+        'models.Product', related_name='images'
     )

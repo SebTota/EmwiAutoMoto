@@ -28,16 +28,45 @@
         <!-- Image gallery -->
         <TabGroup as="div" class="flex flex-col grow col-span-3 grid-rows-1">
           <!-- Image View -->
-          <TabPanels class="w-full aspect-w-5 aspect-h-3">
-            <TabPanel v-for="image in product.images" :key="image.image_url">
+          <TabPanels class="w-full aspect-w-4 aspect-h-3">
+            <TabPanel
+              v-for="image in product.images"
+              :key="image.image_url"
+              @click="openModal(image.image_url)"
+            >
               <img
                 :src="image.medium_thumbnail_url"
                 class="w-full h-full object-center object-cover sm:rounded-lg"
               />
             </TabPanel>
           </TabPanels>
+
+          <!-- Modal View -->
+          <div
+            v-if="modalOpen"
+            class="fixed inset-0 overflow-y-auto z-10 w-full h-full backdrop-grayscale backdrop-blur bg-black bg-opacity-80"
+          >
+            <div
+              class="flex items-center justify-center min-h-screen w-full h-full"
+            >
+              <div class="p-8">
+                <div
+                  class="absolute top-0 right-0 p-4 cursor-pointer text-white text-l font-semibold"
+                  @click="closeModal"
+                >
+                  <!-- Add a close button or icon here -->
+                  Close
+                </div>
+                <img
+                  :src="modalImageUrl"
+                  class="w-full h-full object-contain"
+                />
+              </div>
+            </div>
+          </div>
+
           <!-- Image selector -->
-          <div class="mt-6 w-full max-w-2xl mx-auto sm:block">
+          <div class="mt-4 w-full max-w-2xl mx-auto sm:block">
             <TabList class="grid grid-cols-3 md:grid-cols-4 gap-3">
               <Tab
                 v-for="image in product.images"
@@ -168,7 +197,7 @@
                 :to="{
                   name: 'contact',
                   query: {
-                    motorcycleRef: encodeURIComponent(getCurrentHref()),
+                    productRef: encodeURIComponent(getCurrentHref()),
                   },
                 }"
               >
@@ -184,7 +213,7 @@
             <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
               <router-link
                 class="w-full"
-                :to="{ name: 'motorcycleEdit', params: { id: motorcycleId } }"
+                :to="{ name: 'productEdit', params: { id: productId } }"
               >
                 <button
                   type="button"
@@ -206,8 +235,8 @@ import { ref } from "vue";
 import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
-import type { IMotorcycleWithImages } from "@/interfaces/motorcycle";
-import { colorToPolish, getCssClassFromColor } from "@/utils/colors";
+import type { IProductWithImages } from "@/interfaces/product";
+import { colorToPolish } from "@/utils/colors";
 import { storeToRefs } from "pinia";
 
 const route = useRoute();
@@ -216,20 +245,37 @@ const { isLoggedIn } = storeToRefs(mainStore);
 
 const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
-const motorcycleId: any = route.params.id;
-let product: IMotorcycleWithImages;
-let colorCss: string;
+const productId: any = route.params.id;
+let product: IProductWithImages;
+
+const modalOpen = ref(false);
+const modalImageUrl = ref("");
+
+function openModal(imageUrl: string) {
+  modalImageUrl.value = imageUrl;
+  modalOpen.value = true;
+}
+
+function closeModal() {
+  modalOpen.value = false;
+}
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 });
 
-if (typeof motorcycleId === "string") {
-  mainStore.getMotorcycle(motorcycleId).then((response) => {
-    product = response;
-    colorCss = getCssClassFromColor(product.color);
-    loadingRequest.value = false;
-  });
+if (typeof productId === "string") {
+  mainStore
+    .getProduct(productId)
+    .then((response) => {
+      product = response;
+      // for (const image of product.images) {
+      //   new Image().src = image.medium_thumbnail_url;
+      // }
+    })
+    .finally(() => {
+      loadingRequest.value = false;
+    });
 }
 
 function isAdmin() {

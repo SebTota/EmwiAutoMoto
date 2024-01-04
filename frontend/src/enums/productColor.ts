@@ -1,4 +1,4 @@
-export enum MotorcycleColor {
+export enum ProductColor {
   White = "white",
   Silver = "silver",
   Black = "black",

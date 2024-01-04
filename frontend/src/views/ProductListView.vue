@@ -36,7 +36,7 @@
         </div>
       </div>
 
-      <div v-if="isLoadingMotorcycles" class="text-center pt-4">
+      <div v-if="isLoading" class="text-center pt-4">
         <div
           class="text-center text-white bg-blue-700 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 inline-flex items-center"
         >
@@ -59,12 +59,12 @@
         </div>
       </div>
 
-      <div v-if="!isLoadingMotorcycles && motorcycleResponse">
+      <div v-if="!isLoading && productListResponse">
         <div
           class="mt-4 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8"
         >
           <div
-            v-for="product in motorcycleResponse.motorcycles"
+            v-for="product in productListResponse.products"
             :key="product.id"
             @click="getProductUrl(product.id)"
             class="hover:opacity-75"
@@ -111,7 +111,7 @@
             </div>
           </div>
         </div>
-        <MotorcycleListPagination
+        <ProductListPagination
           :hasNextPage="hasNextPage"
           :hasPrevPage="hasPrevPage"
           :nextPage="navigateToNextPage"
@@ -134,29 +134,32 @@
 <script setup lang="ts">
 import { ref } from "vue";
 
-import type { IMotorcycleList } from "@/interfaces/motorcycle";
+import type { IProductList } from "@/interfaces/product";
 import { useMainStore } from "@/stores/state";
 import router from "@/router";
-import MotorcycleListPagination from "@/components/MotorcycleListPagination.vue";
-import { colorToPolish } from "@/utils/colors";
+import ProductListPagination from "@/components/ProductListPagination.vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { statusToPolish } from "@/utils/status";
 
 const route = useRoute();
-const page = ref(route.query.page ? parseInt(route.query.page as string) : 1);
+const page = ref(
+  route.query.strona ? parseInt(route.query.strona as string) : 1
+);
 const showAll = ref(
-  route.query.showAll ? JSON.parse(route.query.showAll as string) : false
+  route.query.pokaszWszystkie
+    ? JSON.parse(route.query.pokaszWszystkie as string)
+    : false
 );
 
 const mainState = useMainStore();
-const isLoadingMotorcycles = ref(true);
+const isLoading = ref(true);
 const hasNextPage = ref(false);
 const hasPrevPage = ref(false);
 let products = [];
 
-let motorcycleResponse: IMotorcycleList;
+let productListResponse: IProductList;
 let errorMessage = ref("");
 
 const mainStore = useMainStore();
@@ -168,10 +171,16 @@ mainStore.actionCheckLoggedIn().then(() => {
 
 function toggleShowAll() {
   showAll.value = !showAll.value;
-  updateMotorcycles(1);
+  router.push({
+    name: "motorcycleList",
+    query: {
+      strona: 1,
+      pokaszWszystkie: showAll.value,
+    },
+  });
 }
 
-function updateMotorcycles(page: number) {
+function getProductList(page: number) {
   let showStatus;
   if (showAll.value) {
     showStatus = [
@@ -184,46 +193,46 @@ function updateMotorcycles(page: number) {
     showStatus = [ProductStatusEnum.FOR_SALE];
   }
 
-  isLoadingMotorcycles.value = true;
+  isLoading.value = true;
   mainState
-    .getMotorcycles(page, showStatus)
-    .then((motorcycleListResponse: IMotorcycleList) => {
-      motorcycleResponse = motorcycleListResponse;
-      products = motorcycleListResponse.motorcycles;
-      hasNextPage.value = motorcycleResponse.has_next_page;
-      hasPrevPage.value = motorcycleResponse.page > 1;
-      isLoadingMotorcycles.value = false;
+    .getProducts(page, showStatus)
+    .then((response: IProductList) => {
+      productListResponse = response;
+      products = response.products;
+      hasNextPage.value = productListResponse.has_next_page;
+      hasPrevPage.value = productListResponse.page > 1;
+      isLoading.value = false;
     })
     .catch((err) => {
-      isLoadingMotorcycles.value = false;
+      isLoading.value = false;
       errorMessage.value = "Coś poszło nie tak. Spróbuj ponownie później.";
-      console.log("Failed to load motorcycles", err);
+      console.log("Failed to load products.", err);
     });
 }
 
 function getProductUrl(productId: string) {
-  router.push({ name: "motorcycleDetail", params: { id: productId } });
+  router.push({ name: "productDetails", params: { id: productId } });
 }
 
 function navigateToNextPage() {
-  if (motorcycleResponse.has_next_page) {
+  if (productListResponse.has_next_page) {
     router.push({
       name: "motorcycleList",
       query: {
-        page: motorcycleResponse.page + 1,
-        showAll: showAll.value,
+        strona: productListResponse.page + 1,
+        pokaszWszystkie: showAll.value,
       },
     });
   }
 }
 
 function navigateToPreviousPage() {
-  if (motorcycleResponse.page > 1) {
+  if (productListResponse.page > 1) {
     router.push({
       name: "motorcycleList",
       query: {
-        page: motorcycleResponse.page - 1,
-        showAll: showAll.value,
+        strona: productListResponse.page - 1,
+        pokaszWszystkie: showAll.value,
       },
     });
   }
@@ -233,5 +242,5 @@ function showExtraDetails() {
   return isAdmin.value;
 }
 
-updateMotorcycles(page.value);
+getProductList(page.value);
 </script>

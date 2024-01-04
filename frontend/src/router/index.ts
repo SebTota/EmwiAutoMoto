@@ -10,14 +10,14 @@ const router = createRouter({
       component: () => import("../views/LoginView.vue"),
     },
     {
-      path: "/motorcycles",
+      path: "/motocykle",
       name: "motorcycleList",
-      component: () => import("../views/MotorcycleListView.vue"),
+      component: () => import("../views/ProductListView.vue"),
     },
     {
-      path: "/motorcycle/new",
-      name: "newMotorcycle",
-      component: () => import("../views/MotorcycleAdminView.vue"),
+      path: "/product/nowy",
+      name: "newProduct",
+      component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
         const mainState = useMainStore();
         mainState.actionCheckLoggedIn().then(() => {
@@ -30,9 +30,9 @@ const router = createRouter({
       },
     },
     {
-      path: "/motorcycle/:id/edit",
-      name: "motorcycleEdit",
-      component: () => import("../views/MotorcycleAdminView.vue"),
+      path: "/motocykle/:id/edytuj",
+      name: "productEdit",
+      component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
         const mainState = useMainStore();
         mainState.actionCheckLoggedIn().then(() => {
@@ -45,19 +45,19 @@ const router = createRouter({
       },
     },
     {
-      path: "/motorcycle/:id",
-      name: "motorcycleDetail",
-      component: () => import("../views/MotorcycleDetailView.vue"),
+      path: "/motocykle/:id",
+      name: "productDetails",
+      component: () => import("../views/ProductDetailView.vue"),
     },
     {
-      path: "/contact",
+      path: "/kontakt",
       name: "contact",
       component: () => import("../views/ContactPageView.vue"),
     },
     {
       path: "/",
       name: "home",
-      redirect: "/motorcycles",
+      redirect: "/motocykle",
     },
     {
       path: "/:pathMatch(.*)*",

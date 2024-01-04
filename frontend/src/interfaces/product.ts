@@ -1,7 +1,7 @@
 import type { IImage } from "@/interfaces/image";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 
-export interface IMotorcycle {
+export interface IProduct {
   id: string;
   date_created: Date;
   date_last_updated: Date;
@@ -18,11 +18,11 @@ export interface IMotorcycle {
   medium_thumbnail_url: string;
 }
 
-export interface IMotorcycleWithImages extends IMotorcycle {
+export interface IProductWithImages extends IProduct {
   images: IImage[];
 }
 
-export interface IMotorcycleCreate {
+export interface IProductCreate {
   year: number;
   make: string;
   model: string;
@@ -35,8 +35,8 @@ export interface IMotorcycleCreate {
   images: IImage[];
 }
 
-export interface IMotorcycleList {
+export interface IProductList {
   page: number;
   has_next_page: boolean;
-  motorcycles: IMotorcycle[];
+  products: IProduct[];
 }

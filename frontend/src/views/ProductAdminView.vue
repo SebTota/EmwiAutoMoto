@@ -218,14 +218,14 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import router from "@/router";
-import { MotorcycleColor } from "@/enums/motorcycleColor";
+import { ProductColor } from "@/enums/productColor";
 import { colorToPolish } from "@/utils/colors";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
 import type {
-  IMotorcycle,
-  IMotorcycleCreate,
-  IMotorcycleWithImages,
-} from "@/interfaces/motorcycle";
+  IProduct,
+  IProductCreate,
+  IProductWithImages,
+} from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
@@ -237,7 +237,7 @@ const mainStore = useMainStore();
 const loadingRequest = ref(true);
 const error = ref("");
 
-const colors: string[] = Object.values(MotorcycleColor);
+const colors: string[] = Object.values(ProductColor);
 
 const year = ref();
 const make = ref();
@@ -249,7 +249,7 @@ const price = ref();
 const status = ref();
 const description = ref();
 
-const motorcycleId: any = route.params.id;
+const productId: any = route.params.id;
 const images = ref<IImage[]>([]);
 
 async function onStartUp() {
@@ -257,19 +257,19 @@ async function onStartUp() {
     loadingRequest.value = false;
   } else {
     try {
-      const motorcycle: IMotorcycleWithImages = await mainStore.getMotorcycle(
-        motorcycleId
+      const product: IProductWithImages = await mainStore.getProduct(
+        productId
       );
-      year.value = motorcycle.year;
-      make.value = motorcycle.make;
-      model.value = motorcycle.model;
-      vin.value = motorcycle.vin;
-      odometer_miles.value = motorcycle.odometer_miles;
-      color.value = motorcycle.color;
-      price.value = motorcycle.price;
-      status.value = motorcycle.status;
-      description.value = motorcycle.description;
-      images.value = motorcycle.images;
+      year.value = product.year;
+      make.value = product.make;
+      model.value = product.model;
+      vin.value = product.vin;
+      odometer_miles.value = product.odometer_miles;
+      color.value = product.color;
+      price.value = product.price;
+      status.value = product.status;
+      description.value = product.description;
+      images.value = product.images;
       loadingRequest.value = false;
     } catch (err: any) {
       await router.push({ name: "motorcycleList" });
@@ -279,7 +279,7 @@ async function onStartUp() {
 onStartUp();
 
 function isAddNew() {
-  return router.currentRoute.value.path.startsWith("/motorcycle/new");
+  return router.currentRoute.value.path.startsWith("/product/nowy");
 }
 
 function showError() {
@@ -302,16 +302,16 @@ function submit() {
   trimFormValues();
 
   if (isAddNew()) {
-    createMotorcycle();
+    createProduct();
   } else {
-    updateMotorcycle();
+    updateProduct();
   }
 }
 
-async function createMotorcycle() {
+async function createProduct() {
   error.value = "";
 
-  const motorcycle: IMotorcycleCreate = {
+  const productCreate: IProductCreate = {
     year: year.value,
     make: make.value,
     model: model.value,
@@ -326,23 +326,23 @@ async function createMotorcycle() {
 
   try {
     loadingRequest.value = true;
-    const createdMotorcycle: IMotorcycle = await mainStore.createMotorcycle(
-      motorcycle
+    const createdProduct: IProduct = await mainStore.createProducts(
+      productCreate
     );
     await router.push({
-      name: "motorcycleDetail",
-      params: { id: createdMotorcycle.id },
+      name: "productDetails",
+      params: { id: createdProduct.id },
     });
   } catch (err: any) {
     console.error(err);
-    error.value = "Failed to create motorcycle.";
+    error.value = "Failed to create product.";
   } finally {
     loadingRequest.value = false;
   }
 }
 
-async function updateMotorcycle() {
-  const motorcycle: IMotorcycleCreate = {
+async function updateProduct() {
+  const product: IProductCreate = {
     year: year.value,
     make: make.value,
     model: model.value,
@@ -357,13 +357,13 @@ async function updateMotorcycle() {
 
   try {
     loadingRequest.value = true;
-    await mainStore.updateMotorcycle(motorcycleId, motorcycle);
+    await mainStore.updateProducts(productId, product);
     await router.push({
-      name: "motorcycleDetail",
-      params: { id: motorcycleId },
+      name: "productDetails",
+      params: { id: productId },
     });
   } catch (err: any) {
-    error.value = "Failed to update motorcycle.";
+    error.value = "Failed to update product.";
   } finally {
     loadingRequest.value = false;
   }

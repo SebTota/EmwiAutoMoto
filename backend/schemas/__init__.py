@@ -1,4 +1,4 @@
 from .user import *
 from .token import *
-from .motorcycle import *
+from .product import *
 from .image import *

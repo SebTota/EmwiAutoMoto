@@ -168,7 +168,7 @@ import { useRoute } from "vue-router";
 import { api } from "@/api";
 
 const route = useRoute();
-const motorcycleRefLink: any = route.query.motorcycleRef;
+const productRefLink: any = route.query.productRef;
 
 const error_message = ref("");
 const first_name = ref("");
@@ -180,8 +180,8 @@ const message = ref("");
 const emailSentStatus = ref(""); // '', 'sending', 'sent', 'failed'
 
 function loadTemplate() {
-  if (motorcycleRefLink) {
-    message.value = `\n\nMotocykl: ${decodeURIComponent(motorcycleRefLink)}`;
+  if (productRefLink) {
+    message.value = `\n\nLink: ${decodeURIComponent(productRefLink)}`;
   }
 }
 loadTemplate();

@@ -1,28 +1,28 @@
-import { MotorcycleColor } from "@/enums/motorcycleColor";
+import { ProductColor } from "@/enums/productColor";
 
 export function getCssClassFromColor(color: string): string {
   switch (color.toLowerCase().trim()) {
-    case MotorcycleColor.White:
+    case ProductColor.White:
       return "bg-neutral-50";
-    case MotorcycleColor.Silver:
+    case ProductColor.Silver:
       return "bg-zinc-400";
-    case MotorcycleColor.Black:
+    case ProductColor.Black:
       return "bg-stone-900";
-    case MotorcycleColor.Red:
+    case ProductColor.Red:
       return "bg-red-600";
-    case MotorcycleColor.DarkRed:
+    case ProductColor.DarkRed:
       return "bg-red-900";
-    case MotorcycleColor.Violet:
+    case ProductColor.Violet:
       return "bg-violet-900";
-    case MotorcycleColor.Blue:
+    case ProductColor.Blue:
       return "bg-blue-900";
-    case MotorcycleColor.LightBlue:
+    case ProductColor.LightBlue:
       return "bg-blue-400";
-    case MotorcycleColor.Green:
+    case ProductColor.Green:
       return "bg-green-900";
-    case MotorcycleColor.LightGreen:
+    case ProductColor.LightGreen:
       return "bg-green-300";
-    case MotorcycleColor.Yellow:
+    case ProductColor.Yellow:
       return "bg-yellow-600";
     default:
       return "";
@@ -31,27 +31,27 @@ export function getCssClassFromColor(color: string): string {
 
 export function colorToPolish(color: string) {
   switch (color.toLowerCase().trim()) {
-    case MotorcycleColor.White:
+    case ProductColor.White:
       return "Biały";
-    case MotorcycleColor.Silver:
+    case ProductColor.Silver:
       return "Srebrny";
-    case MotorcycleColor.Black:
+    case ProductColor.Black:
       return "Czarny";
-    case MotorcycleColor.Red:
+    case ProductColor.Red:
       return "Czerwony";
-    case MotorcycleColor.DarkRed:
+    case ProductColor.DarkRed:
       return "Ciemno czerwony";
-    case MotorcycleColor.Violet:
+    case ProductColor.Violet:
       return "Fioletowy";
-    case MotorcycleColor.Blue:
+    case ProductColor.Blue:
       return "Niebieski";
-    case MotorcycleColor.LightBlue:
+    case ProductColor.LightBlue:
       return "Jasno niebieski";
-    case MotorcycleColor.Green:
+    case ProductColor.Green:
       return "Zielony";
-    case MotorcycleColor.LightGreen:
+    case ProductColor.LightGreen:
       return "Jasno zielony";
-    case MotorcycleColor.Yellow:
+    case ProductColor.Yellow:
       return "Żółty";
   }
 }

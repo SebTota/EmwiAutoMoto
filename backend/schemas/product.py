@@ -2,11 +2,11 @@ from datetime import datetime
 
 from pydantic.main import BaseModel
 
-from backend.models.motorcycle import MotorcycleStatus
+from backend.models.product import ProductStatus
 from backend.schemas.image import ImageRead, ImageCreate
 
 
-class MotorcycleReadWithImages(BaseModel):
+class ProductReadWithImages(BaseModel):
     id: str
     date_created: datetime
     date_last_updated: datetime
@@ -18,13 +18,13 @@ class MotorcycleReadWithImages(BaseModel):
     color: str
     price: int
     description: str
-    status: MotorcycleStatus
+    status: ProductStatus
     thumbnail_url: str
     medium_thumbnail_url: str
     images: list[ImageRead]
 
 
-class MotorcycleReadNoImages(BaseModel):
+class ProductReadNoImages(BaseModel):
     id: str
     date_created: datetime
     date_last_updated: datetime
@@ -36,12 +36,12 @@ class MotorcycleReadNoImages(BaseModel):
     color: str
     price: int
     description: str
-    status: MotorcycleStatus
+    status: ProductStatus
     thumbnail_url: str
     medium_thumbnail_url: str
 
 
-class MotorcycleCreate(BaseModel):
+class ProductCreate(BaseModel):
     year: int
     make: str
     model: str
@@ -50,11 +50,11 @@ class MotorcycleCreate(BaseModel):
     color: str
     price: int
     description: str
-    status: MotorcycleStatus
+    status: ProductStatus
     images: list[ImageCreate]
 
 
-class MotorcycleList(BaseModel):
+class ProductList(BaseModel):
     page: int
     has_next_page: bool
-    motorcycles: list[MotorcycleReadNoImages]
+    products: list[ProductReadNoImages]

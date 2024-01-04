@@ -174,7 +174,7 @@ const addMotorcycleTab = {
   name: "Nowy Motocykl",
   description: "Nowy Motocykl",
   icon: ArrowLongRightIcon,
-  page: "newMotorcycle",
+  page: "newProduct",
 };
 
 mainState.actionCheckLoggedIn().then(() => {

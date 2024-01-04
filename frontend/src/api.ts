@@ -3,10 +3,10 @@ import { apiUrl } from "@/env";
 import type { IUser } from "@/interfaces/user";
 import type { IToken } from "@/interfaces/token";
 import type {
-  IMotorcycleCreate,
-  IMotorcycleList,
-  IMotorcycleWithImages,
-} from "@/interfaces/motorcycle";
+  IProductCreate,
+  IProductList,
+  IProductWithImages,
+} from "@/interfaces/product";
 import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IImage } from "@/interfaces/image";
@@ -61,7 +61,7 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getMotorcycles(
+  async getProducts(
     page: number,
     status: ProductStatusEnum[],
     token: string | null = null
@@ -76,28 +76,28 @@ export const api = {
       ? authHeaders(token)
       : null;
     const config = configFromAuthHeadersAndParams(auth, params);
-    return client.get<IMotorcycleList>(`${apiUrl}/api/v1/motorcycles`, config);
+    return client.get<IProductList>(`${apiUrl}/api/v1/products`, config);
   },
-  async getMotorcycle(id: string) {
-    return client.get<IMotorcycleWithImages>(
-      `${apiUrl}/api/v1/motorcycles/${id}`
+  async getProduct(id: string) {
+    return client.get<IProductWithImages>(
+      `${apiUrl}/api/v1/products/${id}`
     );
   },
-  async createMotorcycle(token: string, motorcycle: IMotorcycleCreate) {
-    return client.post<IMotorcycleWithImages>(
-      `${apiUrl}/api/v1/motorcycles`,
-      motorcycle,
+  async createProduct(token: string, product: IProductCreate) {
+    return client.post<IProductWithImages>(
+      `${apiUrl}/api/v1/products`,
+      product,
       authHeaders(token)
     );
   },
-  async updateMotorcycle(
+  async updateProduct(
     token: string,
-    motorcycleId: string,
-    motorcycle: IMotorcycleCreate
+    productId: string,
+    product: IProductCreate
   ) {
-    return client.put<IMotorcycleWithImages>(
-      `${apiUrl}/api/v1/motorcycles/${motorcycleId}`,
-      motorcycle,
+    return client.put<IProductWithImages>(
+      `${apiUrl}/api/v1/products/${productId}`,
+      product,
       authHeaders(token)
     );
   },
@@ -107,7 +107,7 @@ export const api = {
       formData.append('files', file);
     });
     return client.post<[IImage]>(
-      `${apiUrl}/api/v1/motorcycles/image`,
+      `${apiUrl}/api/v1/products/image`,
       formData,
       authHeaders(token)
     );

@@ -8,8 +8,8 @@ from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query, Backgr
 from PIL import Image as PIL_Image
 
 from backend import crud
-from backend.models import User, MotorcycleStatus, Motorcycle
-from backend.schemas import MotorcycleCreate, MotorcycleReadWithImages, MotorcycleReadNoImages, MotorcycleList, \
+from backend.models import User, ProductStatus, Product
+from backend.schemas import ProductCreate, ProductReadWithImages, ProductReadNoImages, ProductList, \
     ImageRead
 from backend.exceptions import FileUploadError
 from backend.utils import deps
@@ -18,15 +18,15 @@ from backend.utils.image_handler import process_image
 router = APIRouter()
 
 
-@router.get("", response_model=MotorcycleList)
+@router.get("", response_model=ProductList)
 async def read_items(
-        show_status: List[MotorcycleStatus] = Query([MotorcycleStatus.FOR_SALE]),
+        show_status: List[ProductStatus] = Query([ProductStatus.FOR_SALE]),
         page: int = 1,
         limit: int = 12,
         current_user: User = Depends(deps.get_current_active_superuser_no_exception),
 ) -> Any:
     """
-    Retrieve motorcycle items.
+    Retrieve products with specified filters.
     """
     if page < 1:
         raise HTTPException(status_code=400, detail="Page must be greater than 0")
@@ -34,7 +34,7 @@ async def read_items(
     if limit < 1:
         raise HTTPException(status_code=400, detail="Limit must be greater than 0")
 
-    if len(show_status) == 1 and show_status[0] == MotorcycleStatus.FOR_SALE:
+    if len(show_status) == 1 and show_status[0] == ProductStatus.FOR_SALE:
         ...
     else:
         if not current_user or not current_user.is_superuser:
@@ -43,50 +43,49 @@ async def read_items(
     offset: int = (page - 1) * limit
 
     # Add 1 to the limit to see if there is a next page.
-    items: List[MotorcycleReadNoImages] = await crud.motorcycle.get_multi_with_filters(offset, limit + 1, show_status)
+    items: List[ProductReadNoImages] = await crud.product.get_multi_with_filters(offset, limit + 1, show_status)
 
     if not items:
-        return MotorcycleList(page=page,
-                              has_next_page=False,
-                              motorcycles=[])
+        return ProductList(page=page,
+                           has_next_page=False,
+                           products=[])
 
     has_next_page = True if len(items) > limit else False
 
-    # Remove the extra motorcycle we got as a pagination test IFF there is a next page
+    # Remove the extra products we got as a pagination test IFF there is a next page
     # (indicating we received +1 results back from db)
     if has_next_page:
         items.pop()
 
-    return MotorcycleList(page=page,
-                          has_next_page=has_next_page,
-                          motorcycles=items)
+    return ProductList(page=page,
+                       has_next_page=has_next_page,
+                       products=items)
 
 
-@router.post("", response_model=MotorcycleReadWithImages)
+@router.post("", response_model=ProductReadWithImages)
 async def create_item(
-        item_in: MotorcycleCreate,
+        item_in: ProductCreate,
         current_user: User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Create new motorcycle.
+    Create new product.
     """
-    motorcycle = await crud.motorcycle.create(item_in)
-    return motorcycle
+    return await crud.product.create(item_in)
 
 
-@router.put("/{id}", response_model=MotorcycleReadWithImages)
+@router.put("/{id}", response_model=ProductReadWithImages)
 async def update_item(
         id: str,
-        item_in: MotorcycleCreate,
+        item_in: ProductCreate,
         current_user: User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Update a motorcycle.
+    Update a product.
     """
-    item: Optional[Motorcycle] = await crud.motorcycle.get(id)
+    item: Optional[Product] = await crud.product.get(id)
     if not item:
-        raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
-    item = await crud.motorcycle.update(item, item_in)
+        raise HTTPException(status_code=404, detail="No product found with this id.")
+    item = await crud.product.update(item, item_in)
     return item
 
 
@@ -120,14 +119,14 @@ def generate_product_images(
     return image_results
 
 
-@router.get("/{id}", response_model=MotorcycleReadWithImages)
+@router.get("/{id}", response_model=ProductReadWithImages)
 async def read_item(id: str) -> Any:
     """
     Get item by ID.
     """
-    # TODO: Check if user is active if the motorcycle status is not active
-    item = await crud.motorcycle.get_with_images(id)
+    # TODO: Check if user is active if the product status is not active
+    item = await crud.product.get_with_images(id)
     if not item:
-        raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
+        raise HTTPException(status_code=404, detail="No product found with this ID")
     return item
 
