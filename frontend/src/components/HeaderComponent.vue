@@ -1,7 +1,7 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
     <div class="mx-auto sm:px-5">
-      <div class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10">
+      <div class="flex items-center justify-between border-gray-100 py-3 pb-6 md:justify-start md:space-x-10">
         <div class="flex justify-start flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>

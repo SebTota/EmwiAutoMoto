@@ -3,7 +3,7 @@
     <div class="mx-auto max-w-2xl sm:px-5 lg:max-w-7xl">
       <div>
         <div class="text-center relative z-0">
-          <section aria-labelledby="filter-heading" class="border-b border-gray-200 pt-6 pb-2">
+          <section aria-labelledby="filter-heading" class="border-b border-gray-200 pb-2">
             <div class="flex items-center justify-between">
               <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
 
