@@ -2,7 +2,6 @@
   <div class="px-5 py-4 mx-auto w-full flex sm:flex-nowrap flex-wrap">
     <div class="md:w-1/2 hidden md:flex bg-gray-300 rounded-lg overflow-hidden py-8 px-14 items-end justify-start relative">
       <iframe
-        allowfullscreen=""
         loading="lazy"
         class="w-full h-full absolute inset-0"
         src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d2567.986996232842!2d20.55490997684331!3d49.93658527149866!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x47162725adf82faf%3A0x4a6bbc223774a973!2sEMWI%20Auto-Moto!5e0!3m2!1sen!2sus!4v1704457757907!5m2!1sen!2sus"
