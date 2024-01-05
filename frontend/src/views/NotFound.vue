@@ -1,6 +1,6 @@
 <template>
   <div class="min-h-full pt-16 pb-12 flex flex-col bg-white">
-    <main class="flex-grow flex flex-col justify-center max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8">
+    <main class="flex-grow flex flex-col justify-center w-full mx-auto px-4 sm:px-6 lg:px-8">
       <div class="py-16">
         <div class="text-center">
           <p class="text-sm font-semibold text-indigo-600 uppercase tracking-wide">Błąd 404</p>

@@ -1,5 +1,5 @@
 <template>
-  <div class="pt-6">
+  <div class="pt-2">
     <nav
       class="bg-white px-4 pt-3 flex items-center justify-between sm:px-6 dark:text-gray-400 dark:bg-gray-900 dark:border-gray-400"
       aria-label="Pagination"
@@ -11,7 +11,7 @@
           type="button"
           class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"
         >
-          Previous
+          Poprzednia
         </button>
         <button
           :disabled="!props.hasNextPage"
@@ -19,7 +19,7 @@
           type="button"
           class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white disabled:opacity-25"
         >
-          Next
+          Następna
         </button>
       </div>
     </nav>

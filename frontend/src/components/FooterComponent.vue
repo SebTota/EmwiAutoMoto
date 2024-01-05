@@ -1,9 +1,10 @@
 <template>
-  <footer class="text-gray-600 body-font pt-4 max-w-7xl md:px-5">
+  <footer class="text-gray-600 body-font pt-4 md:px-5">
     <div class="text-xs mx-auto grid grid-cols-3 items-center justify-between p-2 border-t border-t-gray-400">
       <div class="text-center md:text-left col-span-3 md:col-span-1">
         <p><b>EMWI Firma Handlowo Usługowa</b></p>
-        Paweł Sowa
+        Paweł Sowa<br />
+        pawelsowa1970@onet.pl
       </div>
       <div class="hidden md:block col-span-1 text-center">
         <a href="https://www.facebook.com/emwifhu" target="_blank">
