@@ -1,6 +1,8 @@
 <template>
-  <div class="px-5 py-4 mx-auto w-full flex sm:flex-nowrap flex-wrap">
-    <div class="md:w-1/2 hidden md:flex bg-gray-300 rounded-lg overflow-hidden py-8 px-14 items-end justify-start relative">
+  <div class="sm:px-5 py-4 mx-auto w-full flex sm:flex-nowrap flex-grow">
+    <div
+      class="md:w-1/2 hidden md:flex bg-gray-300 rounded-lg overflow-hidden py-8 px-14 items-end justify-start relative"
+    >
       <iframe
         loading="lazy"
         class="w-full h-full absolute inset-0"
@@ -9,20 +11,26 @@
       ></iframe>
       <div class="bg-white relative hidden md:block xl:flex flex-wrap w-full py-4 rounded shadow-md">
         <div class="xl:w-1/2 px-6">
-          <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">ADDRESS</h2>
-          <p class="mt-1">Poręba Spytkowska<br>Ul. Malownicza<br>60 32-800 Brzesko</p>
+          <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">ADRES</h2>
+          <a
+            class="mt-1 text-indigo-500"
+            href="https://www.google.com/maps/dir//EMWI+Auto-Moto+ul.+Malownicza+60+32-800+Por%C4%99ba+Spytkowska+Poland/@49.9365853,20.5574849,17z"
+            target="_blank"
+          >
+            Poręba Spytkowska<br />Ul. Malownicza<br />60 32-800 Brzesko
+          </a>
         </div>
         <div class="xl:w-1/2 px-6 mt-2 xl:mt-0">
           <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs">EMAIL</h2>
-          <a class="text-indigo-500 leading-relaxed">pawelsowa1970@onet.pl</a>
-          <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs mt-2">PHONE</h2>
+          <a href="mailto:pawelsowa1970@onet.pl" class="text-indigo-500 leading-relaxed">pawelsowa1970@onet.pl</a>
+          <h2 class="title-font font-semibold text-gray-900 tracking-widest text-xs mt-2">NUMER TELEFONU</h2>
           <p class="leading-relaxed">+48 731 853 937</p>
         </div>
       </div>
     </div>
-    <div class="md:w-1/2 w-full bg-white flex flex-col md:ml-auto md:mt-0">
-      <div class="bg-white px-4 overflow-hidden dark:bg-gray-900">
-        <div v-if="emailSentStatus !== 'sent'" class="relative max-w-xl mx-auto">
+    <div class="md:w-1/2 w-full bg-white flex flex-col">
+      <div class="bg-white sm:px-4 overflow-hidden dark:bg-gray-900">
+        <div v-if="emailSentStatus !== 'sent'" class="relative max-w-xl">
           <div class="text-center">
             <h2 class="text-3xl font-extrabold tracking-tight text-gray-900 sm:text-4xl dark:text-gray-400">Kontakt</h2>
           </div>
@@ -31,11 +39,11 @@
               Wyślij nam wiadomość lub zadzwoń pod numer +48 (731) 853-937
             </p>
           </div>
-          <div class="mt-6">
-            <form method="POST" @submit.prevent="submit" class="grid grid-cols-1 gap-y-6 sm:grid-cols-2 sm:gap-x-8">
+          <div class="mt-6 mx-4">
+            <form method="POST" @submit.prevent="submit" class="grid grid-cols-1 gap-y-5 gap-x-4 sm:grid-cols-2">
               <div>
                 <label for="first-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200">Imię</label>
-                <div class="mt-1">
+                <div>
                   <input
                     type="text"
                     v-model="first_name"
@@ -44,7 +52,7 @@
                     name="first-name"
                     id="first-name"
                     autocomplete="given-name"
-                    class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200"
+                    class="mt-0.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -52,7 +60,7 @@
                 <label for="last-name" class="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >Nazwisko</label
                 >
-                <div class="mt-1">
+                <div>
                   <input
                     type="text"
                     v-model="last_name"
@@ -61,13 +69,13 @@
                     name="last-name"
                     id="last-name"
                     autocomplete="family-name"
-                    class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200"
+                    class="mt-0.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
               </div>
               <div class="sm:col-span-2">
                 <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-200">E-mail</label>
-                <div class="mt-1">
+                <div>
                   <input
                     id="email"
                     v-model="email"
@@ -76,7 +84,7 @@
                     name="email"
                     type="email"
                     autocomplete="email"
-                    class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200"
+                    class="mt-0.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
               </div>
@@ -84,7 +92,7 @@
                 <label for="phone-number" class="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >Numer telefonu</label
                 >
-                <div class="mt-1">
+                <div>
                   <input
                     type="text"
                     v-model="phone_number"
@@ -93,7 +101,7 @@
                     name="phone-number"
                     id="phone-number"
                     autocomplete="tel"
-                    class="py-3 px-4 block w-full focus:ring-indigo-500 focus:border-indigo-500 border-gray-300 rounded-md disabled:bg-gray-200"
+                    class="mt-0.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                     placeholder="+48 (555) 555 555"
                   />
                 </div>
@@ -102,7 +110,7 @@
                 <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-200"
                   >Wiadomość</label
                 >
-                <div class="mt-1">
+                <div>
                   <textarea
                     id="message"
                     v-model="message"
@@ -110,7 +118,7 @@
                     required
                     name="message"
                     rows="5"
-                    class="py-3 px-4 block w-full shadow-sm focus:ring-indigo-500 focus:border-indigo-500 border border-gray-300 rounded-md disabled:bg-gray-200"
+                    class="mt-0.5 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </div>
               </div>
