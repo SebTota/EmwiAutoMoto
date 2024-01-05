@@ -1,11 +1,11 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
-    <div class="mx-auto max-w-7xl sm:px-5">
+    <div class="mx-auto sm:px-5">
       <div class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10">
-        <div class="flex justify-start lg:w-0 lg:flex-1">
+        <div class="flex justify-start flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <img class="h-6 w-auto sm:h-8" src="/logo-no-border.png" alt="" />
+            <img class="h-6 w-auto lg:h-8" src="/logo-no-border.png" alt="" />
           </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
@@ -16,7 +16,7 @@
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </PopoverButton>
         </div>
-        <PopoverGroup as="nav" class="hidden space-x-10 md:flex">
+        <PopoverGroup as="nav" class="hidden space-x-4 md:space-x-6 lg:space-x-10 md:flex">
           <router-link
             v-for="item in tabs"
             :key="item.name"
