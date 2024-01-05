@@ -1,12 +1,7 @@
 <template>
   <div>
-    <div
-      class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80"
-    >
-      <img
-        :src="product.medium_thumbnail_url"
-        class="h-full w-full object-cover object-center lg:h-full lg:w-full"
-      />
+    <div class="min-h-80 aspect-w-5 aspect-h-3 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none lg:h-80">
+      <img :src="product.medium_thumbnail_url" class="h-full w-full object-cover object-center lg:h-full lg:w-full" />
     </div>
     <div class="mt-4 flex justify-between">
       <div>
@@ -20,10 +15,16 @@
         </p>
       </div>
       <div class="text-right">
-        <p v-if="product.price && product.status === ProductStatusEnum.SOLD" class="text-medium font-medium text-gray-900 dark:text-gray-300">
+        <p
+          v-if="product.price && product.status === ProductStatusEnum.SOLD"
+          class="text-medium font-medium text-gray-900 dark:text-gray-300"
+        >
           {{ statusToPolish(product.status) + " - " + product.price.toLocaleString("pl-PL") }} zł
         </p>
-        <p v-else-if="product.status === ProductStatusEnum.RESERVED" class="text-medium font-medium text-gray-900 dark:text-gray-300">
+        <p
+          v-else-if="product.status === ProductStatusEnum.RESERVED"
+          class="text-medium font-medium text-gray-900 dark:text-gray-300"
+        >
           {{ statusToPolish(product.status) }}
         </p>
         <p v-else-if="product.price" class="text-medium font-medium text-gray-900 dark:text-gray-300">
@@ -32,9 +33,7 @@
         <p v-else class="text-medium font-medium text-gray-900 dark:text-gray-300">
           {{ statusToPolish(product.status) }}
         </p>
-        <p
-          class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400"
-        >
+        <p class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400">
           {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
         </p>
       </div>

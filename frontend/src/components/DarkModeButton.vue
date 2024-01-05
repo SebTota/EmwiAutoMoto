@@ -1,9 +1,6 @@
 <template>
   <button>
-    <MoonIcon
-      class="btn-icon h-6 w-6 flex-shrink-0 text-gray-500 hover:text-gray-900"
-      @click="toggleDarkMode"
-    />
+    <MoonIcon class="btn-icon h-6 w-6 flex-shrink-0 text-gray-500 hover:text-gray-900" @click="toggleDarkMode" />
   </button>
 </template>
 

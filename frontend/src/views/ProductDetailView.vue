@@ -34,10 +34,7 @@
               :key="image.medium_thumbnail_url"
               @click="openModal(image.medium_thumbnail_url)"
             >
-              <img
-                :src="image.medium_thumbnail_url"
-                class="w-full h-full object-center object-cover sm:rounded-lg"
-              />
+              <img :src="image.medium_thumbnail_url" class="w-full h-full object-center object-cover sm:rounded-lg" />
             </TabPanel>
           </TabPanels>
 
@@ -46,9 +43,7 @@
             v-if="modalOpen"
             class="fixed inset-0 overflow-y-auto z-10 w-full h-full backdrop-grayscale backdrop-blur bg-black bg-opacity-80"
           >
-            <div
-              class="flex items-center justify-center min-h-screen w-full h-full"
-            >
+            <div class="flex items-center justify-center min-h-screen w-full h-full">
               <div class="p-8">
                 <div
                   class="absolute top-0 right-0 p-4 cursor-pointer text-white text-l font-semibold"
@@ -57,10 +52,7 @@
                   <!-- Add a close button or icon here -->
                   Close
                 </div>
-                <img
-                  :src="modalImageUrl"
-                  class="w-full h-full object-contain"
-                />
+                <img :src="modalImageUrl" class="w-full h-full object-contain" />
               </div>
             </div>
           </div>
@@ -75,11 +67,7 @@
                 v-slot="{ selected }"
               >
                 <span class="absolute inset-0 rounded-md overflow-hidden">
-                  <img
-                    :src="image.thumbnail_url"
-                    alt=""
-                    class="w-full h-full object-center object-cover"
-                  />
+                  <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
                 </span>
                 <span
                   :class="[
@@ -95,97 +83,61 @@
 
         <!-- Product info -->
         <div class="mt-8 lg:mt-0 col-span-2">
-          <router-link
-            :to="getGoBackLink()"
-            class="text-sm tracking-tight text-gray-900 dark:text-gray-400"
-          >
+          <router-link :to="getGoBackLink()" class="text-sm tracking-tight text-gray-900 dark:text-gray-400">
             &#8592; Wszystkie Motocykle
           </router-link>
 
-          <h1
-            class="text-3xl font-extrabold mt-2 tracking-tight text-gray-900 dark:text-gray-400"
-          >
+          <h1 class="text-3xl font-extrabold mt-2 tracking-tight text-gray-900 dark:text-gray-400">
             {{ product.year + " " + product.make + " " + product.model }}
           </h1>
 
           <!-- Price -->
-          <div
-            v-if="product.price && product.status !== ProductStatusEnum.RESERVED"
-            class="mt-1"
-          >
+          <div v-if="product.price && product.status !== ProductStatusEnum.RESERVED" class="mt-1">
             <h2 class="sr-only">Price</h2>
-            <p class="text-2xl text-gray-900 dark:text-gray-400">
-              {{ product.price.toLocaleString("pl-PL") }} zł
-            </p>
+            <p class="text-2xl text-gray-900 dark:text-gray-400">{{ product.price.toLocaleString("pl-PL") }} zł</p>
           </div>
 
           <div>
             <div class="mt-2 border-t border-gray-100">
               <dl class="divide-y divide-gray-100">
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Rok
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Rok</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.year }}
                   </dd>
                 </div>
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Marka
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Marka</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.make }}
                   </dd>
                 </div>
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Model
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Model</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.model }}
                   </dd>
                 </div>
                 <div v-if="product.vin" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    VIN
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">VIN</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.vin }}
                   </dd>
                 </div>
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Przebieg
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Przebieg</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
                   </dd>
                 </div>
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Kolor
-                  </dt>
-                  <dd
-                    class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0"
-                  >
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Kolor</dt>
+                  <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ colorToPolish(product.color) }}
                   </dd>
                 </div>
                 <div v-if="product.description" class="py-2 sm:gap-4">
-                  <dt class="text-sm font-medium leading-6 text-gray-900">
-                    Opis
-                  </dt>
+                  <dt class="text-sm font-medium leading-6 text-gray-900">Opis</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700">
                     {{ product.description }}
                   </dd>
@@ -214,10 +166,7 @@
             </div>
 
             <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
-              <router-link
-                class="w-full"
-                :to="{ name: 'productEdit', params: { id: productId } }"
-              >
+              <router-link class="w-full" :to="{ name: 'productEdit', params: { id: productId } }">
                 <button
                   type="button"
                   class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"

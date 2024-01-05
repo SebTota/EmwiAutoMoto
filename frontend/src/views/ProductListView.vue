@@ -3,23 +3,12 @@
     <div class="mx-auto max-w-2xl sm:px-5 lg:max-w-7xl">
       <div>
         <div class="text-center relative z-0">
-          <section
-            aria-labelledby="filter-heading"
-            class="border-b border-gray-200 pt-6 pb-2"
-          >
+          <section aria-labelledby="filter-heading" class="border-b border-gray-200 pt-6 pb-2">
             <div class="flex items-center justify-between">
-              <h2
-                class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200"
-              >
-                Motocykle
-              </h2>
+              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
 
               <div class="flex items-center">
-                <label
-                  for="statusFilter"
-                  class="text-sm font-medium text-gray-900 hidden sm:block"
-                  >Pokaż:</label
-                >
+                <label for="statusFilter" class="text-sm font-medium text-gray-900 hidden sm:block">Pokaż:</label>
                 <select
                   v-model="selectedStatus"
                   id="statusFilter"
@@ -27,16 +16,10 @@
                   class="ml-2 block w-full pl-3 pr-10 py-2 text-small border-gray-300 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 rounded-md bg-white text-gray-700"
                   @change="changeStatus"
                 >
-                  <option :value="ProductStatusEnum.FOR_SALE">
-                    Na sprzedaż
-                  </option>
+                  <option :value="ProductStatusEnum.FOR_SALE">Na sprzedaż</option>
                   <option :value="ProductStatusEnum.SOLD">Sprzedane</option>
-                  <option :value="ProductStatusEnum.DRAFT" v-if="isAdmin">
-                    Szkic
-                  </option>
-                  <option :value="ProductStatusEnum.DELETED" v-if="isAdmin">
-                    Sunięte
-                  </option>
+                  <option :value="ProductStatusEnum.DRAFT" v-if="isAdmin">Szkic</option>
+                  <option :value="ProductStatusEnum.DELETED" v-if="isAdmin">Sunięte</option>
                 </select>
               </div>
             </div>
@@ -68,19 +51,14 @@
       </div>
 
       <div v-if="!isLoading && productListResponse">
-        <div
-          class="mt-4 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8"
-        >
+        <div class="mt-4 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
           <div
             v-for="product in productListResponse.products"
             :key="product.id"
             @click="getProductUrl(product.id)"
             class="hover:opacity-75"
           >
-            <ProductListComponent
-              :selected-status="selectedStatus"
-              :product="product"
-            />
+            <ProductListComponent :selected-status="selectedStatus" :product="product" />
           </div>
         </div>
         <ProductListPagination
@@ -92,10 +70,7 @@
       </div>
 
       <div v-if="errorMessage" class="pt-4">
-        <div
-          class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative"
-          role="alert"
-        >
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative" role="alert">
           <span class="block sm:inline">{{ errorMessage }}</span>
         </div>
       </div>
@@ -113,16 +88,12 @@ import ProductListPagination from "@/components/ProductListPagination.vue";
 import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import ProductListComponent from '@/components/ProductListComponent.vue'
+import ProductListComponent from "@/components/ProductListComponent.vue";
 
 const route = useRoute();
-const page = ref(
-  route.query.strona ? parseInt(route.query.strona as string) : 1
-);
+const page = ref(route.query.strona ? parseInt(route.query.strona as string) : 1);
 const selectedStatus = ref<ProductStatusEnum>(
-  route.query.wybranyStatus
-    ? (route.query.wybranyStatus as ProductStatusEnum)
-    : ProductStatusEnum.FOR_SALE
+  route.query.wybranyStatus ? (route.query.wybranyStatus as ProductStatusEnum) : ProductStatusEnum.FOR_SALE
 );
 
 const mainState = useMainStore();

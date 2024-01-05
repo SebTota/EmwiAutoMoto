@@ -5,11 +5,7 @@ import { getLocalToken, removeLocalToken, saveLocalToken } from "@/utils/token";
 import router from "@/router";
 import type { IToken } from "@/interfaces/token";
 import axios from "axios";
-import type {
-  IProductCreate,
-  IProductList,
-  IProductWithImages,
-} from "@/interfaces/product";
+import type { IProductCreate, IProductList, IProductWithImages } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 
 export interface MainState {
@@ -71,10 +67,7 @@ export const useMainStore = defineStore("mainState", {
             this.isAdmin = response.data.is_superuser;
           }
         } catch (error) {
-          console.error(
-            "Failed to retrieve signed in user information.",
-            error
-          );
+          console.error("Failed to retrieve signed in user information.", error);
           this.actionCheckApiError(error);
         }
       } else {
@@ -100,10 +93,7 @@ export const useMainStore = defineStore("mainState", {
           this.user = response.data;
           this.isAdmin = response.data.is_superuser;
         } catch (error) {
-          console.error(
-            "Failed to retrieve signed in user information.",
-            error
-          );
+          console.error("Failed to retrieve signed in user information.", error);
           await this.actionRemoveLogIn();
         }
       } else if (!this.token) {
@@ -130,9 +120,7 @@ export const useMainStore = defineStore("mainState", {
         const tokenExp: Date = this.token.refresh_token_expires;
         const sevenDays: number = 24 * 7;
         const sevenDaysIntoTheFuture: Date = new Date();
-        sevenDaysIntoTheFuture.setHours(
-          sevenDaysIntoTheFuture.getHours() + sevenDays
-        );
+        sevenDaysIntoTheFuture.setHours(sevenDaysIntoTheFuture.getHours() + sevenDays);
         const shouldRefresh: boolean = tokenExp < sevenDaysIntoTheFuture;
 
         if (shouldRefresh && this.refreshTokenIsValid()) {
@@ -184,10 +172,7 @@ export const useMainStore = defineStore("mainState", {
       }
       return false;
     },
-    async getProducts(
-      page: number,
-      status: ProductStatusEnum[] = [ProductStatusEnum.FOR_SALE]
-    ): Promise<IProductList> {
+    async getProducts(page: number, status: ProductStatusEnum[] = [ProductStatusEnum.FOR_SALE]): Promise<IProductList> {
       let token;
       if (this.token && this.tokenIsValid()) {
         token = this.token.access_token;
@@ -209,15 +194,10 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product details.");
       }
     },
-    async createProducts(
-      product: IProductCreate
-    ): Promise<IProductWithImages> {
+    async createProducts(product: IProductCreate): Promise<IProductWithImages> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.createProduct(
-            this.token.access_token,
-            product
-          );
+          const response = await api.createProduct(this.token.access_token, product);
           return response.data;
         } catch (error) {
           console.error(error);
@@ -229,17 +209,10 @@ export const useMainStore = defineStore("mainState", {
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async updateProducts(
-      productId: string,
-      product: IProductCreate
-    ): Promise<IProductWithImages> {
+    async updateProducts(productId: string, product: IProductCreate): Promise<IProductWithImages> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.updateProduct(
-            this.token.access_token,
-            productId,
-            product
-          );
+          const response = await api.updateProduct(this.token.access_token, productId, product);
           return response.data;
         } catch (error) {
           console.error(error);
@@ -254,10 +227,7 @@ export const useMainStore = defineStore("mainState", {
     async uploadProductImage(files: FileList) {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.uploadProductImages(
-            this.token.access_token,
-            files
-          );
+          const response = await api.uploadProductImages(this.token.access_token, files);
           return response.data;
         } catch (error) {
           console.error(error);

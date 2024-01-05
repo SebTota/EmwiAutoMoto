@@ -29,11 +29,7 @@
           <div class="space-y-6 bg-white py-5 sm:p-6">
             <div class="grid grid-cols-6 gap-6">
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="year"
-                  class="block text-sm font-medium text-gray-700"
-                  >Rok</label
-                >
+                <label for="year" class="block text-sm font-medium text-gray-700">Rok</label>
                 <input
                   v-model="year"
                   type="number"
@@ -45,11 +41,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="make"
-                  class="block text-sm font-medium text-gray-700"
-                  >Marka</label
-                >
+                <label for="make" class="block text-sm font-medium text-gray-700">Marka</label>
                 <input
                   v-model="make"
                   type="text"
@@ -61,11 +53,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="model"
-                  class="block text-sm font-medium text-gray-700"
-                  >Model</label
-                >
+                <label for="model" class="block text-sm font-medium text-gray-700">Model</label>
                 <input
                   v-model="model"
                   type="text"
@@ -77,11 +65,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="model"
-                  class="block text-sm font-medium text-gray-700"
-                  >VIN</label
-                >
+                <label for="model" class="block text-sm font-medium text-gray-700">VIN</label>
                 <input
                   v-model="vin"
                   type="text"
@@ -92,11 +76,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="odometer_miles"
-                  class="block text-sm font-medium text-gray-700"
-                  >Przebieg (Mil)</label
-                >
+                <label for="odometer_miles" class="block text-sm font-medium text-gray-700">Przebieg (Mil)</label>
                 <input
                   v-model="odometer_miles"
                   type="number"
@@ -108,11 +88,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="color"
-                  class="block text-sm font-medium text-gray-700"
-                  >Kolor</label
-                >
+                <label for="color" class="block text-sm font-medium text-gray-700">Kolor</label>
                 <select
                   v-model="color"
                   id="color"
@@ -120,22 +96,14 @@
                   required
                   class="mt-1 block w-full rounded-md border border-gray-300 bg-white py-2 px-3 shadow-sm focus:border-indigo-500 focus:outline-none focus:ring-indigo-500 sm:text-sm"
                 >
-                  <option
-                    v-for="(color, index) in colors"
-                    :key="index"
-                    :value="color"
-                  >
+                  <option v-for="(color, index) in colors" :key="index" :value="color">
                     {{ colorToPolish(color) }}
                   </option>
                 </select>
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="price"
-                  class="block text-sm font-medium text-gray-700"
-                  >Cena (zł)</label
-                >
+                <label for="price" class="block text-sm font-medium text-gray-700">Cena (zł)</label>
                 <input
                   v-model="price"
                   type="number"
@@ -146,11 +114,7 @@
               </div>
 
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
-                <label
-                  for="status"
-                  class="block text-sm font-medium text-gray-700"
-                  >Status</label
-                >
+                <label for="status" class="block text-sm font-medium text-gray-700">Status</label>
                 <select
                   v-model="status"
                   id="status"
@@ -168,11 +132,7 @@
             </div>
 
             <div>
-              <label
-                for="description"
-                class="block text-sm font-medium text-gray-700"
-                >Opis</label
-              >
+              <label for="description" class="block text-sm font-medium text-gray-700">Opis</label>
               <div class="mt-1">
                 <textarea
                   v-model="description"
@@ -186,17 +146,12 @@
 
             <div>
               <ImageGallery :images="images" :onDelete="deleteImage" />
-              <label class="block text-sm font-medium text-gray-700"
-                >Photo</label
-              >
+              <label class="block text-sm font-medium text-gray-700">Photo</label>
               <PhotoHandlerComponent @newFileUploaded="newFileUpload" />
             </div>
           </div>
 
-          <div
-            v-if="showError()"
-            class="text-sm mb-0 w-100 text-red-400 text-right"
-          >
+          <div v-if="showError()" class="text-sm mb-0 w-100 text-red-400 text-right">
             <p>{{ error }}</p>
           </div>
           <div class="px-4 py-3 text-right sm:px-6">
@@ -219,11 +174,7 @@ import router from "@/router";
 import { ProductColor } from "@/enums/productColor";
 import { colorToPolish } from "@/utils/colors";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
-import type {
-  IProduct,
-  IProductCreate,
-  IProductWithImages,
-} from "@/interfaces/product";
+import type { IProduct, IProductCreate, IProductWithImages } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
@@ -318,9 +269,7 @@ async function createProduct() {
 
   try {
     loadingRequest.value = true;
-    const createdProduct: IProduct = await mainStore.createProducts(
-      productCreate
-    );
+    const createdProduct: IProduct = await mainStore.createProducts(productCreate);
     await router.push({
       name: "productDetails",
       params: { id: createdProduct.id },

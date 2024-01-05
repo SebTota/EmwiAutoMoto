@@ -1,9 +1,7 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
     <div class="mx-auto max-w-7xl sm:px-5">
-      <div
-        class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10"
-      >
+      <div class="flex items-center justify-between border-gray-100 py-3 md:justify-start md:space-x-10">
         <div class="flex justify-start lg:w-0 lg:flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
@@ -30,19 +28,12 @@
         </PopoverGroup>
         <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
           <div v-if="mainStateLoaded && !isLoggedIn">
-            <router-link
-              :to="{ name: 'login' }"
-              class="whitespace-nowrap text-base font-medium"
-            >
+            <router-link :to="{ name: 'login' }" class="whitespace-nowrap text-base font-medium">
               Zaloguj się
             </router-link>
           </div>
           <div v-else>
-            <button
-              @click="handleLogout"
-              type="submit"
-              class="whitespace-nowrap text-base font-medium"
-            >
+            <button @click="handleLogout" type="submit" class="whitespace-nowrap text-base font-medium">
               Wyloguj się
             </button>
           </div>
@@ -70,11 +61,7 @@
           <div class="px-5 py-5">
             <div class="flex items-center justify-between">
               <div>
-                <img
-                  class="h-8 w-auto"
-                  src="/logo-no-border.png"
-                  alt="EMWI Auto Moto"
-                />
+                <img class="h-8 w-auto" src="/logo-no-border.png" alt="EMWI Auto Moto" />
               </div>
               <div class="-mr-2">
                 <PopoverButton
@@ -94,14 +81,8 @@
                   @click="close"
                   class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
-                  <component
-                    :is="item.icon"
-                    class="h-6 w-6 flex-shrink-0"
-                    aria-hidden="true"
-                  />
-                  <span class="ml-3 text-base font-medium">{{
-                    item.name
-                  }}</span>
+                  <component :is="item.icon" class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
+                  <span class="ml-3 text-base font-medium">{{ item.name }}</span>
                 </router-link>
               </nav>
             </div>
@@ -136,17 +117,8 @@
 </template>
 
 <script setup lang="ts">
-import {
-  Popover,
-  PopoverButton,
-  PopoverGroup,
-  PopoverPanel,
-} from "@headlessui/vue";
-import {
-  Bars3Icon,
-  XMarkIcon,
-  ArrowLongRightIcon,
-} from "@heroicons/vue/24/outline";
+import { Popover, PopoverButton, PopoverGroup, PopoverPanel } from "@headlessui/vue";
+import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from "@heroicons/vue/24/outline";
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";

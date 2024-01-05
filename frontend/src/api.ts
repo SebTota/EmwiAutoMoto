@@ -2,11 +2,7 @@ import axios from "axios";
 import { apiUrl } from "@/env";
 import type { IUser } from "@/interfaces/user";
 import type { IToken } from "@/interfaces/token";
-import type {
-  IProductCreate,
-  IProductList,
-  IProductWithImages,
-} from "@/interfaces/product";
+import type { IProductCreate, IProductList, IProductWithImages } from "@/interfaces/product";
 import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IImage } from "@/interfaces/image";
@@ -26,10 +22,7 @@ function authHeaders(token: string) {
   };
 }
 
-function configFromAuthHeadersAndParams(
-  auth: { headers: { Authorization: string } } | null,
-  params: URLSearchParams
-) {
+function configFromAuthHeadersAndParams(auth: { headers: { Authorization: string } } | null, params: URLSearchParams) {
   const config: any = {
     params: {},
     headers: {},
@@ -61,64 +54,34 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getProducts(
-    page: number,
-    status: ProductStatusEnum[],
-    token: string | null = null
-  ) {
+  async getProducts(page: number, status: ProductStatusEnum[], token: string | null = null) {
     const params = new URLSearchParams();
     params.append("page", page.toString());
     status.forEach((s) => {
       params.append("show_status", s);
     });
 
-    const auth: { headers: { Authorization: string } } | null = token
-      ? authHeaders(token)
-      : null;
+    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, params);
     return client.get<IProductList>(`${apiUrl}/api/v1/products`, config);
   },
   async getProduct(id: string) {
-    return client.get<IProductWithImages>(
-      `${apiUrl}/api/v1/products/${id}`
-    );
+    return client.get<IProductWithImages>(`${apiUrl}/api/v1/products/${id}`);
   },
   async createProduct(token: string, product: IProductCreate) {
-    return client.post<IProductWithImages>(
-      `${apiUrl}/api/v1/products`,
-      product,
-      authHeaders(token)
-    );
+    return client.post<IProductWithImages>(`${apiUrl}/api/v1/products`, product, authHeaders(token));
   },
-  async updateProduct(
-    token: string,
-    productId: string,
-    product: IProductCreate
-  ) {
-    return client.put<IProductWithImages>(
-      `${apiUrl}/api/v1/products/${productId}`,
-      product,
-      authHeaders(token)
-    );
+  async updateProduct(token: string, productId: string, product: IProductCreate) {
+    return client.put<IProductWithImages>(`${apiUrl}/api/v1/products/${productId}`, product, authHeaders(token));
   },
   async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();
     Array.from(files).forEach((file, index) => {
-      formData.append('files', file);
+      formData.append("files", file);
     });
-    return client.post<[IImage]>(
-      `${apiUrl}/api/v1/products/image`,
-      formData,
-      authHeaders(token)
-    );
+    return client.post<[IImage]>(`${apiUrl}/api/v1/products/image`, formData, authHeaders(token));
   },
-  async sendEmail(
-    first_name: string,
-    last_name: string,
-    email: string,
-    phone_number: string,
-    email_body: string
-  ) {
+  async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
     const body = {
       first_name: first_name,
       last_name: last_name,

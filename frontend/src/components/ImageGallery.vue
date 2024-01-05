@@ -5,11 +5,7 @@
       :list="props.images"
       v-bind="dragOptions"
     >
-      <div
-        v-for="image in props.images"
-        :key="image.thumbnail_url"
-        class="hover:bg-slate-10"
-      >
+      <div v-for="image in props.images" :key="image.thumbnail_url" class="hover:bg-slate-10">
         <div class="aspect-w-5 aspect-h-3 w-full overflow-hidden">
           <img
             :src="image.thumbnail_url"
