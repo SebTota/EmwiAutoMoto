@@ -49,8 +49,7 @@
                   class="absolute top-0 right-0 p-4 cursor-pointer text-white text-l font-semibold"
                   @click="closeModal"
                 >
-                  <!-- Add a close button or icon here -->
-                  Close
+                  Zamknij
                 </div>
                 <img :src="modalImageUrl" class="w-full h-full object-contain" />
               </div>
