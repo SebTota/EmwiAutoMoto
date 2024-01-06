@@ -41,6 +41,7 @@
           <!-- Modal View -->
           <div
             v-if="modalOpen"
+            @click="closeModal"
             class="fixed inset-0 overflow-y-auto z-10 w-full h-full backdrop-grayscale backdrop-blur bg-black bg-opacity-80"
           >
             <div class="flex items-center justify-center min-h-screen w-full h-full">
