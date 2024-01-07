@@ -1,11 +1,11 @@
 import io
 import mimetypes
+import time
 from concurrent.futures import ProcessPoolExecutor
 from concurrent.futures import as_completed
 
 import boto3
 from backend.core.logging import logger
-from botocore.config import Config
 from PIL import Image as PIL_Image
 
 from backend.core.config import settings
@@ -23,8 +23,7 @@ def _get_storage_resource() -> boto3.resource:
     return boto3.resource(service_name='s3',
                           endpoint_url=settings.BUCKET_ENDPOINT_URL,
                           aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
-                          aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
-                          config=Config(signature_version='s3v4'))
+                          aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY)
 
 
 def _get_s3_client() -> boto3.client:
@@ -32,7 +31,7 @@ def _get_s3_client() -> boto3.client:
                         endpoint_url=settings.BUCKET_ENDPOINT_URL,
                         aws_access_key_id=settings.BUCKET_ACCESS_KEY_ID,
                         aws_secret_access_key=settings.BUCKET_SECRET_ACCESS_KEY,
-                        config=Config(signature_version='s3v4'))
+                        region_name="weur")
 
 
 def process_image(image: PIL_Image, image_name: str):
@@ -76,10 +75,11 @@ def upload_image_to_cloud_storage(image: PIL_Image, image_name: str) -> str:
     content_type, _ = mimetypes.guess_type(image_name)
 
     try:
+        start_time: float = time.time()
         logger.info(f"Uploading file: {image_name} to cloud storage...")
         s3.Bucket(BUCKET_NAME).upload_fileobj(buffer, image_name, ExtraArgs={'ContentType': content_type,
                                                                              'CacheControl': 'max-age=31536000'})
-        logger.info(f"Upload of file: {image_name} complete!")
+        logger.info(f"Upload of file: {image_name} complete in {time.time() - start_time} seconds...")
         return f'{BASE_HOST_URL}/{image_name}'
     except Exception as e:
         raise FileUploadError(e)

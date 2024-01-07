@@ -1,12 +1,7 @@
 from backend.core.logging import establish_request_detail_logging
 from backend.core.logging import logger  # noqa
 
-from dotenv import load_dotenv
-import os
-env_path = os.path.abspath(os.path.join(os.path.dirname( __file__ ), '.env'))  # noqa
-load_dotenv(dotenv_path=env_path)  # noqa
-
-from fastapi import FastAPI, Request
+from fastapi import FastAPI
 from starlette.middleware.cors import CORSMiddleware
 
 from backend.db.init_db import init_db
