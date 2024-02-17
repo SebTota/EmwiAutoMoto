@@ -5,10 +5,11 @@
         <div class="flex justify-start flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <img class="h-10 w-auto" src="/logo-stacked.png" alt="Company Logo" />
+            <img class="h-7 w-auto block sm:hidden" src="/logo-no-border.png" alt="Company Logo" />
+            <img class="h-14 w-auto hidden sm:block" src="/logo-stacked.png" alt="Company Logo" />
           </router-link>
         </div>
-        <div class="-my-2 -mr-2 md:hidden">
+        <div class="-my-2 -mr-2 lg:hidden">
           <PopoverButton
             class="inline-flex items-center justify-center rounded-md bg-white p-2 focus:outline-none dark:bg-gray-900 dark:text-white dark:hover:bg-gray-800"
           >
@@ -16,7 +17,7 @@
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </PopoverButton>
         </div>
-        <PopoverGroup as="nav" class="hidden space-x-4 md:space-x-6 lg:space-x-10 md:flex">
+        <PopoverGroup as="nav" class="hidden space-x-4 lg:space-x-10 lg:flex">
           <router-link
             v-for="item in tabs"
             :key="item.name"
@@ -26,7 +27,7 @@
             <a class="text-base font-medium">{{ item.name }}</a>
           </router-link>
         </PopoverGroup>
-        <div class="hidden items-center justify-end md:flex md:flex-1 lg:w-0">
+        <div class="hidden items-center justify-end lg:flex lg:flex-1 w-0">
           <div v-if="mainStateLoaded && !isLoggedIn">
             <router-link :to="{ name: 'login' }" class="whitespace-nowrap text-base font-medium">
               Zaloguj się
