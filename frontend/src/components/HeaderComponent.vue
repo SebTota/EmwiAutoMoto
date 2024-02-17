@@ -1,11 +1,11 @@
 <template>
   <Popover class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
     <div class="mx-auto sm:px-5">
-      <div class="flex items-center justify-between border-gray-100 py-3 pb-6 md:justify-start md:space-x-10">
+      <div class="flex items-center justify-between border-gray-100 py-3 pb-6 lg:justify-start lg:space-x-10">
         <div class="flex justify-start flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <img class="h-6 w-auto lg:h-8" src="/logo-no-border.png" alt="Company Logo" />
+            <img class="h-10 w-auto" src="/logo-stacked.png" alt="Company Logo" />
           </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
@@ -53,7 +53,7 @@
       <PopoverPanel
         v-slot="{ close }"
         focus
-        class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition md:hidden"
+        class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition lg:hidden"
       >
         <div
           class="divide-y-2 divide-gray-50 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:text-gray-400 dark:bg-gray-800"
@@ -137,7 +137,7 @@ let tabs = [
     query: { produkt: ProductTypeEnum.MOTOCYKL },
   },
   {
-    name: "Traktory",
+    name: "Traktory Ogrodowe",
     description: "Traktory",
     icon: ArrowLongRightIcon,
     page: "productList",
