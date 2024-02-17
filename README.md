@@ -59,6 +59,11 @@ systemctl restart emwiautomoto
 
 ## Prod Deployments
 
+### Frontend
+All frontend deployments are automatically handled by GitHub Action, and deploy directly to Cloudflare.
+
+### Backend
+
 1. SSH into the server
 2. `cd MotorcycleStore`
 3. `git pull`
