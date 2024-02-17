@@ -79,7 +79,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 import type { IProductList } from "@/interfaces/product";
 import { useMainStore } from "@/stores/state";
@@ -89,13 +89,19 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductListComponent from "@/components/ProductListComponent.vue";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const route = useRoute();
+const type = ref<ProductTypeEnum>(
+  route.query.produkt ? (route.query.produkt as ProductTypeEnum) : ProductTypeEnum.MOTOCYKL
+);
 const page = ref(route.query.strona ? parseInt(route.query.strona as string) : 1);
 const selectedStatus = ref<ProductStatusEnum>(
   route.query.wybranyStatus ? (route.query.wybranyStatus as ProductStatusEnum) : ProductStatusEnum.FOR_SALE
 );
 
+console.log("type", type.value);
+console.log("query", route.query.produkt);
 const mainState = useMainStore();
 const isLoading = ref(true);
 const hasNextPage = ref(false);
@@ -112,10 +118,15 @@ mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 });
 
+onMounted(() => {
+  getProductList(page.value);
+});
+
 function changeStatus() {
   router.push({
-    name: "motorcycleList",
+    name: "productList",
     query: {
+      produkt: type.value,
       strona: 1,
       wybranyStatus: selectedStatus.value,
     },
@@ -130,7 +141,7 @@ function getProductList(page: number) {
 
   isLoading.value = true;
   mainState
-    .getProducts(page, showStatus)
+    .getProducts(type.value, page, showStatus)
     .then((response: IProductList) => {
       productListResponse = response;
       products = response.products;
@@ -152,8 +163,9 @@ function getProductUrl(productId: string) {
 function navigateToNextPage() {
   if (productListResponse.has_next_page) {
     router.push({
-      name: "motorcycleList",
+      name: "productList",
       query: {
+        produkt: type.value,
         strona: productListResponse.page + 1,
         wybranyStatus: selectedStatus.value,
       },
@@ -164,14 +176,13 @@ function navigateToNextPage() {
 function navigateToPreviousPage() {
   if (productListResponse.page > 1) {
     router.push({
-      name: "motorcycleList",
+      name: "productList",
       query: {
+        produkt: type.value,
         strona: productListResponse.page - 1,
         wybranyStatus: selectedStatus.value,
       },
     });
   }
 }
-
-getProductList(page.value);
 </script>

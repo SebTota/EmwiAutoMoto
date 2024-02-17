@@ -3,7 +3,7 @@ from typing import Optional, List
 
 from pydantic import BaseModel
 
-from backend.models.product import ProductStatus
+from backend.models.product import ProductStatus, ProductType, OdometerType
 from backend.schemas.image import ImageRead, ImageCreate
 
 
@@ -11,11 +11,13 @@ class ProductBase(BaseModel):
     id: str
     date_created: datetime
     date_last_updated: datetime
+    type: ProductType
     year: int
     make: str
     model: str
     vin: Optional[str] = None
-    odometer_miles: int
+    odometer: int
+    odometer_type: OdometerType
     color: str
     price: Optional[int] = None
     description: Optional[str] = None
@@ -34,11 +36,13 @@ class ProductReadNoImages(ProductBase):
 
 
 class ProductCreate(BaseModel):
+    type: ProductType
     year: int
     make: str
     model: str
     vin: Optional[str] = None
-    odometer_miles: int
+    odometer: int
+    odometer_type: OdometerType
     color: str
     price: Optional[int] = None
     description: Optional[str] = None

@@ -58,8 +58,8 @@
           </div>
 
           <!-- Image selector -->
-          <div class="mt-4 w-full max-w-2xl mx-auto sm:block">
-            <TabList class="grid grid-cols-3 md:grid-cols-4 gap-3">
+          <div class="mt-4 w-full mx-auto sm:block">
+            <TabList class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
               <Tab
                 v-for="image in product.images"
                 :key="image.thumbnail_url"
@@ -84,7 +84,7 @@
         <!-- Product info -->
         <div class="mt-8 lg:mt-0 col-span-2">
           <router-link :to="getGoBackLink()" class="text-sm tracking-tight text-gray-900 dark:text-gray-400">
-            &#8592; Wszystkie Motocykle
+            &#8592; Wróć
           </router-link>
 
           <h1 class="text-3xl font-extrabold mt-2 tracking-tight text-gray-900 dark:text-gray-400">
@@ -127,7 +127,7 @@
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Przebieg</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
+                    {{ product.odometer.toLocaleString("pl-PL") }} {{ product.odometer_type }}
                   </dd>
                 </div>
                 <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
@@ -171,7 +171,7 @@
                   type="button"
                   class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
                 >
-                  Edytuj motocykl
+                  Edytuj
                 </button>
               </router-link>
             </div>
@@ -240,7 +240,7 @@ function getGoBackLink() {
   const previousRoute = window.history.state.back;
   const url = new URL(window.location.origin + previousRoute);
 
-  if (url.pathname === "/motocykle") {
+  if (url.pathname === "/produkty") {
     const query: Record<string, string> = {};
 
     for (const [key, value] of url.searchParams) {
@@ -249,7 +249,7 @@ function getGoBackLink() {
 
     return { path: previousRoute, query };
   } else {
-    return { name: "motorcycleList" } as const;
+    return { name: "productList" } as const;
   }
 }
 </script>

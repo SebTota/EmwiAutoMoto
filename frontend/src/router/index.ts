@@ -10,12 +10,12 @@ const router = createRouter({
       component: () => import("../views/LoginView.vue"),
     },
     {
-      path: "/motocykle",
-      name: "motorcycleList",
+      path: "/produkty",
+      name: "productList",
       component: () => import("../views/ProductListView.vue"),
     },
     {
-      path: "/product/nowy",
+      path: "/produkt/nowy",
       name: "newProduct",
       component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
@@ -57,7 +57,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: "/motocykle",
+      redirect: "/produkty",
     },
     {
       path: "/:pathMatch(.*)*",

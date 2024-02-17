@@ -7,6 +7,7 @@ import type { IToken } from "@/interfaces/token";
 import axios from "axios";
 import type { IProductCreate, IProductList, IProductWithImages } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
+import type { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 export interface MainState {
   token: IToken | null;
@@ -172,13 +173,17 @@ export const useMainStore = defineStore("mainState", {
       }
       return false;
     },
-    async getProducts(page: number, status: ProductStatusEnum[] = [ProductStatusEnum.FOR_SALE]): Promise<IProductList> {
+    async getProducts(
+      productType: ProductTypeEnum,
+      page: number,
+      status: ProductStatusEnum[] = [ProductStatusEnum.FOR_SALE]
+    ): Promise<IProductList> {
       let token;
       if (this.token && this.tokenIsValid()) {
         token = this.token.access_token;
       }
       try {
-        const response = await api.getProducts(page, status, token);
+        const response = await api.getProducts(productType, page, status, token);
         return response.data;
       } catch (error) {
         console.error("Failed to retrieve product list.", error);

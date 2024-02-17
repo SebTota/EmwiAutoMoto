@@ -5,7 +5,7 @@
         <div class="flex justify-start flex-1">
           <router-link :to="{ name: 'home' }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <img class="h-6 w-auto lg:h-8" src="/logo-no-border.png" alt="" />
+            <img class="h-6 w-auto lg:h-8" src="/logo-no-border.png" alt="Company Logo" />
           </router-link>
         </div>
         <div class="-my-2 -mr-2 md:hidden">
@@ -20,7 +20,7 @@
           <router-link
             v-for="item in tabs"
             :key="item.name"
-            :to="{ name: item.page }"
+            :to="{ name: item.page, query: item.query }"
             class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <a class="text-base font-medium">{{ item.name }}</a>
@@ -77,7 +77,7 @@
                 <router-link
                   v-for="item in tabs"
                   :key="item.name"
-                  :to="{ name: item.page }"
+                  :to="{ name: item.page, query: item.query }"
                   @click="close"
                   class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
@@ -122,6 +122,7 @@ import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from "@heroicons/vue/24/outl
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
@@ -132,26 +133,36 @@ let tabs = [
     name: "Motocykle",
     description: "Motocykle",
     icon: ArrowLongRightIcon,
-    page: "motorcycleList",
+    page: "productList",
+    query: { produkt: ProductTypeEnum.MOTOCYKL },
+  },
+  {
+    name: "Traktory",
+    description: "Traktory",
+    icon: ArrowLongRightIcon,
+    page: "productList",
+    query: { produkt: ProductTypeEnum.TRAKTOR },
   },
   {
     name: "Kontakt",
     description: "Kontakt",
     icon: ArrowLongRightIcon,
     page: "contact",
+    query: {},
   },
 ];
 
 const addMotorcycleTab = {
-  name: "Nowy Motocykl",
-  description: "Nowy Motocykl",
+  name: "Nowy Produkt",
+  description: "Nowy Produkt",
   icon: ArrowLongRightIcon,
   page: "newProduct",
+  query: {},
 };
 
 mainState.actionCheckLoggedIn().then(() => {
   if (mainState.isAdmin) {
-    tabs = [tabs[0], addMotorcycleTab, tabs[1]];
+    tabs = [tabs[0], tabs[1], addMotorcycleTab, tabs[2]];
   }
   mainStateLoaded.value = true;
 });
@@ -162,7 +173,7 @@ function getUsername() {
 
 async function handleLogout(event: Event) {
   event.preventDefault();
-  await mainState.actionLogout();
+  mainState.actionLogout();
   window.location.reload();
 }
 </script>

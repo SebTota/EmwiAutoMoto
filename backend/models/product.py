@@ -5,6 +5,11 @@ from backend.models.image import Image
 from tortoise import fields, models
 
 
+class ProductType(str, enum.Enum):
+    MOTOCYKL = 'Motocykl'
+    TRAKTOR = 'Traktor'
+
+
 class ProductStatus(str, enum.Enum):
     DRAFT = 'DRAFT'
     FOR_SALE = 'FOR_SALE'
@@ -13,15 +18,22 @@ class ProductStatus(str, enum.Enum):
     DELETED = 'DELETED'
 
 
+class OdometerType(str, enum.Enum):
+    MIL = 'Mil'
+    GODZIN = 'Godzin'
+
+
 class Product(models.Model):
     id = fields.CharField(max_length=12, pk=True, index=True)
     date_created = fields.DatetimeField(auto_now_add=True, index=True)
     date_last_updated = fields.DatetimeField(auto_now=True, index=True)
+    type = fields.CharEnumField(ProductType, index=True, default=ProductType.MOTOCYKL)
     year = fields.IntField()
     make = fields.CharField(max_length=100)
     model = fields.CharField(max_length=100)
     vin = fields.CharField(max_length=100, null=True)
-    odometer_miles = fields.IntField()
+    odometer = fields.IntField()
+    odometer_type = fields.CharEnumField(OdometerType, defualt=OdometerType.MIL)
     color = fields.CharField(max_length=100)
     price = fields.IntField(null=True)
     description = fields.TextField(null=True)
@@ -30,3 +42,7 @@ class Product(models.Model):
     medium_thumbnail_url = fields.CharField(max_length=512)
     images = fields.ReverseRelation[Image]
 
+    # TODO: Create a complex index for querying on the following fields:
+    #  - type
+    #  - date created desc (for pagination)
+    #  - status

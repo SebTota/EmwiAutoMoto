@@ -6,6 +6,7 @@ import type { IProductCreate, IProductList, IProductWithImages } from "@/interfa
 import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IImage } from "@/interfaces/image";
+import type { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const client = axios.create({ baseURL: apiUrl });
 
@@ -54,9 +55,15 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getProducts(page: number, status: ProductStatusEnum[], token: string | null = null) {
+  async getProducts(
+    productType: ProductTypeEnum,
+    page: number,
+    status: ProductStatusEnum[],
+    token: string | null = null
+  ) {
     const params = new URLSearchParams();
     params.append("page", page.toString());
+    params.append("product_type", productType);
     status.forEach((s) => {
       params.append("show_status", s);
     });

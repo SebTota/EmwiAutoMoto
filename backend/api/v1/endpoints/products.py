@@ -9,6 +9,7 @@ from PIL import Image as PIL_Image
 
 from backend import crud
 from backend.models import User, ProductStatus, Product
+from backend.models.product import ProductType
 from backend.schemas import ProductCreate, ProductReadWithImages, ProductReadNoImages, ProductList, \
     ImageRead
 from backend.exceptions import FileUploadError
@@ -20,6 +21,7 @@ router = APIRouter()
 
 @router.get("", response_model=ProductList)
 async def read_items(
+        product_type: ProductType = ProductType.MOTOCYKL,
         show_status: List[ProductStatus] = Query([ProductStatus.FOR_SALE]),
         page: int = 1,
         limit: int = 12,
@@ -41,7 +43,10 @@ async def read_items(
     offset: int = (page - 1) * limit
 
     # Add 1 to the limit to see if there is a next page.
-    items: List[ProductReadNoImages] = await crud.product.get_multi_with_filters(offset, limit + 1, show_status)
+    items: List[ProductReadNoImages] = await crud.product.get_multi_with_filters(product_type,
+                                                                                 offset,
+                                                                                 limit + 1,
+                                                                                 show_status)
 
     if not items:
         return ProductList(page=page,

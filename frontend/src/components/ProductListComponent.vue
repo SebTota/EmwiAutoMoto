@@ -34,7 +34,7 @@
           {{ statusToPolish(product.status) }}
         </p>
         <p class="mt-1 text-medium justify-end text-gray-500 dark:text-gray-400">
-          {{ product.odometer_miles.toLocaleString("pl-PL") }} mil
+          {{ product.odometer.toLocaleString("pl-PL") }} {{ product.odometer_type }}
         </p>
       </div>
     </div>

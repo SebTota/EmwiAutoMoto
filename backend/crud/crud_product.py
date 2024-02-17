@@ -3,7 +3,7 @@ from tortoise import transactions
 from tortoise.queryset import QuerySet
 
 from backend.models import Image
-from backend.models.product import Product, ProductStatus
+from backend.models.product import Product, ProductStatus, ProductType
 from backend.schemas import ImageRead, ProductReadWithImages, ProductReadNoImages, ImageCreate
 from backend.schemas.product import ProductCreate
 from backend.utils import get_random_alphanumeric_string
@@ -94,8 +94,9 @@ async def update(db_obj: Product, new_obj: ProductCreate) -> Optional[ProductRea
     return await get(db_obj.id)
 
 
-async def get_multi_with_filters(offset: int, limit: int, show_status: [ProductStatus]) -> List[ProductReadNoImages]:
-    query: QuerySet = (Product.filter(status__in=show_status)
+async def get_multi_with_filters(product_type: ProductType, offset: int, limit: int, show_status: [ProductStatus]) -> List[ProductReadNoImages]:
+    query: QuerySet = (Product.filter(type=product_type)
+                       .filter(status__in=show_status)
                        .offset(offset)
                        .limit(limit)
                        .order_by("-date_created"))
