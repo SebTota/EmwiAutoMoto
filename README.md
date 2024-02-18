@@ -3,14 +3,16 @@
 This is a website for the EMWI Auto Moto company. 
 
 ## Prod Setup
-1. Create a file: `/etc/emwiautomoto.env`
+1. Create a file in `/etc/emwiautomoto.env` to store the application environment variables.
+
+File content:
 ```bash
 API_CREDENTIALS_GENERATOR_SECRET_KEY=secretKeyOne
 API_CREDENTIALS_REFRESH_TOKEN_SECRET_KEY=secretKeyTwo
 
 DATABASE_HOST=host
 DATABASE_USER=user
-DATABASE_PASSWORD=passowrd
+DATABASE_PASSWORD=password
 DATABASE=database
 
 BUCKET_STORAGE_BUCKET_NAME=bucketname
@@ -51,7 +53,7 @@ StandardError=file:/root/prod_logs/error/error.log
 WantedBy=multi-user.target
 ```
 
-If you add this file, OR make any changes to thsi file, you must run the following command:
+If you add this file, OR make any changes to this file, you must run the following command:
 ```bash
 systemctl daemon-reload
 systemctl restart emwiautomoto
