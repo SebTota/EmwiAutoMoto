@@ -5,7 +5,7 @@
         <div class="text-center relative z-0">
           <section aria-labelledby="filter-heading" class="border-b border-gray-200 pb-2">
             <div class="flex items-center justify-between">
-              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">Motocykle</h2>
+              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">{{type}}</h2>
 
               <div class="flex items-center">
                 <label for="statusFilter" class="text-sm font-medium text-gray-900 hidden sm:block">Pokaż:</label>
