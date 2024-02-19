@@ -5,7 +5,7 @@
         <div class="text-center relative z-0">
           <section aria-labelledby="filter-heading" class="border-b border-gray-200 pb-2">
             <div class="flex items-center justify-between">
-              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">{{type}}</h2>
+              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">{{ getPageHeader() }}</h2>
 
               <div class="flex items-center">
                 <label for="statusFilter" class="text-sm font-medium text-gray-900 hidden sm:block">Pokaż:</label>
@@ -79,17 +79,17 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from "vue";
+import { onMounted, ref } from 'vue'
 
-import type { IProductList } from "@/interfaces/product";
-import { useMainStore } from "@/stores/state";
-import router from "@/router";
-import ProductListPagination from "@/components/ProductListPagination.vue";
-import { useRoute } from "vue-router";
-import { storeToRefs } from "pinia";
-import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import ProductListComponent from "@/components/ProductListComponent.vue";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import type { IProductList } from '@/interfaces/product'
+import { useMainStore } from '@/stores/state'
+import router from '@/router'
+import ProductListPagination from '@/components/ProductListPagination.vue'
+import { useRoute } from 'vue-router'
+import { storeToRefs } from 'pinia'
+import { ProductStatusEnum } from '@/enums/productStatusEnum'
+import ProductListComponent from '@/components/ProductListComponent.vue'
+import { ProductTypeEnum } from '@/enums/productTypeEnum'
 
 const route = useRoute();
 const type = ref<ProductTypeEnum>(
@@ -121,6 +121,16 @@ mainStore.actionCheckLoggedIn().then(() => {
 onMounted(() => {
   getProductList(page.value);
 });
+
+function getPageHeader() {
+  if (type.value === ProductTypeEnum.MOTOCYKL) {
+    return "Motocykle";
+  } else if (type.value === ProductTypeEnum.TRAKTOR) {
+    return "Traktory Ogrodowe";
+  } else {
+    return "Produkty";
+  }
+}
 
 function changeStatus() {
   router.push({
