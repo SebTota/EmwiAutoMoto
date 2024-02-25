@@ -26,17 +26,18 @@
     <div class="max-w-2xl mx-auto py-2 sm:px-5 lg:max-w-7xl">
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
-        <TabGroup as="div" class="flex flex-col grow col-span-3 grid-rows-1">
+        <div class="flex flex-col grow col-span-3 grid-rows-1">
           <!-- Image View -->
-          <TabPanels class="w-full aspect-w-5 aspect-h-3">
-            <TabPanel
-              v-for="image in product.images"
+          <div class="w-full aspect-w-5 aspect-h-3">
+            <div
+              v-for="(image, index) in product.images"
               :key="image.medium_thumbnail_url"
               @click="openModal(image.medium_thumbnail_url)"
+              v-show="selectedImage === index"
             >
               <img :src="image.medium_thumbnail_url" class="w-full h-full object-center object-cover sm:rounded-lg" />
-            </TabPanel>
-          </TabPanels>
+            </div>
+          </div>
 
           <!-- Modal View -->
           <div
@@ -59,27 +60,27 @@
 
           <!-- Image selector -->
           <div class="mt-4 w-full mx-auto sm:block">
-            <TabList class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
-              <Tab
-                v-for="image in product.images"
+            <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3">
+              <div
+                v-for="(image, index) in product.images"
                 :key="image.thumbnail_url"
                 class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 dark:text-gray-400 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
-                v-slot="{ selected }"
+                @click="selectedImage = index"
               >
                 <span class="absolute inset-0 rounded-md overflow-hidden">
                   <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
                 </span>
                 <span
                   :class="[
-                    selected ? 'ring-indigo-500' : 'ring-transparent',
+                    selectedImage === index ? 'ring-indigo-500' : 'ring-transparent',
                     'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none',
                   ]"
                   aria-hidden="true"
                 />
-              </Tab>
-            </TabList>
+              </div>
+            </div>
           </div>
-        </TabGroup>
+        </div>
 
         <!-- Product info -->
         <div class="mt-8 lg:mt-0 col-span-2">
@@ -184,7 +185,6 @@
 
 <script setup lang="ts">
 import { ref } from "vue";
-import { Tab, TabGroup, TabList, TabPanel, TabPanels } from "@headlessui/vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
 import type { IProductWithImages } from "@/interfaces/product";
@@ -200,9 +200,14 @@ const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
 let product: IProductWithImages;
+let selectedImage = ref(0);
 
 const modalOpen = ref(false);
 const modalImageUrl = ref("");
+
+mainStore.actionCheckLoggedIn().then(() => {
+  mainStateLoaded.value = true;
+});
 
 function openModal(imageUrl: string) {
   modalImageUrl.value = imageUrl;
@@ -212,10 +217,6 @@ function openModal(imageUrl: string) {
 function closeModal() {
   modalOpen.value = false;
 }
-
-mainStore.actionCheckLoggedIn().then(() => {
-  mainStateLoaded.value = true;
-});
 
 if (typeof productId === "string") {
   mainStore
