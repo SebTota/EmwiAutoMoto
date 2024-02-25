@@ -3,7 +3,7 @@
     <!-- Image View -->
     <div>
       <div class="w-full h-full relative group">
-        <div class="aspect-w-5 aspect-h-3">
+        <div class="aspect-w-5 aspect-h-4">
           <div
             v-for="(image, index) in images"
             :key="image.medium_thumbnail_url"
@@ -94,7 +94,7 @@
         <div
           v-for="(image, index) in images"
           :key="image.thumbnail_url"
-          class="relative h-24 bg-white rounded-md flex items-center justify-center text-sm font-medium uppercase text-gray-900 dark:text-gray-400 cursor-pointer hover:bg-gray-50 focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
+          class="relative h-24 bg-white rounded-md flex items-center justify-center cursor-pointer focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
           @click="selectedImage = index"
         >
           <span class="absolute inset-0 rounded-md overflow-hidden">
