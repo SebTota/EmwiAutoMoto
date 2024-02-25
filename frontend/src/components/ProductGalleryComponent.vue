@@ -19,7 +19,7 @@
         </div>
 
         <button
-          class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
+          class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-50 group-hover:opacity-100 transition-opacity drop-shadow-lg"
           @click="selectedImage = (selectedImage - 1 + images.length) % images.length"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
@@ -28,7 +28,7 @@
         </button>
 
         <button
-          class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
+          class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-50 group-hover:opacity-100 transition-opacity drop-shadow-lg"
           @click="selectedImage = (selectedImage + 1) % images.length"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
