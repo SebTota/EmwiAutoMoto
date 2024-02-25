@@ -1,6 +1,6 @@
 <template>
   <div class="relative bg-white dark:text-gray-400 dark:bg-gray-900">
-    <div class="mx-auto max-w-2xl sm:px-5 lg:max-w-7xl">
+    <div class="mx-auto sm:px-5">
       <div>
         <div class="text-center relative z-0">
           <section aria-labelledby="filter-heading" class="border-b border-gray-200 pb-2">
@@ -30,7 +30,7 @@
       <LoadingSpinner v-if="loadingRequest" class="pt-4" />
 
       <div v-if="!loadingRequest && productListResponse">
-        <div class="mt-4 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-1 lg:grid-cols-2 xl:gap-x-8">
+        <div class="mt-4 grid gap-y-10 gap-x-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 xl:gap-x-8">
           <div
             v-for="product in productListResponse.products"
             :key="product.id"

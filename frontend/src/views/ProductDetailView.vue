@@ -11,14 +11,18 @@
             &#8592; Wróć
           </router-link>
 
-          <h1 class="text-3xl font-extrabold mt-2 tracking-tight text-gray-900 dark:text-gray-400">
-            {{ product.year + " " + product.make + " " + product.model }}
+          <h1 class="text-2xl font-semibold mt-2 tracking-tight text-gray-900 dark:text-gray-400">
+            {{ product.year + " " + product.make }}
+          </h1>
+
+          <h1 class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-400">
+            {{ product.model }}
           </h1>
 
           <!-- Price -->
           <div v-if="product.price && product.status !== ProductStatusEnum.RESERVED" class="mt-1">
             <h2 class="sr-only">Price</h2>
-            <p class="text-2xl text-gray-900 dark:text-gray-400">{{ product.price.toLocaleString("pl-PL") }} zł</p>
+            <p class="text-md text-gray-900 dark:text-gray-400">{{ product.price.toLocaleString("pl-PL") }} zł</p>
           </div>
 
           <div>
