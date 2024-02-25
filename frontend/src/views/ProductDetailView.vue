@@ -46,7 +46,7 @@
               </div>
 
               <button
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
                 @click="selectedImage = (selectedImage - 1 + product.images.length) % product.images.length"
               >
                 <svg
@@ -61,7 +61,7 @@
               </button>
 
               <button
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
+                class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
                 @click="selectedImage = (selectedImage + 1) % product.images.length"
               >
                 <svg
@@ -92,10 +92,10 @@
               </div>
 
               <div class="p-2 md:p-8 relative group">
-                <img :src="getProductImage()" @click.stop="" class="w-full h-full object-contain" />
+                <img :src="getProductImage()" @click.stop="" class="w-full h-full object-contain rounded-md drop-shadow-lg" />
 
                 <button
-                  class="absolute top-1/2 left-2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md drop-shadow-lg"
+                  class="absolute top-1/2 left-2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md drop-shadow-lg"
                   @click.stop="selectedImage = (selectedImage - 1 + product.images.length) % product.images.length"
                 >
                   <svg
@@ -110,7 +110,7 @@
                 </button>
 
                 <button
-                  class="absolute top-1/2 right-2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md drop-shadow-lg"
+                  class="absolute top-1/2 right-2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md drop-shadow-lg"
                   @click.stop="selectedImage = (selectedImage + 1) % product.images.length"
                 >
                   <svg
