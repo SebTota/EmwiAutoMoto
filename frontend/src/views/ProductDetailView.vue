@@ -28,14 +28,52 @@
         <!-- Image gallery -->
         <div class="flex flex-col grow col-span-3 grid-rows-1">
           <!-- Image View -->
-          <div class="w-full aspect-w-5 aspect-h-3">
-            <div
-              v-for="(image, index) in product.images"
-              :key="image.medium_thumbnail_url"
-              @click="openModal(image.medium_thumbnail_url)"
-              v-show="selectedImage === index"
-            >
-              <img :src="image.medium_thumbnail_url" class="w-full h-full object-center object-cover sm:rounded-lg" />
+          <div>
+            <div class="w-full h-full relative group">
+              <div class="aspect-w-5 aspect-h-3">
+                <div
+                  v-for="(image, index) in product.images"
+                  :key="image.medium_thumbnail_url"
+                  v-show="selectedImage === index"
+                >
+                  <img
+                    :src="image.medium_thumbnail_url"
+                    @click="openModal(image.medium_thumbnail_url)"
+                    class="w-full h-full object-center object-cover sm:rounded-lg"
+                    alt="Product Image"
+                  />
+                </div>
+              </div>
+
+              <button
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                @click="selectedImage = (selectedImage - 1 + product.images.length) % product.images.length"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="h-6 w-6"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                </svg>
+              </button>
+
+              <button
+                class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                @click="selectedImage = (selectedImage + 1) % product.images.length"
+              >
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke="currentColor"
+                  class="h-6 w-6"
+                >
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                </svg>
+              </button>
             </div>
           </div>
 
@@ -217,7 +255,6 @@ function openModal(imageUrl: string) {
 function closeModal() {
   modalOpen.value = false;
 }
-
 
 if (typeof productId === "string") {
   mainStore
