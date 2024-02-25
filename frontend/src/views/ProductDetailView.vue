@@ -45,7 +45,7 @@
             class="fixed inset-0 overflow-y-auto z-10 w-full h-full backdrop-grayscale backdrop-blur bg-black bg-opacity-80"
           >
             <div class="flex items-center justify-center min-h-screen w-full h-full">
-              <div class="p-8">
+              <div class="p-2 md:p-8">
                 <div
                   class="absolute top-0 right-0 p-4 cursor-pointer text-white text-l font-semibold"
                   @click="closeModal"
