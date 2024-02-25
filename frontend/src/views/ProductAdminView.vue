@@ -162,7 +162,7 @@
             </div>
 
             <div>
-              <ImageGallery :images="images" :onDelete="deleteImage" />
+              <DraggableImageGalleryComponent :images="images" :onDelete="deleteImage" />
               <label class="block text-sm font-medium text-gray-700">Photo</label>
               <PhotoHandlerComponent @newFileUploaded="newFileUpload" />
             </div>
@@ -196,7 +196,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
 import type { IImage } from "@/interfaces/image";
-import ImageGallery from "@/components/ImageGallery.vue";
+import DraggableImageGalleryComponent from "@/components/DraggableImageGalleryComponent.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import { OdometerTypeEnum } from "@/enums/odometerTypeEnum";
 
