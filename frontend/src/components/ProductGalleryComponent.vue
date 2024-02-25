@@ -4,11 +4,7 @@
     <div>
       <div class="w-full h-full relative group">
         <div class="aspect-w-5 aspect-h-4">
-          <div
-            v-for="(image, index) in images"
-            :key="image.medium_thumbnail_url"
-            v-show="selectedImage === index"
-          >
+          <div v-for="(image, index) in images" :key="image.medium_thumbnail_url" v-show="selectedImageIndex === index">
             <img
               :src="image.medium_thumbnail_url"
               @click="modalOpen = true"
@@ -20,7 +16,7 @@
 
         <button
           class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-50 group-hover:opacity-100 transition-opacity drop-shadow-lg"
-          @click="selectedImage = (selectedImage - 1 + images.length) % images.length"
+          @click="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
@@ -29,12 +25,16 @@
 
         <button
           class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md sm:opacity-50 group-hover:opacity-100 transition-opacity drop-shadow-lg"
-          @click="selectedImage = (selectedImage + 1) % images.length"
+          @click="selectedImageIndex = (selectedImageIndex + 1) % images.length"
         >
           <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor" class="h-6 w-6">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
           </svg>
         </button>
+
+        <div class="absolute right-0 bottom-0 m-1 p-2 bg-white rounded-md drop-shadow-lg">
+          <p class="text-xs">{{ selectedImageIndex + 1 + " / " + images.length }}</p>
+        </div>
       </div>
     </div>
 
@@ -57,7 +57,7 @@
 
           <button
             class="absolute top-1/2 left-2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md drop-shadow-lg"
-            @click.stop="selectedImage = (selectedImage - 1 + images.length) % images.length"
+            @click.stop="selectedImageIndex = (selectedImageIndex - 1 + images.length) % images.length"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -72,7 +72,7 @@
 
           <button
             class="absolute top-1/2 right-2 transform -translate-y-1/2 m-1 p-2 bg-white hover:bg-gray-800 hover:text-white rounded-md drop-shadow-lg"
-            @click.stop="selectedImage = (selectedImage + 1) % images.length"
+            @click.stop="selectedImageIndex = (selectedImageIndex + 1) % images.length"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -84,6 +84,10 @@
               <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
             </svg>
           </button>
+
+          <div class="absolute right-0 bottom-0 m-3 md:m-9 p-2 bg-white rounded-md drop-shadow-lg">
+            <p class="text-xs">{{ selectedImageIndex + 1 + " / " + images.length }}</p>
+          </div>
         </div>
       </div>
     </div>
@@ -95,14 +99,14 @@
           v-for="(image, index) in images"
           :key="image.thumbnail_url"
           class="relative h-24 bg-white rounded-md flex items-center justify-center cursor-pointer focus:outline-none focus:ring focus:ring-offset-4 focus:ring-opacity-50"
-          @click="selectedImage = index"
+          @click="selectedImageIndex = index"
         >
           <span class="absolute inset-0 rounded-md overflow-hidden">
             <img :src="image.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
           </span>
           <span
             :class="[
-              selectedImage === index ? 'ring-indigo-500' : 'ring-transparent',
+              selectedImageIndex === index ? 'ring-indigo-500' : 'ring-transparent',
               'absolute inset-0 rounded-md ring-2 ring-offset-2 pointer-events-none',
             ]"
             aria-hidden="true"
@@ -120,10 +124,10 @@ const props = defineProps({
   images: { type: Array as () => IImage[], required: true },
 });
 
-let selectedImage = ref(0);
+let selectedImageIndex = ref(0);
 const modalOpen = ref(false);
 
 function getProductImage() {
-  return props.images[selectedImage.value].medium_thumbnail_url;
+  return props.images[selectedImageIndex.value].medium_thumbnail_url;
 }
 </script>
