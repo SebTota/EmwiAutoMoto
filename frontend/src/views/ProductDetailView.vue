@@ -218,6 +218,7 @@ function closeModal() {
   modalOpen.value = false;
 }
 
+
 if (typeof productId === "string") {
   mainStore
     .getProduct(productId)
