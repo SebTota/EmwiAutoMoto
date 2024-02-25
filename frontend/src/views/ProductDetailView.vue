@@ -38,7 +38,7 @@
                 >
                   <img
                     :src="image.medium_thumbnail_url"
-                    @click="openModal(image.medium_thumbnail_url)"
+                    @click="modalOpen = true"
                     class="w-full h-full object-center object-cover sm:rounded-lg"
                     alt="Product Image"
                   />
@@ -46,7 +46,7 @@
               </div>
 
               <button
-                class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                class="absolute left-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
                 @click="selectedImage = (selectedImage - 1 + product.images.length) % product.images.length"
               >
                 <svg
@@ -61,7 +61,7 @@
               </button>
 
               <button
-                class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md opacity-0 group-hover:opacity-100 transition-opacity"
+                class="absolute right-0 top-1/2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md sm:opacity-0 group-hover:opacity-100 transition-opacity drop-shadow-lg"
                 @click="selectedImage = (selectedImage + 1) % product.images.length"
               >
                 <svg
@@ -79,19 +79,50 @@
 
           <!-- Modal View -->
           <div
-            v-if="modalOpen"
-            @click="closeModal"
-            class="fixed inset-0 overflow-y-auto z-10 w-full h-full backdrop-grayscale backdrop-blur bg-black bg-opacity-80"
+            v-show="modalOpen"
+            @click="modalOpen = false"
+            class="fixed inset-0 overflow-y-auto z-10 w-full h-full bg-stone-100"
           >
             <div class="flex items-center justify-center min-h-screen w-full h-full">
-              <div class="p-2 md:p-8">
-                <div
-                  class="absolute top-0 right-0 p-4 cursor-pointer text-white text-l font-semibold"
-                  @click="closeModal"
+              <div
+                class="absolute top-0 right-0 p-4 cursor-pointer text-black text-l font-semibold"
+                @click.stop="modalOpen = false"
+              >
+                Zamknij
+              </div>
+
+              <div class="p-2 md:p-8 relative group">
+                <img :src="getProductImage()" @click.stop="" class="w-full h-full object-contain" />
+
+                <button
+                  class="absolute top-1/2 left-2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md drop-shadow-lg"
+                  @click.stop="selectedImage = (selectedImage - 1 + product.images.length) % product.images.length"
                 >
-                  Zamknij
-                </div>
-                <img :src="modalImageUrl" class="w-full h-full object-contain" />
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="h-6 w-6"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+                  </svg>
+                </button>
+
+                <button
+                  class="absolute top-1/2 right-2 transform -translate-y-1/2 m-1 bg-white p-2 rounded-md drop-shadow-lg"
+                  @click.stop="selectedImage = (selectedImage + 1) % product.images.length"
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    stroke="currentColor"
+                    class="h-6 w-6"
+                  >
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+                  </svg>
+                </button>
               </div>
             </div>
           </div>
@@ -239,21 +270,14 @@ const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
 let product: IProductWithImages;
 let selectedImage = ref(0);
-
 const modalOpen = ref(false);
-const modalImageUrl = ref("");
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 });
 
-function openModal(imageUrl: string) {
-  modalImageUrl.value = imageUrl;
-  modalOpen.value = true;
-}
-
-function closeModal() {
-  modalOpen.value = false;
+function getProductImage() {
+  return product.images[selectedImage.value].medium_thumbnail_url;
 }
 
 if (typeof productId === "string") {
