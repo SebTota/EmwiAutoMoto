@@ -14,7 +14,10 @@ establish_request_detail_logging(app)
 
 app.add_middleware(
         CORSMiddleware,
-        allow_origins=["http://localhost", "http://localhost:5173", "https://emwiautomoto.sebtota.com"],
+        allow_origins=["http://localhost",
+                       "http://localhost:5173",
+                       "https://emwiautomoto.sebtota.com",
+                       "https://emwiautomoto.pl"],
         allow_credentials=True,
         allow_methods=["*"],
         allow_headers=["*"],
