@@ -46,10 +46,14 @@
     >
       <div class="flex items-center justify-center min-h-screen w-full h-full">
         <div
-          class="absolute top-0 right-0 p-4 cursor-pointer text-black text-l font-semibold"
+          class="absolute top-0 right-0 m-2 md:m-12 p-2 cursor-pointer bg-white hover:bg-gray-800 hover:text-white rounded-md drop-shadow-lg"
           @click.stop="modalOpen = false"
         >
-          Zamknij
+          <div
+            class="p-2 text-l font-semibold"
+          >
+            Zamknij
+          </div>
         </div>
 
         <div class="p-2 md:p-8 relative group">
