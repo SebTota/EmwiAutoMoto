@@ -4,7 +4,8 @@
     <div class="max-w-2xl mx-auto py-2 sm:px-5 lg:max-w-7xl">
       <div class="lg:grid lg:grid-cols-5 lg:gap-x-8 lg:items-start">
         <!-- Image gallery -->
-        <ProductGalleryComponent :images="product.images" />
+        <ProductGalleryComponent :media="product.media" />
+
         <!-- Product info -->
         <div class="mt-8 lg:mt-0 col-span-2">
           <router-link :to="getGoBackLink()" class="text-sm tracking-tight text-gray-900 dark:text-gray-400">
@@ -114,7 +115,7 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
-import type { IProductWithImages } from "@/interfaces/product";
+import type { IProductWithContent } from "@/interfaces/product";
 import { colorToPolish } from "@/utils/colors";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
@@ -128,7 +129,7 @@ const { isLoggedIn } = storeToRefs(mainStore);
 const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
-let product: IProductWithImages;
+let product: IProductWithContent;
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;

@@ -5,6 +5,7 @@
       <form @submit.prevent="submit">
         <div class="sm:overflow-hidden sm:rounded-md">
           <div class="space-y-6 bg-white py-5 sm:p-6">
+            <p class="block text-xl font-medium text-gray-700">Informacje o produkcie</p>
             <div class="grid grid-cols-6 gap-6">
               <div class="col-span-6 sm:col-span-3 md:col-span-2">
                 <label for="type" class="block text-sm font-medium text-gray-700">Produkt</label>
@@ -139,11 +140,41 @@
               </div>
             </div>
 
+            <!-- Video component -->
             <div>
-              <DraggableImageGalleryComponent :images="images" :onDelete="deleteImage" />
-              <label class="block text-sm font-medium text-gray-700">Photo</label>
+              <!--              <div v-if="videos && videos.length > 0">-->
+              <!--                <div class="max-w-2xl max-h-2xl">-->
+              <!--                  <iframe :src="videos[0].url" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
+              <!--                </div>-->
+              <!--              </div>-->
+            </div>
+
+            <!-- Photo component -->
+            <div>
+              <p class="block text-xl font-medium text-gray-700">Media</p>
+              <label class="block text-sm font-medium text-gray-700">YouTube Wideo</label>
+              <div class="flex items-center py-2">
+                <input
+                  v-model="youtubeLink"
+                  class="mr-2 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
+                  type="text"
+                  placeholder="https://youtube.com"
+                />
+                <button
+                  class="flex-shrink-0 rounded-md bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  type="button"
+                  @click="addVideo"
+                >
+                  Dodaj wideo
+                </button>
+              </div>
+              <div v-if="youtubeLinkError" class="text-sm mb-0 w-100 text-red-400 text-right">
+                <p>{{ youtubeLinkError }}</p>
+              </div>
+              <label class="block text-sm font-medium text-gray-700">Zdjęcia</label>
               <PhotoHandlerComponent @newFileUploaded="newFileUpload" />
             </div>
+            <DraggableMediaGalleryComponent :media="media" :on-delete-media="deleteImage" />
           </div>
 
           <div v-if="showError()" class="text-sm mb-0 w-100 text-red-400 text-right">
@@ -169,22 +200,25 @@ import router from "@/router";
 import { ProductColor } from "@/enums/productColor";
 import { colorToPolish } from "@/utils/colors";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
-import type { IProduct, IProductCreate, IProductWithImages } from "@/interfaces/product";
+import type { IProduct, IProductCreate, IProductWithContent } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
-import type { IImage } from "@/interfaces/image";
-import DraggableImageGalleryComponent from "@/components/DraggableImageGalleryComponent.vue";
+import type { IMedia } from "@/interfaces/media";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import { OdometerTypeEnum } from "@/enums/odometerTypeEnum";
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
+import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 
+const colors: string[] = Object.values(ProductColor);
 const route = useRoute();
 const mainStore = useMainStore();
 const loadingRequest = ref(true);
-const error = ref("");
 
-const colors: string[] = Object.values(ProductColor);
+const error = ref("");
+const youtubeLinkError = ref("");
+const youtubeLink = ref("");
 
 const type = ref();
 const year = ref();
@@ -203,7 +237,7 @@ watch(type, (newType) => {
 });
 
 const productId: any = route.params.id;
-const images = ref<IImage[]>([]);
+const media = ref<IMedia[]>([]);
 
 async function onStartUp() {
   if (isAddNew()) {
@@ -211,7 +245,7 @@ async function onStartUp() {
     loadingRequest.value = false;
   } else {
     try {
-      const product: IProductWithImages = await mainStore.getProduct(productId);
+      const product: IProductWithContent = await mainStore.getProduct(productId);
       type.value = product.type;
       year.value = product.year;
       make.value = product.make;
@@ -222,7 +256,7 @@ async function onStartUp() {
       price.value = product.price;
       status.value = product.status;
       description.value = product.description;
-      images.value = product.images;
+      media.value = product.media;
       loadingRequest.value = false;
     } catch (err: any) {
       await router.push({ name: "productList" });
@@ -276,7 +310,7 @@ async function createProduct() {
     price: price.value ? price.value : null,
     description: description.value,
     status: ProductStatusEnum.FOR_SALE,
-    images: images.value,
+    media: media.value,
   };
 
   try {
@@ -307,7 +341,7 @@ async function updateProduct() {
     price: price.value ? price.value : null,
     description: description.value,
     status: status.value,
-    images: images.value,
+    media: media.value,
   };
 
   try {
@@ -329,9 +363,9 @@ async function newFileUpload(files: FileList) {
   loadingRequest.value = true;
   try {
     console.log("Uploading new image...");
-    const newImages: [IImage] = await mainStore.uploadProductImage(files);
+    const newImages: [IMedia] = await mainStore.uploadProductImage(files);
     for (const newImage of newImages) {
-      images.value.push(newImage);
+      media.value.push(newImage);
     }
     loadingRequest.value = false;
   } catch (err: any) {
@@ -343,11 +377,54 @@ async function newFileUpload(files: FileList) {
 }
 
 async function deleteImage(imageUrl: string) {
-  for (let i = 0; i < images.value.length; i++) {
-    if (images.value[i].image_url === imageUrl) {
-      images.value.splice(i, 1);
+  for (let i = 0; i < media.value.length; i++) {
+    if (media.value[i].url === imageUrl) {
+      media.value.splice(i, 1);
       break;
     }
+  }
+}
+
+function addVideo() {
+  youtubeLinkError.value = "";
+
+  try {
+    const videoId: string = extractYouTubeVideoIdFromLink(youtubeLink.value);
+    console.log("Extracted YouTube video id: ", videoId);
+
+    const video: IMedia = generateYouTubeVideoObject(videoId);
+    console.log("Generated YouTube video object: ", video);
+
+    media.value.push(video);
+    youtubeLink.value = ""; // Reset input form
+  } catch (e) {
+    console.error("Failed to extract YouTube video id.", e);
+    youtubeLinkError.value = "Nie udało się wyodrębnić identyfikatora wideo YouTube z linku.";
+    return;
+  }
+}
+
+function generateYouTubeVideoObject(videoId: string): IMedia {
+  const videoUrl: string = `https://www.youtube-nocookie.com/embed/${videoId}`;
+  const baseThumbnailUrl: string = `https://img.youtube.com/vi/${videoId}`;
+
+  return {
+    type: MediaTypeEnum.YOUTUBE_VIDEO,
+    url: videoUrl,
+    // small_thumbnail_url: `${baseThumbnailUrl}/default.jpg`,
+    thumbnail_url: `${baseThumbnailUrl}/mqdefault.jpg`,
+    medium_thumbnail_url: `${baseThumbnailUrl}/hqdefault.jpg`,
+    // large_thumbnail_url: `${baseThumbnailUrl}/maxresdefault.jpg`,
+  };
+}
+
+function extractYouTubeVideoIdFromLink(url: string): string {
+  const regExp = /^.*(youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/;
+  const match = url.match(regExp);
+  if (match && match[2].length == 11) {
+    return match[2];
+  } else {
+    throw Error("Failed to extract YouTube video id from link.");
   }
 }
 </script>

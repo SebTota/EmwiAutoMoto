@@ -1,4 +1,4 @@
-import type { IImage } from "@/interfaces/image";
+import type { IMedia } from "@/interfaces/media";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { ProductTypeEnum } from "@/enums/productTypeEnum";
 import type { OdometerTypeEnum } from "@/enums/odometerTypeEnum";
@@ -22,8 +22,8 @@ export interface IProduct {
   medium_thumbnail_url: string;
 }
 
-export interface IProductWithImages extends IProduct {
-  images: IImage[];
+export interface IProductWithContent extends IProduct {
+  media: IMedia[];
 }
 
 export interface IProductCreate {
@@ -38,7 +38,7 @@ export interface IProductCreate {
   price: number | null;
   description: string | null;
   status: ProductStatusEnum;
-  images: IImage[];
+  media: IMedia[];
 }
 
 export interface IProductList {

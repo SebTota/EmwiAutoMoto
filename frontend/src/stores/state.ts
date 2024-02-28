@@ -5,7 +5,7 @@ import { getLocalToken, removeLocalToken, saveLocalToken } from "@/utils/token";
 import router from "@/router";
 import type { IToken } from "@/interfaces/token";
 import axios from "axios";
-import type { IProductCreate, IProductList, IProductWithImages } from "@/interfaces/product";
+import type { IProductCreate, IProductList, IProductWithContent } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { ProductTypeEnum } from "@/enums/productTypeEnum";
 
@@ -190,7 +190,7 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product list.");
       }
     },
-    async getProduct(id: string): Promise<IProductWithImages> {
+    async getProduct(id: string): Promise<IProductWithContent> {
       try {
         const response = await api.getProduct(id);
         return response.data;
@@ -199,7 +199,7 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product details.");
       }
     },
-    async createProducts(product: IProductCreate): Promise<IProductWithImages> {
+    async createProducts(product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
           const response = await api.createProduct(this.token.access_token, product);
@@ -214,7 +214,7 @@ export const useMainStore = defineStore("mainState", {
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async updateProducts(productId: string, product: IProductCreate): Promise<IProductWithImages> {
+    async updateProducts(productId: string, product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
           const response = await api.updateProduct(this.token.access_token, productId, product);

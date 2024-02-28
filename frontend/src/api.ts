@@ -2,10 +2,10 @@ import axios from "axios";
 import { apiUrl } from "@/env";
 import type { IUser } from "@/interfaces/user";
 import type { IToken } from "@/interfaces/token";
-import type { IProductCreate, IProductList, IProductWithImages } from "@/interfaces/product";
+import type { IProductCreate, IProductList, IProductWithContent } from "@/interfaces/product";
 import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
-import type { IImage } from "@/interfaces/image";
+import type { IMedia } from "@/interfaces/media";
 import type { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const client = axios.create({ baseURL: apiUrl });
@@ -73,20 +73,20 @@ export const api = {
     return client.get<IProductList>(`${apiUrl}/api/v1/products`, config);
   },
   async getProduct(id: string) {
-    return client.get<IProductWithImages>(`${apiUrl}/api/v1/products/${id}`);
+    return client.get<IProductWithContent>(`${apiUrl}/api/v1/products/${id}`);
   },
   async createProduct(token: string, product: IProductCreate) {
-    return client.post<IProductWithImages>(`${apiUrl}/api/v1/products`, product, authHeaders(token));
+    return client.post<IProductWithContent>(`${apiUrl}/api/v1/products`, product, authHeaders(token));
   },
   async updateProduct(token: string, productId: string, product: IProductCreate) {
-    return client.put<IProductWithImages>(`${apiUrl}/api/v1/products/${productId}`, product, authHeaders(token));
+    return client.put<IProductWithContent>(`${apiUrl}/api/v1/products/${productId}`, product, authHeaders(token));
   },
   async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();
     Array.from(files).forEach((file, index) => {
       formData.append("files", file);
     });
-    return client.post<[IImage]>(`${apiUrl}/api/v1/products/image`, formData, authHeaders(token));
+    return client.post<[IMedia]>(`${apiUrl}/api/v1/products/image`, formData, authHeaders(token));
   },
   async sendEmail(first_name: string, last_name: string, email: string, phone_number: string, email_body: string) {
     const body = {
