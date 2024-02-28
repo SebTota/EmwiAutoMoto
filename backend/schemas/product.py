@@ -4,7 +4,7 @@ from typing import Optional, List
 from pydantic import BaseModel
 
 from backend.models.product import ProductStatus, ProductType, OdometerType
-from backend.schemas.image import ImageRead, ImageCreate
+from backend.schemas.media import MediaRead, MediaCreate
 
 
 class ProductBase(BaseModel):
@@ -24,13 +24,13 @@ class ProductBase(BaseModel):
     status: ProductStatus
 
 
-class ProductReadWithImages(ProductBase):
+class ProductReadWithMedia(ProductBase):
     thumbnail_url: str
     medium_thumbnail_url: str
-    images: List[ImageRead]
+    media: List[MediaRead]
 
 
-class ProductReadNoImages(ProductBase):
+class ProductReadNoMedia(ProductBase):
     thumbnail_url: str
     medium_thumbnail_url: str
 
@@ -47,10 +47,10 @@ class ProductCreate(BaseModel):
     price: Optional[int] = None
     description: Optional[str] = None
     status: ProductStatus
-    images: List[ImageCreate]
+    media: List[MediaCreate]
 
 
 class ProductList(BaseModel):
     page: int
     has_next_page: bool
-    products: List[ProductReadNoImages]
+    products: List[ProductReadNoMedia]

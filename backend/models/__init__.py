@@ -1,3 +1,3 @@
 from .user import User
-from .image import Image
+from .media import Media
 from .product import Product, ProductStatus, ProductType

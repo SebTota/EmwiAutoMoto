@@ -1,7 +1,6 @@
 import enum
 
-from backend.models.image import Image
-
+from backend.models.media import Media
 from tortoise import fields, models
 
 
@@ -40,9 +39,4 @@ class Product(models.Model):
     status = fields.CharEnumField(ProductStatus, index=True)
     thumbnail_url = fields.CharField(max_length=512)
     medium_thumbnail_url = fields.CharField(max_length=512)
-    images = fields.ReverseRelation[Image]
-
-    # TODO: Create a complex index for querying on the following fields:
-    #  - type
-    #  - date created desc (for pagination)
-    #  - status
+    media = fields.ReverseRelation[Media]

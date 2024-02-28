@@ -10,7 +10,7 @@ from PIL import Image as PIL_Image
 
 from backend.core.config import settings
 from backend.exceptions import FileUploadError
-from backend.models import Image
+from backend.models import Media
 
 BUCKET_NAME = settings.IMAGE_BUCKET_NAME
 BASE_HOST_URL = settings.IMAGE_BUCKET_BASE_HOST_URL
@@ -97,11 +97,11 @@ def create_thumbnail_for_image(image: PIL_Image, image_name: str, size: [int, in
     return r
 
 
-def delete_image(image: Image):
+def delete_image(image: Media):
     s3: boto3.client = _get_s3_client()
     s3.delete_objects(Bucket=BUCKET_NAME, Delete={
         'Objects': [
-            {'Key': image.image_url.split('/')[-1]},
+            {'Key': image.url.split('/')[-1]},
             {'Key': image.thumbnail_url.split('/')[-1]}
         ]
     })

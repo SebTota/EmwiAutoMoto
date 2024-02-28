@@ -9,9 +9,10 @@ from PIL import Image as PIL_Image
 
 from backend import crud
 from backend.models import User, ProductStatus, Product
+from backend.models.media import MediaType
 from backend.models.product import ProductType
-from backend.schemas import ProductCreate, ProductReadWithImages, ProductReadNoImages, ProductList, \
-    ImageRead
+from backend.schemas import ProductCreate, ProductReadWithMedia, ProductReadNoMedia, ProductList, \
+    MediaRead
 from backend.exceptions import FileUploadError
 from backend.utils import deps
 from backend.utils.image_handler import process_image
@@ -43,10 +44,10 @@ async def read_items(
     offset: int = (page - 1) * limit
 
     # Add 1 to the limit to see if there is a next page.
-    items: List[ProductReadNoImages] = await crud.product.get_multi_with_filters(product_type,
-                                                                                 offset,
-                                                                                 limit + 1,
-                                                                                 show_status)
+    items: List[ProductReadNoMedia] = await crud.product.get_multi_with_filters(product_type,
+                                                                                offset,
+                                                                                limit + 1,
+                                                                                show_status)
 
     if not items:
         return ProductList(page=page,
@@ -65,7 +66,7 @@ async def read_items(
                        products=items)
 
 
-@router.post("", response_model=ProductReadWithImages)
+@router.post("", response_model=ProductReadWithMedia)
 async def create_item(
         item_in: ProductCreate,
         current_user: User = Depends(deps.get_current_active_superuser),
@@ -76,7 +77,7 @@ async def create_item(
     return await crud.product.create(item_in)
 
 
-@router.put("/{id}", response_model=ProductReadWithImages)
+@router.put("/{id}", response_model=ProductReadWithMedia)
 async def update_item(
         id: str,
         item_in: ProductCreate,
@@ -92,7 +93,7 @@ async def update_item(
     return item
 
 
-@router.post('/image', response_model=List[ImageRead])
+@router.post('/image', response_model=List[MediaRead])
 def generate_product_images(
         files: List[UploadFile],
         background_tasks: BackgroundTasks,
@@ -107,7 +108,8 @@ def generate_product_images(
             [image_url, thumbnail_url, medium_thumbnail_url] = process_image(img, name)
             img.close()
             file.file.close()
-            return ImageRead(image_url=image_url,
+            return MediaRead(type=MediaType.IMAGE,
+                             url=image_url,
                              thumbnail_url=thumbnail_url,
                              medium_thumbnail_url=medium_thumbnail_url)
         except FileUploadError as e:
@@ -122,13 +124,13 @@ def generate_product_images(
     return image_results
 
 
-@router.get("/{id}", response_model=ProductReadWithImages)
+@router.get("/{id}", response_model=ProductReadWithMedia)
 async def read_item(id: str) -> Any:
     """
     Get item by ID.
     """
     # TODO: Check if user is active if the product status is not active
-    item = await crud.product.get_with_images(id)
+    item = await crud.product.get_with_media(id)
     if not item:
         raise HTTPException(status_code=404, detail="No product found with this ID")
     return item
