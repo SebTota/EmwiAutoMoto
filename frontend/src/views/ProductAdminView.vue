@@ -140,16 +140,7 @@
               </div>
             </div>
 
-            <!-- Video component -->
-            <div>
-              <!--              <div v-if="videos && videos.length > 0">-->
-              <!--                <div class="max-w-2xl max-h-2xl">-->
-              <!--                  <iframe :src="videos[0].url" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>-->
-              <!--                </div>-->
-              <!--              </div>-->
-            </div>
-
-            <!-- Photo component -->
+            <!-- Media component -->
             <div>
               <p class="block text-xl font-medium text-gray-700">Media</p>
               <label class="block text-sm font-medium text-gray-700">YouTube Wideo</label>

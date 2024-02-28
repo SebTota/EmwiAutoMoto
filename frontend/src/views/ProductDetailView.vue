@@ -119,8 +119,8 @@ import type { IProductWithContent } from "@/interfaces/product";
 import { colorToPolish } from "@/utils/colors";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import ProductGalleryComponent from '@/components/ProductGalleryComponent.vue'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const route = useRoute();
 const mainStore = useMainStore();

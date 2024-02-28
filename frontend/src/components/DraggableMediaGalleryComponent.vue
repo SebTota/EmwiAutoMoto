@@ -7,10 +7,17 @@
     >
       <div v-for="media in props.media" :key="media.thumbnail_url" class="hover:bg-slate-10">
         <div class="aspect-w-5 aspect-h-3 w-full overflow-hidden">
-          <img
-            :src="media.thumbnail_url"
-            class="rounded hover:transparency-80 h-full w-full object-cover object-center"
-          />
+          <span class="absolute inset-0 rounded-md overflow-hidden">
+            <img :src="media.thumbnail_url" alt="" class="w-full h-full object-center object-cover" />
+            <a
+              v-if="media.type == MediaTypeEnum.YOUTUBE_VIDEO"
+              class="absolute inset-0 m-auto h-16 w-16 bg-white bg-opacity-50 rounded-md"
+              :href="media.url"
+              target="_blank"
+            >
+              <img src="/icons/play-button.png" class="p-4" />
+            </a>
+          </span>
         </div>
         <div class="rounded mt-1 text-center">
           <button
@@ -28,6 +35,7 @@
 <script setup lang="ts">
 import { VueDraggableNext } from "vue-draggable-next";
 import type { IMedia } from "@/interfaces/media";
+import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 
 const props = defineProps({
   media: { type: Array as () => IMedia[], required: true },

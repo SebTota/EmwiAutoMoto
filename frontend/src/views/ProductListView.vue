@@ -58,18 +58,18 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { onMounted, ref } from "vue";
 
-import type { IProductList } from '@/interfaces/product'
-import { useMainStore } from '@/stores/state'
-import router from '@/router'
-import ProductListPagination from '@/components/ProductListPagination.vue'
-import { useRoute } from 'vue-router'
-import { storeToRefs } from 'pinia'
-import { ProductStatusEnum } from '@/enums/productStatusEnum'
-import ProductListComponent from '@/components/ProductListComponent.vue'
-import { ProductTypeEnum } from '@/enums/productTypeEnum'
-import LoadingSpinner from '@/components/LoadingSpinner.vue'
+import type { IProductList } from "@/interfaces/product";
+import { useMainStore } from "@/stores/state";
+import router from "@/router";
+import ProductListPagination from "@/components/ProductListPagination.vue";
+import { useRoute } from "vue-router";
+import { storeToRefs } from "pinia";
+import { ProductStatusEnum } from "@/enums/productStatusEnum";
+import ProductListComponent from "@/components/ProductListComponent.vue";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const route = useRoute();
 const type = ref<ProductTypeEnum>(
@@ -86,7 +86,6 @@ const mainState = useMainStore();
 const loadingRequest = ref(true);
 const hasNextPage = ref(false);
 const hasPrevPage = ref(false);
-let products = [];
 
 let productListResponse: IProductList;
 let errorMessage = ref("");
@@ -134,7 +133,6 @@ function getProductList(page: number) {
     .getProducts(type.value, page, showStatus)
     .then((response: IProductList) => {
       productListResponse = response;
-      products = response.products;
       hasNextPage.value = productListResponse.has_next_page;
       hasPrevPage.value = productListResponse.page > 1;
       loadingRequest.value = false;
