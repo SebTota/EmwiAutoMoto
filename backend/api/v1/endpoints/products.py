@@ -145,7 +145,7 @@ async def read_item(id: str) -> Any:
     # TODO: Check if user is active if the product status is not active
     item = await crud.product.get_with_media(id)
 
-    logging.info(f"Finished processing GetMotorcycleListRequest."
+    logging.info(f"Finished processing GetMotorcycleItemRequest."
                  f"\n\tTotal time: {(datetime.datetime.now() - start_time).total_seconds()} seconds.")
 
     if not item:
