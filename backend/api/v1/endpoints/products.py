@@ -1,5 +1,8 @@
 import concurrent.futures
+import datetime
 import io
+import logging
+import time
 import uuid
 from typing import Any, List, Optional
 
@@ -31,6 +34,7 @@ async def read_items(
     """
     Retrieve products with specified filters.
     """
+    request_start_time = datetime.datetime.now()
     if page < 1:
         raise HTTPException(status_code=400, detail="Page must be greater than 0")
 
@@ -48,6 +52,7 @@ async def read_items(
                                                                                 offset,
                                                                                 limit + 1,
                                                                                 show_status)
+    end_query_time = datetime.datetime.now()
 
     if not items:
         return ProductList(page=page,
@@ -60,6 +65,12 @@ async def read_items(
     # (indicating we received +1 results back from db)
     if has_next_page:
         items.pop()
+
+    end_time = datetime.datetime.now()
+
+    logging.info(f"Finished processing GetMotorcycleListRequest."
+                 f"\n\tQuery time: {(end_query_time - request_start_time).total_seconds()} seconds."
+                 f"\n\tTotal time: {(end_time - request_start_time).total_seconds()} seconds.")
 
     return ProductList(page=page,
                        has_next_page=has_next_page,
@@ -129,8 +140,14 @@ async def read_item(id: str) -> Any:
     """
     Get item by ID.
     """
+    start_time = datetime.datetime.now()
+
     # TODO: Check if user is active if the product status is not active
     item = await crud.product.get_with_media(id)
+
+    logging.info(f"Finished processing GetMotorcycleListRequest."
+                 f"\n\tTotal time: {(datetime.datetime.now() - start_time).total_seconds()} seconds.")
+
     if not item:
         raise HTTPException(status_code=404, detail="No product found with this ID")
     return item

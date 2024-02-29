@@ -1,3 +1,4 @@
+import datetime
 import logging
 import string
 import random
@@ -31,9 +32,11 @@ def get_db() -> Generator:
 
 
 async def get_current_user_if_signed_in(
-    token: str = Depends(reusable_oauth2_no_error)
+        token: str = Depends(reusable_oauth2_no_error)
 ) -> Optional[models.User]:
+    start_time = datetime.datetime.now()
     if not token:
+        logging.info(f"No token. Get current user check took {(datetime.datetime.now() - start_time).total_seconds()} seconds")
         return None
 
     try:
@@ -42,16 +45,19 @@ async def get_current_user_if_signed_in(
         )
         token_data = schemas.TokenPayload(**payload)
     except (jwt.JWTError, ValidationError):
+        logging.info(f"No JWT. Get current user check took {(datetime.datetime.now() - start_time).total_seconds()} seconds")
         return None
 
     user = await crud.user.get(token_data.sub)
+
+    logging.info(f"Get current user check took {(datetime.datetime.now() - start_time).total_seconds()} seconds")
     if not user:
         return None
     return user
 
 
 def get_current_active_superuser_if_signed_in(
-    current_user: models.User = Depends(get_current_user_if_signed_in),
+        current_user: models.User = Depends(get_current_user_if_signed_in),
 ) -> Optional[models.User]:
     if not current_user or not current_user.is_superuser:
         return None
@@ -59,7 +65,7 @@ def get_current_active_superuser_if_signed_in(
 
 
 async def get_current_user(
-    token: str = Depends(reusable_oauth2)
+        token: str = Depends(reusable_oauth2)
 ) -> models.User:
     try:
         payload = jwt.decode(
@@ -80,7 +86,7 @@ async def get_current_user(
 
 
 def get_current_active_superuser(
-    current_user: models.User = Depends(get_current_user),
+        current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not current_user.is_superuser:
         raise HTTPException(
@@ -88,8 +94,9 @@ def get_current_active_superuser(
         )
     return current_user
 
+
 def get_current_active_superuser_no_exception(
-    current_user: models.User = Depends(get_current_user_if_signed_in),
+        current_user: models.User = Depends(get_current_user_if_signed_in),
 ) -> Optional[models.User]:
     if not current_user or not current_user.is_superuser:
         return None
