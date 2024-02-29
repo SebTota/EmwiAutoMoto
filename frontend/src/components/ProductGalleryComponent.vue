@@ -50,12 +50,12 @@
 
     <!-- Modal View -->
     <div
-      v-show="modalOpen"
+      v-if="modalOpen"
       @click="modalOpen = false"
       class="fixed inset-0 overflow-y-auto z-10 w-full h-full bg-stone-100"
     >
       <div class="flex items-center justify-center h-screen w-full">
-        <div class="p-2 max-w-4xl h-full w-full md:h-4/5 md:w-4/5 flex items-center justify-center">
+        <div class="p-2 max-w-4xl h-full w-full md:h-5/6 md:w-5/6 flex items-center justify-center">
           <img
             v-if="getProductImage().type === MediaTypeEnum.IMAGE"
             :src="getProductImage().medium_thumbnail_url"
