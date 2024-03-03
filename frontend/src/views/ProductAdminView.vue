@@ -224,7 +224,7 @@ const status = ref();
 const description = ref();
 
 watch(type, (newType) => {
-  odometer_type.value = newType === ProductTypeEnum.MOTOCYKL ? OdometerTypeEnum.MIL : OdometerTypeEnum.GODZIN;
+  odometer_type.value = newType === ProductTypeEnum.MOTORCYCLE ? OdometerTypeEnum.MILES : OdometerTypeEnum.HOURS;
 });
 
 const productId: any = route.params.id;
@@ -232,7 +232,7 @@ const media = ref<IMedia[]>([]);
 
 async function onStartUp() {
   if (isAddNew()) {
-    type.value = ProductTypeEnum.MOTOCYKL;
+    type.value = ProductTypeEnum.MOTORCYCLE;
     loadingRequest.value = false;
   } else {
     try {
@@ -265,7 +265,7 @@ function showError() {
 }
 
 function hideVinInput() {
-  return type.value === ProductTypeEnum.MOTOCYKL;
+  return type.value === ProductTypeEnum.MOTORCYCLE;
 }
 
 function trimFormValues() {

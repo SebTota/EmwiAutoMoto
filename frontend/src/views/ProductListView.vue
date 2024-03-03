@@ -73,7 +73,7 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 
 const route = useRoute();
 const type = ref<ProductTypeEnum>(
-  route.query.produkt ? (route.query.produkt as ProductTypeEnum) : ProductTypeEnum.MOTOCYKL
+  route.query.produkt ? (route.query.produkt as ProductTypeEnum) : ProductTypeEnum.MOTORCYCLE
 );
 const page = ref(route.query.strona ? parseInt(route.query.strona as string) : 1);
 const selectedStatus = ref<ProductStatusEnum>(
@@ -102,9 +102,9 @@ onMounted(() => {
 });
 
 function getPageHeader() {
-  if (type.value === ProductTypeEnum.MOTOCYKL) {
+  if (type.value === ProductTypeEnum.MOTORCYCLE) {
     return "Motocykle";
-  } else if (type.value === ProductTypeEnum.TRAKTOR) {
+  } else if (type.value === ProductTypeEnum.MOWER) {
     return "Traktory Ogrodowe";
   } else {
     return "Produkty";

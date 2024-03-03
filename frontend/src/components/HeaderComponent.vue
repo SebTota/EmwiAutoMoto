@@ -135,14 +135,14 @@ let tabs = [
     description: "Motocykle",
     icon: ArrowLongRightIcon,
     page: "productList",
-    query: { produkt: ProductTypeEnum.MOTOCYKL },
+    query: { produkt: ProductTypeEnum.MOTORCYCLE },
   },
   {
     name: "Traktory Ogrodowe",
     description: "Traktory",
     icon: ArrowLongRightIcon,
     page: "productList",
-    query: { produkt: ProductTypeEnum.TRAKTOR },
+    query: { produkt: ProductTypeEnum.MOWER },
   },
   {
     name: "Kontakt",

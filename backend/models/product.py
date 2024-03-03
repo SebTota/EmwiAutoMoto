@@ -5,8 +5,8 @@ from tortoise import fields, models
 
 
 class ProductType(str, enum.Enum):
-    MOTOCYKL = 'Motocykl'
-    TRAKTOR = 'Traktor'
+    MOTORCYCLE = 'Motocykl'
+    MOWER = 'Traktor'
 
 
 class ProductStatus(str, enum.Enum):
@@ -18,21 +18,21 @@ class ProductStatus(str, enum.Enum):
 
 
 class OdometerType(str, enum.Enum):
-    MIL = 'Mil'
-    GODZIN = 'Godzin'
+    MILES = 'Mil'
+    HOURS = 'Godzin'
 
 
 class Product(models.Model):
     id = fields.CharField(max_length=12, pk=True, index=True)
     date_created = fields.DatetimeField(auto_now_add=True, index=True)
     date_last_updated = fields.DatetimeField(auto_now=True, index=True)
-    type = fields.CharEnumField(ProductType, index=True, default=ProductType.MOTOCYKL)
+    type = fields.CharEnumField(ProductType, index=True, default=ProductType.MOTORCYCLE)
     year = fields.IntField()
     make = fields.CharField(max_length=100)
     model = fields.CharField(max_length=100)
     vin = fields.CharField(max_length=100, null=True)
     odometer = fields.IntField()
-    odometer_type = fields.CharEnumField(OdometerType, defualt=OdometerType.MIL)
+    odometer_type = fields.CharEnumField(OdometerType, defualt=OdometerType.MILES)
     color = fields.CharField(max_length=100)
     price = fields.IntField(null=True)
     description = fields.TextField(null=True)

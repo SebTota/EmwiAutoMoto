@@ -25,7 +25,7 @@ router = APIRouter()
 
 @router.get("", response_model=ProductList)
 async def read_items(
-        product_type: ProductType = ProductType.MOTOCYKL,
+        product_type: ProductType = ProductType.MOTORCYCLE,
         show_status: List[ProductStatus] = Query([ProductStatus.FOR_SALE]),
         page: int = 1,
         limit: int = 12,

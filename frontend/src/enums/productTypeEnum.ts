@@ -1,4 +1,4 @@
 export enum ProductTypeEnum {
-  MOTOCYKL = "Motocykl",
-  TRAKTOR = "Traktor",
+  MOTORCYCLE = "Motocykl",
+  MOWER = "Traktor",
 }
