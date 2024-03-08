@@ -1,5 +1,6 @@
 <template>
   <div class="relative bg-white dark:text-gray-400 dark:bg-gray-900">
+    <NewDomainWarningModal v-if="showWarningModal" />
     <div class="mx-auto sm:px-5">
       <div>
         <div class="text-center relative z-0">
@@ -70,6 +71,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductListComponent from "@/components/ProductListComponent.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import NewDomainWarningModal from "@/components/NewDomainWarningModal.vue";
 
 const route = useRoute();
 const type = ref<ProductTypeEnum>(
@@ -83,6 +85,7 @@ const selectedStatus = ref<ProductStatusEnum>(
 console.log("type", type.value);
 console.log("query", route.query.produkt);
 const mainState = useMainStore();
+const showWarningModal = ref(false);
 const loadingRequest = ref(true);
 const hasNextPage = ref(false);
 const hasPrevPage = ref(false);
@@ -98,8 +101,16 @@ mainStore.actionCheckLoggedIn().then(() => {
 });
 
 onMounted(() => {
+  checkDomain();
   getProductList(page.value);
 });
+
+function checkDomain() {
+  const currentDomain = window.location.origin;
+  if (currentDomain !== "https://emwiautomoto.pl" && currentDomain !== "http://localhost:5173") {
+    showWarningModal.value = true;
+  }
+}
 
 function getPageHeader() {
   if (type.value === ProductTypeEnum.MOTORCYCLE) {
