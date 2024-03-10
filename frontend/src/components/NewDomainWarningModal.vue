@@ -20,7 +20,7 @@
   </div>
 </template>
 
-<script setup>
+<script setup lang="ts">
 function navigateToNewDomain() {
   window.location.href = "https://emwiautomoto.pl";
 }
