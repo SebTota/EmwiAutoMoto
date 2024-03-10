@@ -5,7 +5,7 @@
       <p class="text-gray-700 mb-6">
         Ta strona została przeniesiona do nowej domeny. Aby kontynuować, wejdź na stronę
         <a href="https://emwiautomoto.pl" class="text-blue-500 hover:underline">emwiautomoto.pl</a>
-        ub kliknij przycisk poniżej.
+        lub kliknij przycisk poniżej.
       </p>
       <div class="flex justify-end">
         <button
@@ -16,7 +16,7 @@
         </button>
       </div>
     </div>
-    <div class="fixed inset-0 backdrop-blur-sm backdrop-filter bg-black/50" @click.self="navigateToNewDomain"></div>
+    <div class="fixed inset-0 backdrop-blur-sm backdrop-filter bg-black/50"></div>
   </div>
 </template>
 
