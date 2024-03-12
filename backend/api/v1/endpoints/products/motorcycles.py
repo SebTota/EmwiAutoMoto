@@ -136,7 +136,9 @@ def generate_product_images(
 
 
 @router.get("/{id}", response_model=ProductReadWithMedia)
-async def read_item(id: str) -> Any:
+async def read_item(
+        id: str,
+        current_user: User = Depends(deps.get_current_active_superuser_no_exception),) -> Any:
     """
     Get item by ID.
     """
@@ -145,8 +147,9 @@ async def read_item(id: str) -> Any:
     # TODO: Check if user is active if the product status is not active
     item = await crud.product.get_with_media(id)
 
-    logging.info(f"Finished processing GetMotorcycleItemRequest."
-                 f"\n\tTotal time: {(datetime.datetime.now() - start_time).total_seconds()} seconds.")
+    if item.status in [ProductStatus.DRAFT, ProductStatus.DELETED]:
+        if not current_user or not current_user.is_superuser:
+            raise HTTPException(status_code=403, detail="You must be a superuser to view this item")
 
     if not item:
         raise HTTPException(status_code=404, detail="No product found with this ID")
