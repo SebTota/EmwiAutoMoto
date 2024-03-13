@@ -50,7 +50,7 @@ def read_items(
     if not items:
         return MotorcycleList(page=page,
                               has_next_page=False,
-                              motorcycles=[])
+                              products=[])
 
     has_next_page = True if len(items) > limit else False
 
@@ -61,7 +61,7 @@ def read_items(
 
     return MotorcycleList(page=page,
                           has_next_page=has_next_page,
-                          motorcycles=items)
+                          products=items)
 
 
 @router.post("", response_model=MotorcycleReadWithMedia)

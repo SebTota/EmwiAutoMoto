@@ -13,13 +13,13 @@ class VehicleBase(ProductBase):
     color: str
 
 
-class VehicleReadWithMedia(ProductBase):
+class VehicleReadWithMedia(VehicleBase):
     thumbnail_url: str
     medium_thumbnail_url: str
     media: List[MediaRead]
 
 
-class VehicleReadNoMedia(ProductBase):
+class VehicleReadNoMedia(VehicleBase):
     thumbnail_url: str
     medium_thumbnail_url: str
 

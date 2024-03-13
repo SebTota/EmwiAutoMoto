@@ -1,3 +1,5 @@
+from typing import List
+
 from backend.schemas.vehicle import VehicleBase, VehicleCreate, VehicleReadNoMedia, VehicleReadWithMedia, VehicleList
 
 
@@ -18,4 +20,6 @@ class MotorcycleCreate(VehicleCreate):
 
 
 class MotorcycleList(VehicleList):
-    pass
+    page: int
+    has_next_page: bool
+    products: List[MotorcycleReadNoMedia]

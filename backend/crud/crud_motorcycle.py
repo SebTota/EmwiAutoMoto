@@ -87,7 +87,7 @@ def update(db: Session, db_obj: Motorcycle, new_obj: MotorcycleCreate) -> Option
         i, media_objs = 0, []
         for media_obj in new_obj.media:
             media_obj: MediaCreate = media_obj  # Add type support
-            media_objs.append(Media(motorcycle_id=db_obj.id,
+            media_objs.append(Media(product_id=db_obj.id,
                                     id=get_random_alphanumeric_string(20),
                                     type=media_obj.type,
                                     url=media_obj.url,
