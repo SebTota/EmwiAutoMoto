@@ -1,10 +1,14 @@
-from tortoise import fields, models
+from sqlalchemy import Column, String, Boolean
+
+from backend.db.init_db import Base
 
 
-class User(models.Model):
-    id: str = fields.CharField(max_length=12, pk=True)
-    first_name: str = fields.CharField(max_length=100)
-    last_name: str = fields.CharField(max_length=100)
-    email: str = fields.CharField(max_length=100, unique=True)
-    hashed_password: str = fields.CharField(max_length=128)
-    is_superuser: bool = fields.BooleanField(default=False)
+class User(Base):
+    __tablename__ = 'users'
+
+    id = Column(String(12), primary_key=True)
+    first_name = Column(String(100))
+    last_name = Column(String(100))
+    email = Column(String(100), unique=True)
+    hashed_password = Column(String(128))
+    is_superuser = Column(Boolean, default=False)

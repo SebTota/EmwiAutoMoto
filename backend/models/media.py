@@ -1,24 +1,23 @@
 import enum
-from typing import TYPE_CHECKING
 
-from tortoise import fields, models
+from sqlalchemy import Column, Integer, String, ForeignKey, Enum
 
-if TYPE_CHECKING:
-    from backend.models import Product
+from backend.db.init_db import Base
 
 
-class MediaType(str, enum.Enum):
+class MediaType(enum.Enum):
     IMAGE = 'IMAGE'
     YOUTUBE_VIDEO = 'YOUTUBE_VIDEO'
 
 
-class Media(models.Model):
-    id: str = fields.CharField(max_length=20, pk=True)
-    type = fields.CharEnumField(MediaType, default=MediaType.IMAGE)
-    url: str = fields.CharField(max_length=512)
-    thumbnail_url: str = fields.CharField(max_length=512)
-    medium_thumbnail_url: str = fields.CharField(max_length=512)
-    order: int = fields.IntField()
-    product: fields.ForeignKeyRelation["Product"] = fields.ForeignKeyField(
-        'models.Product', related_name='media'
-    )
+class Media(Base):
+    __tablename__ = 'media'
+
+    id: int = Column(String, primary_key=True)
+    type: MediaType = Column(Enum(MediaType), nullable=False)
+    url: str = Column(String, nullable=False)
+    thumbnail_url: str = Column(String, nullable=False)
+    medium_thumbnail_url: str = Column(String, nullable=False)
+    order: int = Column(Integer, nullable=False)
+
+    product_id: str = Column(String, ForeignKey('products.id'))

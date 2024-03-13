@@ -1,24 +1,37 @@
 import enum
+from datetime import datetime
+from typing import Optional
 
-from backend.models.media import Media
-from tortoise import fields, models
+from sqlalchemy import Column, Integer, String, DateTime, Text, Enum
+from sqlalchemy.orm import relationship
 
-
-class ProductStatus(str, enum.Enum):
-    DRAFT = "Szkic"
-    FOR_SALE = "Na sprzedaż"
-    SOLD = "Sprzedany"
-    RESERVED = "Zarezerwowany"
-    DELETED = "Usunięty"
+from backend.db.init_db import Base
 
 
-class Product(models.Model):
-    id = fields.CharField(max_length=12, pk=True, index=True)
-    date_created = fields.DatetimeField(auto_now_add=True)
-    date_last_updated = fields.DatetimeField(auto_now=True)
-    price = fields.IntField(null=True)
-    description = fields.TextField(null=True)
-    status = fields.CharEnumField(ProductStatus)
-    thumbnail_url = fields.CharField(max_length=512)
-    medium_thumbnail_url = fields.CharField(max_length=512)
-    media = fields.ReverseRelation[Media]
+class ProductStatus(enum.Enum):
+    DRAFT = "DRAFT"
+    FOR_SALE = "FOR_SALE"
+    SOLD = "SOLD"
+    RESERVED = "RESERVED"
+    DELETED = "DELETED"
+
+
+class Product(Base):
+    __tablename__ = 'products'
+
+    id: str = Column(String, primary_key=True)
+    date_created: datetime = Column(DateTime, nullable=False, default=datetime.utcnow)
+    date_last_updated: datetime = Column(DateTime, nullable=False, default=datetime.utcnow, onupdate=datetime.utcnow)
+    title: str = Column(String, nullable=False)
+    subtitle: str = Column(String, nullable=False)
+    price: Optional[int] = Column(Integer, nullable=True)
+    description: Optional[str] = Column(Text, nullable=True)
+    status: ProductStatus = Column(Enum(ProductStatus), nullable=False)
+    thumbnail_url: str = Column(String, nullable=False)
+    medium_thumbnail_url: str = Column(String, nullable=False)
+
+    media = relationship("Media", backref="product")
+
+    __mapper_args__ = {
+        'polymorphic_identity': 'product',
+    }
