@@ -1,21 +1,17 @@
 import concurrent.futures
-import datetime
 import io
-import logging
-import time
 import uuid
 from typing import Any, List, Optional
+from sqlalchemy.orm import Session
 
 from backend.core.logging import logger
 from fastapi import APIRouter, Depends, HTTPException, UploadFile, Query, BackgroundTasks
 from PIL import Image as PIL_Image
 
 from backend import crud
-from backend.models import User, ProductStatus, Product
-from backend.models.media import MediaType
-from backend.models.product import ProductType
-from backend.schemas import ProductCreate, ProductReadWithMedia, ProductReadNoMedia, ProductList, \
-    MediaRead
+from backend.db.init_db import get_db
+from backend.models import User, ProductStatus, Motorcycle, MediaType
+from backend.schemas import MediaRead, MotorcycleReadWithMedia, MotorcycleReadNoMedia, MotorcycleList, MotorcycleCreate
 from backend.exceptions import FileUploadError
 from backend.utils import deps
 from backend.utils.image_handler import process_image
@@ -23,18 +19,17 @@ from backend.utils.image_handler import process_image
 router = APIRouter()
 
 
-@router.get("", response_model=ProductList)
-async def read_items(
-        product_type: ProductType = ProductType.MOTORCYCLE,
+@router.get("", response_model=MotorcycleList)
+def read_items(
         show_status: List[ProductStatus] = Query([ProductStatus.FOR_SALE]),
         page: int = 1,
         limit: int = 12,
+        db: Session = Depends(get_db),
         current_user: User = Depends(deps.get_current_active_superuser_no_exception),
 ) -> Any:
     """
-    Retrieve products with specified filters.
+    Retrieve motorcycles with specified filters.
     """
-    request_start_time = datetime.datetime.now()
     if page < 1:
         raise HTTPException(status_code=400, detail="Page must be greater than 0")
 
@@ -48,66 +43,61 @@ async def read_items(
     offset: int = (page - 1) * limit
 
     # Add 1 to the limit to see if there is a next page.
-    items: List[ProductReadNoMedia] = await crud.product.get_multi_with_filters(product_type,
-                                                                                offset,
+    items: List[MotorcycleReadNoMedia] = crud.motorcycle.get_multi_with_filters(db, offset,
                                                                                 limit + 1,
                                                                                 show_status)
-    end_query_time = datetime.datetime.now()
 
     if not items:
-        return ProductList(page=page,
-                           has_next_page=False,
-                           products=[])
+        return MotorcycleList(page=page,
+                              has_next_page=False,
+                              motorcycles=[])
 
     has_next_page = True if len(items) > limit else False
 
-    # Remove the extra products we got as a pagination test IFF there is a next page
+    # Remove the extra motorcycles we got as a pagination test IFF there is a next page
     # (indicating we received +1 results back from db)
     if has_next_page:
         items.pop()
 
-    end_time = datetime.datetime.now()
-
-    logging.info(f"Finished processing GetMotorcycleListRequest."
-                 f"\n\tQuery time: {(end_query_time - request_start_time).total_seconds()} seconds."
-                 f"\n\tTotal time: {(end_time - request_start_time).total_seconds()} seconds.")
-
-    return ProductList(page=page,
-                       has_next_page=has_next_page,
-                       products=items)
+    return MotorcycleList(page=page,
+                          has_next_page=has_next_page,
+                          motorcycles=items)
 
 
-@router.post("", response_model=ProductReadWithMedia)
-async def create_item(
-        item_in: ProductCreate,
+@router.post("", response_model=MotorcycleReadWithMedia)
+def create_item(
+        item_in: MotorcycleCreate,
+        db: Session = Depends(get_db),
         current_user: User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Create new product.
+    Create new motorcycle.
     """
-    return await crud.product.create(item_in)
+    return crud.motorcycle.create(db, item_in)
 
 
-@router.put("/{id}", response_model=ProductReadWithMedia)
-async def update_item(
+@router.put("/{id}", response_model=MotorcycleReadWithMedia)
+def update_item(
         id: str,
-        item_in: ProductCreate,
+        item_in: MotorcycleCreate,
+        db: Session = Depends(get_db),
         current_user: User = Depends(deps.get_current_active_superuser),
 ) -> Any:
     """
-    Update a product.
+    Update a motorcycle.
     """
-    item: Optional[Product] = await crud.product.get(id)
+    item: Optional[Motorcycle] = crud.motorcycle.get(db, id)
     if not item:
-        raise HTTPException(status_code=404, detail="No product found with this id.")
-    item = await crud.product.update(item, item_in)
+        raise HTTPException(status_code=404, detail="No motorcycle found with this id.")
+    item = crud.motorcycle.update(db, item, item_in)
     return item
 
 
 @router.post('/image', response_model=List[MediaRead])
-def generate_product_images(
+def generate_motorcycle_images(
         files: List[UploadFile],
         background_tasks: BackgroundTasks,
+        db: Session = Depends(get_db),
         current_user: User = Depends(deps.get_current_active_superuser)
 ) -> Any:
     def process_single_image(file):
@@ -135,23 +125,21 @@ def generate_product_images(
     return image_results
 
 
-@router.get("/{id}", response_model=ProductReadWithMedia)
-async def read_item(
+@router.get("/{id}", response_model=MotorcycleReadWithMedia)
+def read_item(
         id: str,
-        current_user: User = Depends(deps.get_current_active_superuser_no_exception),) -> Any:
+        db: Session = Depends(get_db),
+        current_user: User = Depends(deps.get_current_active_superuser_no_exception), ) -> Any:
     """
     Get item by ID.
     """
-    start_time = datetime.datetime.now()
-
     # TODO: Check if user is active if the product status is not active
-    item = await crud.product.get_with_media(id)
+    item = crud.motorcycle.get_with_media(db, id)
 
     if item.status in [ProductStatus.DRAFT, ProductStatus.DELETED]:
         if not current_user or not current_user.is_superuser:
             raise HTTPException(status_code=403, detail="You must be a superuser to view this item")
 
     if not item:
-        raise HTTPException(status_code=404, detail="No product found with this ID")
+        raise HTTPException(status_code=404, detail="No motorcycle found with this ID")
     return item
-
