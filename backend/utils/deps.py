@@ -2,16 +2,18 @@ import datetime
 import logging
 import string
 import random
-from typing import Generator, Optional
+from typing import Optional
 
 from fastapi import Depends, HTTPException, status
 from fastapi.security import OAuth2PasswordBearer
 from jose import jwt
 from pydantic import ValidationError
+from sqlalchemy.orm import Session
 
 from backend import crud, models, schemas
 from backend.core import security
 from backend.core.config import settings
+from backend.db.init_db import get_db
 
 reusable_oauth2 = OAuth2PasswordBearer(
     tokenUrl=f"{settings.API_V1_STR}/login/access-token"
@@ -27,11 +29,8 @@ def get_random_string(length):
     return ''.join(random.choice(string.ascii_letters) for _ in range(length))
 
 
-def get_db() -> Generator:
-    pass
-
-
-async def get_current_user_if_signed_in(
+def get_current_user_if_signed_in(
+        db: Session = Depends(get_db),
         token: str = Depends(reusable_oauth2_no_error)
 ) -> Optional[models.User]:
     start_time = datetime.datetime.now()
@@ -48,7 +47,7 @@ async def get_current_user_if_signed_in(
         logging.info(f"No JWT. Get current user check took {(datetime.datetime.now() - start_time).total_seconds()} seconds")
         return None
 
-    user = await crud.user.get(token_data.sub)
+    user = crud.user.get(db, token_data.sub)
 
     logging.info(f"Get current user check took {(datetime.datetime.now() - start_time).total_seconds()} seconds")
     if not user:
@@ -57,6 +56,7 @@ async def get_current_user_if_signed_in(
 
 
 def get_current_active_superuser_if_signed_in(
+        db: Session = Depends(get_db),
         current_user: models.User = Depends(get_current_user_if_signed_in),
 ) -> Optional[models.User]:
     if not current_user or not current_user.is_superuser:
@@ -64,7 +64,8 @@ def get_current_active_superuser_if_signed_in(
     return current_user
 
 
-async def get_current_user(
+def get_current_user(
+        db: Session = Depends(get_db),
         token: str = Depends(reusable_oauth2)
 ) -> models.User:
     try:
@@ -77,7 +78,7 @@ async def get_current_user(
             status_code=status.HTTP_403_FORBIDDEN,
             detail="Could not validate credentials",
         )
-    user = await crud.user.get(token_data.sub)
+    user = crud.user.get(db, token_data.sub)
     if not user:
         raise HTTPException(status_code=404, detail="Could not authenticate user. User not found")
 
@@ -86,6 +87,7 @@ async def get_current_user(
 
 
 def get_current_active_superuser(
+        db: Session = Depends(get_db),
         current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not current_user.is_superuser:
@@ -96,6 +98,7 @@ def get_current_active_superuser(
 
 
 def get_current_active_superuser_no_exception(
+        db: Session = Depends(get_db),
         current_user: models.User = Depends(get_current_user_if_signed_in),
 ) -> Optional[models.User]:
     if not current_user or not current_user.is_superuser:

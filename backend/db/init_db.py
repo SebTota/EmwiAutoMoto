@@ -1,29 +1,17 @@
-from tortoise.contrib.fastapi import register_tortoise
-from tortoise import Tortoise
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.declarative import declarative_base
 
 from backend.core.config import settings
 
-# For aerich migrations
-TORTOISE_ORM = {
-    "connections": {
-        "default": settings.DATABASE_URL,
-    },
-    "apps": {
-        "models": {"models": ["backend.models", "aerich.models"], "default_connection": "default"},
-    },
-}
+engine = create_engine(settings.DATABASE_URL)
+SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+Base = declarative_base()
 
 
-def init_db(app) -> None:
-    register_tortoise(
-        app,
-        db_url=settings.DATABASE_URL,
-        modules={'models': ["backend.models", "aerich.models"]},
-    )
-
-
-async def init_db_for_script():
-    await Tortoise.init(
-        db_url=settings.DATABASE_URL,
-        modules={'models': ['backend.models']},
-    )
+def get_db():
+    db = SessionLocal()
+    try:
+        yield db
+    finally:
+        db.close()
