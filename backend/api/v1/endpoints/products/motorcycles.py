@@ -133,7 +133,6 @@ def read_item(
     """
     Get item by ID.
     """
-    # TODO: Check if user is active if the product status is not active
     item = crud.motorcycle.get_with_media(db, id)
 
     if item.status in [ProductStatus.DRAFT, ProductStatus.DELETED]:
