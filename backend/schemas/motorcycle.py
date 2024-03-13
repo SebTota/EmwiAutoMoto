@@ -1,4 +1,4 @@
-from backend.schemas.vehicle import VehicleBase, VehicleCreate, VehicleReadNoMedia, VehicleReadWithMedia
+from backend.schemas.vehicle import VehicleBase, VehicleCreate, VehicleReadNoMedia, VehicleReadWithMedia, VehicleList
 
 
 class MotorcycleBase(VehicleBase):
@@ -14,4 +14,8 @@ class MotorcycleReadNoMedia(VehicleReadNoMedia):
 
 
 class MotorcycleCreate(VehicleCreate):
+    pass
+
+
+class MotorcycleList(VehicleList):
     pass

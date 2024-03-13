@@ -1,7 +1,7 @@
 from typing import Optional, List
 
 from backend.schemas.media import MediaRead
-from backend.schemas.product import ProductBase, ProductCreate
+from backend.schemas.product import ProductBase, ProductCreate, ProductList
 
 
 class VehicleBase(ProductBase):
@@ -30,4 +30,8 @@ class VehicleCreate(ProductCreate):
     model: str
     vin: Optional[str] = None
     odometer: int
+    color: str
 
+
+class VehicleList(ProductList):
+    pass
