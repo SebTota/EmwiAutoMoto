@@ -1,4 +1,6 @@
-from backend.schemas.vehicle import VehicleBase, VehicleCreate, VehicleReadWithMedia, VehicleReadNoMedia
+from typing import List
+
+from backend.schemas.vehicle import VehicleBase, VehicleCreate, VehicleReadWithMedia, VehicleReadNoMedia, VehicleList
 
 
 class MowerBase(VehicleBase):
@@ -15,3 +17,9 @@ class MowerReadNoMedia(VehicleReadNoMedia):
 
 class MowerCreate(VehicleCreate):
     pass
+
+
+class MowerList(VehicleList):
+    page: int
+    has_next_page: bool
+    products: List[MowerReadNoMedia]

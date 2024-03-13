@@ -1,18 +1,25 @@
-from backend.schemas.product import ProductBase, ProductCreate
+from typing import List
+
+from backend.schemas.product import ProductBase, ProductCreate, ProductList
 
 
-class PartsBase(ProductBase):
+class PartBase(ProductBase):
     pass
 
 
-class PartsReadWithMedia(ProductBase):
+class PartReadWithMedia(ProductBase):
     pass
 
 
-class PartsReadNoMedia(ProductBase):
+class PartReadNoMedia(ProductBase):
     pass
 
 
-class PartsCreate(ProductCreate):
+class PartCreate(ProductCreate):
     pass
 
+
+class PartList(ProductList):
+    page: int
+    has_next_page: bool
+    products: List[PartReadNoMedia]
