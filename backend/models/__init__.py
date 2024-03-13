@@ -6,4 +6,4 @@ from .vehicle import Vehicle
 from .user import User
 from .motorcycle import Motorcycle
 from .mower import Mower
-from .parts import Part
+from .part import Part
