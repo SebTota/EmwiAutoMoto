@@ -1,7 +1,5 @@
 import type { IMedia } from "@/interfaces/media";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
-import type { ProductTypeEnum } from "@/enums/productTypeEnum";
-import type { OdometerTypeEnum } from "@/enums/odometerTypeEnum";
 
 export interface IProduct {
   id: string;

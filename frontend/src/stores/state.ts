@@ -7,7 +7,7 @@ import type { IToken } from "@/interfaces/token";
 import axios from "axios";
 import type { IProductCreate, IProductList, IProductWithContent } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import type { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 export interface MainState {
   token: IToken | null;
@@ -58,8 +58,6 @@ export const useMainStore = defineStore("mainState", {
         this.actionLogoutAndNavigateToLogin();
       }
 
-      // await this.refreshToken();
-
       if (this.token) {
         try {
           const response = await api.getMe(this.token.access_token);
@@ -83,10 +81,6 @@ export const useMainStore = defineStore("mainState", {
         }
       }
 
-      // if (this.token) {
-      //     await this.refreshToken();
-      // }
-
       if (!this.isLoggedIn && this.token) {
         try {
           const response = await api.getMe(this.token.access_token);
@@ -95,10 +89,10 @@ export const useMainStore = defineStore("mainState", {
           this.isAdmin = response.data.is_superuser;
         } catch (error) {
           console.error("Failed to retrieve signed in user information.", error);
-          await this.actionRemoveLogIn();
+          this.actionRemoveLogIn()
         }
       } else if (!this.token) {
-        await this.actionRemoveLogIn();
+        this.actionRemoveLogIn()
       }
     },
     actionLogoutAndNavigateToLogin() {
@@ -174,7 +168,7 @@ export const useMainStore = defineStore("mainState", {
       return false;
     },
     async getProducts(
-      productType: ProductTypeEnum,
+      type: ProductTypeEnum,
       page: number,
       status: ProductStatusEnum[] = [ProductStatusEnum.FOR_SALE]
     ): Promise<IProductList> {
@@ -183,46 +177,56 @@ export const useMainStore = defineStore("mainState", {
         token = this.token.access_token;
       }
       try {
-        const response = await api.getProducts(productType, page, status, token);
-        return response.data;
+        if (type === ProductTypeEnum.MOTORCYCLE) {
+          const response = await api.getMotorcycles(page, status, token);
+          return response.data;
+        } else if (type === ProductTypeEnum.MOWER) {
+          const response = await api.getMowers(page, status, token);
+          return response.data;
+        } else if (type === ProductTypeEnum.PARTS) {
+          const response = await api.getParts(page, status, token);
+          return response.data;
+        } else {
+          throw Error("Invalid product type.");
+        }
       } catch (error) {
         console.error("Failed to retrieve product list.", error);
         throw Error("Failed to retrieve product list.");
       }
     },
-    async getProduct(id: string): Promise<IProductWithContent> {
+    async getMotorcycle(id: string): Promise<IProductWithContent> {
       try {
-        const response = await api.getProduct(id);
+        const response = await api.getMotorcycle(id);
         return response.data;
       } catch (error) {
         console.error(error);
-        throw Error("Failed to retrieve product details.");
+        throw Error("Failed to retrieve motorcycle details.");
       }
     },
-    async createProducts(product: IProductCreate): Promise<IProductWithContent> {
+    async createMotorcycle(product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.createProduct(this.token.access_token, product);
+          const response = await api.createMotorcycle(this.token.access_token, product);
           return response.data;
         } catch (error) {
           console.error(error);
           this.actionCheckApiError(error);
-          throw Error("Failed to create product.");
+          throw Error("Failed to create motorcycle.");
         }
       } else {
         this.actionLogoutAndNavigateToLogin();
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async updateProducts(productId: string, product: IProductCreate): Promise<IProductWithContent> {
+    async updateMotorcycle(productId: string, product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.updateProduct(this.token.access_token, productId, product);
+          const response = await api.updateMotorcycle(this.token.access_token, productId, product);
           return response.data;
         } catch (error) {
           console.error(error);
           this.actionCheckApiError(error);
-          throw Error("Failed to create product.");
+          throw Error("Failed to create motorcycle.");
         }
       } else {
         this.actionLogoutAndNavigateToLogin();
@@ -237,7 +241,7 @@ export const useMainStore = defineStore("mainState", {
         } catch (error) {
           console.error(error);
           this.actionCheckApiError(error);
-          throw Error("Failed to add image to product.");
+          throw Error("Failed to process product image.");
         }
       } else {
         this.actionLogoutAndNavigateToLogin();

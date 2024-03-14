@@ -6,7 +6,9 @@
         <div class="text-center relative z-0">
           <section aria-labelledby="filter-heading" class="border-b border-gray-200 pb-2">
             <div class="flex items-center justify-between">
-              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">{{ getPageHeader() }}</h2>
+              <h2 class="text-2xl font-bold tracking-tight text-gray-900 dark:text-gray-200">
+                {{ props.productType }}
+              </h2>
 
               <div class="flex items-center">
                 <label for="statusFilter" class="text-sm font-medium text-gray-900 hidden sm:block">Pokaż:</label>
@@ -69,21 +71,21 @@ import { useRoute } from "vue-router";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductListComponent from "@/components/ProductListComponent.vue";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import NewDomainWarningModal from "@/components/NewDomainWarningModal.vue";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const route = useRoute();
-const type = ref<ProductTypeEnum>(
-  route.query.produkt ? (route.query.produkt as ProductTypeEnum) : ProductTypeEnum.MOTORCYCLE
-);
+
+const props = defineProps<{
+  productType: ProductTypeEnum;
+}>();
+
 const page = ref(route.query.strona ? parseInt(route.query.strona as string) : 1);
 const selectedStatus = ref<ProductStatusEnum>(
   route.query.wybranyStatus ? (route.query.wybranyStatus as ProductStatusEnum) : ProductStatusEnum.FOR_SALE
 );
 
-console.log("type", type.value);
-console.log("query", route.query.produkt);
 const mainState = useMainStore();
 const showWarningModal = ref(false);
 const loadingRequest = ref(true);
@@ -112,21 +114,10 @@ function checkDomain() {
   }
 }
 
-function getPageHeader() {
-  if (type.value === ProductTypeEnum.MOTORCYCLE) {
-    return "Motocykle";
-  } else if (type.value === ProductTypeEnum.MOWER) {
-    return "Traktory Ogrodowe";
-  } else {
-    return "Produkty";
-  }
-}
-
 function changeStatus() {
   router.push({
-    name: "productList",
+    name: "motorcycleList",
     query: {
-      produkt: type.value,
       strona: 1,
       wybranyStatus: selectedStatus.value,
     },
@@ -140,8 +131,9 @@ function getProductList(page: number) {
   }
 
   loadingRequest.value = true;
+
   mainState
-    .getProducts(type.value, page, showStatus)
+    .getProducts(props.productType, page, showStatus)
     .then((response: IProductList) => {
       productListResponse = response;
       hasNextPage.value = productListResponse.has_next_page;
@@ -162,9 +154,8 @@ function getProductUrl(productId: string) {
 function navigateToNextPage() {
   if (productListResponse.has_next_page) {
     router.push({
-      name: "productList",
+      name: "motorcycleList",
       query: {
-        produkt: type.value,
         strona: productListResponse.page + 1,
         wybranyStatus: selectedStatus.value,
       },
@@ -175,9 +166,8 @@ function navigateToNextPage() {
 function navigateToPreviousPage() {
   if (productListResponse.page > 1) {
     router.push({
-      name: "productList",
+      name: "motorcycleList",
       query: {
-        produkt: type.value,
         strona: productListResponse.page - 1,
         wybranyStatus: selectedStatus.value,
       },
