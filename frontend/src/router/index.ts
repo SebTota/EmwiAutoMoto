@@ -12,13 +12,13 @@ const router = createRouter({
     },
     {
       path: "/motocykle",
-      name: "motorcycleList",
+      name: ProductTypeEnum.MOTORCYCLE,
       component: () => import("../views/ProductListView.vue"),
       props: { productType: ProductTypeEnum.MOTORCYCLE },
     },
     {
       path: "/traktory-ogrodowe",
-      name: "mowerList",
+      name: ProductTypeEnum.MOWER,
       component: () => import("../views/ProductListView.vue"),
       props: { productType: ProductTypeEnum.MOWER },
     },

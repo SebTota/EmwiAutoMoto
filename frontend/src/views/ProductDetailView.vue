@@ -13,11 +13,11 @@
           </router-link>
 
           <h1 class="text-2xl font-semibold mt-2 tracking-tight text-gray-900 dark:text-gray-400">
-            {{ product.year + " " + product.make }}
+            {{ product.title }}
           </h1>
 
           <h1 class="text-2xl font-semibold tracking-tight text-gray-900 dark:text-gray-400">
-            {{ product.model }}
+            {{ product.subtitle }}
           </h1>
 
           <!-- Price -->
@@ -121,6 +121,10 @@ import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
+import type { IVehicle } from '@/interfaces/vehicle'
+import type { IMotorcycleWithContent } from '@/interfaces/motorcycle'
+import type { IMowerWithContent } from '@/interfaces/mower'
+import type { IPartWithContent } from '@/interfaces/parts'
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -129,7 +133,7 @@ const { isLoggedIn } = storeToRefs(mainStore);
 const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
-let product: IProductWithContent;
+let product: IMotorcycleWithContent | IMowerWithContent | IPartWithContent;
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
@@ -167,7 +171,7 @@ function getGoBackLink() {
 
     return { path: previousRoute, query };
   } else {
-    return { name: "productList" } as const;
+    return { name: "motorcycleList" } as const;
   }
 }
 </script>

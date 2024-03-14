@@ -116,7 +116,10 @@ function checkDomain() {
 
 function changeStatus() {
   router.push({
-    name: "motorcycleList",
+    name: props.productType,
+    params: {
+      productType: props.productType,
+    },
     query: {
       strona: 1,
       wybranyStatus: selectedStatus.value,
@@ -154,7 +157,10 @@ function getProductUrl(productId: string) {
 function navigateToNextPage() {
   if (productListResponse.has_next_page) {
     router.push({
-      name: "motorcycleList",
+      name: props.productType,
+      params: {
+        productType: props.productType,
+      },
       query: {
         strona: productListResponse.page + 1,
         wybranyStatus: selectedStatus.value,
@@ -166,7 +172,10 @@ function navigateToNextPage() {
 function navigateToPreviousPage() {
   if (productListResponse.page > 1) {
     router.push({
-      name: "motorcycleList",
+      name: props.productType,
+      params: {
+        productType: props.productType,
+      },
       query: {
         strona: productListResponse.page - 1,
         wybranyStatus: selectedStatus.value,

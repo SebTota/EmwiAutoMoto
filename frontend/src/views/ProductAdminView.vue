@@ -250,7 +250,7 @@ async function onStartUp() {
       media.value = product.media;
       loadingRequest.value = false;
     } catch (err: any) {
-      await router.push({ name: "productList" });
+      await router.push({ name: ProductTypeEnum.MOTORCYCLE });
     }
   }
 }
