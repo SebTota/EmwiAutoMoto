@@ -7,14 +7,8 @@ export interface IProduct {
   id: string;
   date_created: Date;
   date_last_updated: Date;
-  type: ProductTypeEnum;
-  year: number;
-  make: string;
-  model: string;
-  vin: string | null;
-  odometer: number;
-  odometer_type: OdometerTypeEnum;
-  color: string;
+  title: string;
+  subtitle: string;
   price: number | null;
   description: string | null;
   status: ProductStatusEnum;
@@ -27,14 +21,8 @@ export interface IProductWithContent extends IProduct {
 }
 
 export interface IProductCreate {
-  type: ProductTypeEnum;
-  year: number;
-  make: string;
-  model: string;
-  vin: string | null;
-  odometer: number;
-  odometer_type: OdometerTypeEnum;
-  color: string;
+  title: string;
+  subtitle: string;
   price: number | null;
   description: string | null;
   status: ProductStatusEnum;
