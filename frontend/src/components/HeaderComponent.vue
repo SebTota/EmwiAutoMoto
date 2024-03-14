@@ -21,7 +21,7 @@
           <router-link
             v-for="item in tabs"
             :key="item.name"
-            :to="{ name: item.page, query: item.query }"
+            :to="{ name: item.page }"
             class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
           >
             <a class="text-base font-medium">{{ item.name }}</a>
@@ -78,7 +78,7 @@
                 <router-link
                   v-for="item in tabs"
                   :key="item.name"
-                  :to="{ name: item.page, query: item.query }"
+                  :to="{ name: item.page }"
                   @click="close"
                   class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
@@ -123,7 +123,6 @@ import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from "@heroicons/vue/24/outl
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
@@ -134,22 +133,19 @@ let tabs = [
     name: "Motocykle",
     description: "Motocykle",
     icon: ArrowLongRightIcon,
-    page: "productList",
-    query: { produkt: ProductTypeEnum.MOTORCYCLE },
+    page: "motorcycleList",
   },
   {
     name: "Traktory Ogrodowe",
     description: "Traktory",
     icon: ArrowLongRightIcon,
-    page: "productList",
-    query: { produkt: ProductTypeEnum.MOWER },
+    page: "mowerList",
   },
   {
     name: "Kontakt",
     description: "Kontakt",
     icon: ArrowLongRightIcon,
     page: "contact",
-    query: {},
   },
 ];
 
@@ -158,7 +154,6 @@ const addMotorcycleTab = {
   description: "Nowy Produkt",
   icon: ArrowLongRightIcon,
   page: "newProduct",
-  query: {},
 };
 
 mainState.actionCheckLoggedIn().then(() => {

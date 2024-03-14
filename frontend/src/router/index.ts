@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from "vue-router";
 import { useMainStore } from "@/stores/state";
+import { ProductTypeEnum } from '@/enums/productTypeEnum'
 
 const router = createRouter({
   history: createWebHistory(),
@@ -10,9 +11,16 @@ const router = createRouter({
       component: () => import("../views/LoginView.vue"),
     },
     {
-      path: "/produkty",
-      name: "productList",
+      path: "/motocykle",
+      name: "motorcycleList",
       component: () => import("../views/ProductListView.vue"),
+      props: { productType: ProductTypeEnum.MOTORCYCLE },
+    },
+    {
+      path: "/traktory-ogrodowe",
+      name: "mowerList",
+      component: () => import("../views/ProductListView.vue"),
+      props: { productType: ProductTypeEnum.MOWER },
     },
     {
       path: "/produkt/nowy",
@@ -57,7 +65,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: "/produkty",
+      redirect: "/motocykle",
     },
     {
       path: "/:pathMatch(.*)*",
