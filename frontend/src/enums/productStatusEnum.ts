@@ -1,7 +1,7 @@
 export enum ProductStatusEnum {
-  DRAFT = "DRAFT",
-  FOR_SALE = "FOR_SALE",
-  SOLD = "SOLD",
-  DELETED = "DELETED",
-  RESERVED = "RESERVED",
+  DRAFT = "Szkic",
+  FOR_SALE = "Na sprzedaż",
+  SOLD = "Sprzedane",
+  DELETED = "Usunięte",
+  RESERVED = "Zarezerwowane",
 }

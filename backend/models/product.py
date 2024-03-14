@@ -9,11 +9,11 @@ from backend.db.init_db import Base
 
 
 class ProductStatus(enum.Enum):
-    DRAFT = "DRAFT"
-    FOR_SALE = "FOR_SALE"
-    SOLD = "SOLD"
-    RESERVED = "RESERVED"
-    DELETED = "DELETED"
+    DRAFT = "Szkic"
+    FOR_SALE = "Na sprzedaż"
+    SOLD = "Sprzedane"
+    RESERVED = "Zarezerwowane"
+    DELETED = "Usunięte"
 
 
 class Product(Base):
