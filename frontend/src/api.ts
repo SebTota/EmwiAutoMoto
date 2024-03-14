@@ -93,7 +93,13 @@ export const api = {
     return client.get<IMowerList>(`${apiUrl}/api/v1/products/parts`, config);
   },
   async getMotorcycle(id: string) {
-    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles.${id}`);
+    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${id}`);
+  },
+  async getMower(id: string) {
+    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`);
+  },
+  async getPart(id: string) {
+    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/parts/${id}`);
   },
   async createMotorcycle(token: string, product: IProductCreate) {
     return client.post<IMotorcycleWithContent>(`${apiUrl}/api/v1/motorcycles/products`, product, authHeaders(token));

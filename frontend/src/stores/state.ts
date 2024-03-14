@@ -194,13 +194,23 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product list.");
       }
     },
-    async getMotorcycle(id: string): Promise<IProductWithContent> {
+    async getProduct(type: ProductTypeEnum, id: string): Promise<IProductWithContent> {
       try {
-        const response = await api.getMotorcycle(id);
-        return response.data;
+        if (type === ProductTypeEnum.MOTORCYCLE) {
+          const response = await api.getMotorcycle(id);
+          return response.data;
+        } else if (type === ProductTypeEnum.MOWER) {
+          const response = await api.getMower(id);
+          return response.data;
+        } else if (type === ProductTypeEnum.PARTS) {
+          const response = await api.getPart(id);
+          return response.data;
+        } else {
+          throw Error("Invalid product type.");
+        }
       } catch (error) {
         console.error(error);
-        throw Error("Failed to retrieve motorcycle details.");
+        throw Error("Failed to retrieve product details.");
       }
     },
     async createMotorcycle(product: IProductCreate): Promise<IProductWithContent> {

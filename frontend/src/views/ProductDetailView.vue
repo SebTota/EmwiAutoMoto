@@ -29,42 +29,58 @@
           <div>
             <div class="mt-2 border-t border-gray-100">
               <dl class="divide-y divide-gray-100">
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+                <!-- Display year -->
+                <div v-if="product && 'year' in product" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Rok</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.year }}
                   </dd>
                 </div>
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                <!-- Display make -->
+                <div v-if="product && 'make' in product" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Marka</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.make }}
                   </dd>
                 </div>
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                <!-- Display model -->
+                <div v-if="product && 'model' in product" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Model</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.model }}
                   </dd>
                 </div>
-                <div v-if="product.vin" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                <!-- Display VIN -->
+                <div v-if="product && 'vin' in product && product.vin" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">VIN</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.vin }}
                   </dd>
                 </div>
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                <!-- Display odometer -->
+                <div
+                  v-if="product && 'odometer' in product && 'odometer_type' in product"
+                  class="py-2 sm:grid sm:grid-cols-3 sm:gap-4"
+                >
                   <dt class="text-sm font-medium leading-6 text-gray-900">Przebieg</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ product.odometer.toLocaleString("pl-PL") }} {{ product.odometer_type }}
                   </dd>
                 </div>
-                <div class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
+
+                <!-- Display color -->
+                <div v-if="product && 'color' in product" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Kolor</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
                     {{ colorToPolish(product.color) }}
                   </dd>
                 </div>
+
+                <!-- Display description -->
                 <div v-if="product.description" class="py-2 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Opis</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 whitespace-pre-line">
@@ -115,17 +131,16 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
-import type { IProductWithContent } from "@/interfaces/product";
 import { colorToPolish } from "@/utils/colors";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import type { IVehicle } from '@/interfaces/vehicle'
-import type { IMotorcycleWithContent } from '@/interfaces/motorcycle'
-import type { IMowerWithContent } from '@/interfaces/mower'
-import type { IPartWithContent } from '@/interfaces/parts'
-import { ProductTypeEnum } from '@/enums/productTypeEnum'
+import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
+import type { IMowerWithContent } from "@/interfaces/mower";
+import type { IPartWithContent } from "@/interfaces/parts";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { RouteNameEnum } from "@/enums/routeNameEnum";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -146,9 +161,13 @@ const props = defineProps<{
 
 if (typeof productId === "string") {
   mainStore
-    .getMotorcycle(productId)
+    .getProduct(props.productType, productId)
     .then((response) => {
       product = response;
+    })
+    .catch((error) => {
+      // TODO: Better error handling
+      console.log("Something went wrong when fetching the product details.", error);
     })
     .finally(() => {
       loadingRequest.value = false;
@@ -164,19 +183,6 @@ function getCurrentHref() {
 }
 
 function getGoBackLink() {
-  const previousRoute = window.history.state.back;
-  const url = new URL(window.location.origin + previousRoute);
-
-  if (url.pathname === "/produkty") {
-    const query: Record<string, string> = {};
-
-    for (const [key, value] of url.searchParams) {
-      query[key] = value;
-    }
-
-    return { path: previousRoute, query };
-  } else {
-    return { name: "motorcycleList" } as const;
-  }
+  return { name: RouteNameEnum.MOTORCYCLE_LIST } as const;
 }
 </script>

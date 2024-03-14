@@ -74,7 +74,7 @@ import ProductListComponent from "@/components/ProductListComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import NewDomainWarningModal from "@/components/NewDomainWarningModal.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { RouteNameEnum } from '@/enums/routeNameEnum'
+import { RouteNameEnum } from "@/enums/routeNameEnum";
 
 const route = useRoute();
 
@@ -152,7 +152,15 @@ function getProductList(page: number) {
 }
 
 function getProductUrl(productId: string) {
-  router.push({ name: props.productType, params: { productType: props.productType, id: productId } });
+  let routeNameEnum: RouteNameEnum | undefined;
+  if (props.productType === ProductTypeEnum.MOTORCYCLE) {
+    routeNameEnum = RouteNameEnum.MOTORCYCLE_DETAILS;
+  } else if (props.productType === ProductTypeEnum.MOWER) {
+    routeNameEnum = RouteNameEnum.MOWER_DETAILS;
+  } else if (props.productType === ProductTypeEnum.PARTS) {
+    routeNameEnum = RouteNameEnum.PARTS_DETAILS;
+  }
+  router.push({ name: routeNameEnum, params: { productType: props.productType, id: productId } });
 }
 
 function navigateToNextPage() {
