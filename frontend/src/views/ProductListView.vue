@@ -40,7 +40,7 @@
             @click="getProductUrl(product.id)"
             class="hover:opacity-75"
           >
-            <ProductListComponent :selected-status="selectedStatus" :product="product" />
+            <ProductListComponent :product="product" :productType="productType" />
           </div>
         </div>
         <ProductListPagination

@@ -7,11 +7,11 @@
       <div>
         <h3 class="font-medium text-gray-900 dark:text-gray-300">
           <a>
-            {{ product.year + " " + product.make }}
+            {{ product.title }}
           </a>
         </h3>
         <p class="mt-1 text-gray-700 dark:text-gray-400">
-          {{ product.model }}
+          {{ product.subtitle }}
         </p>
       </div>
       <div class="text-right">
@@ -33,8 +33,8 @@
         <p v-else class="font-medium text-gray-900 dark:text-gray-300">
           {{ statusToPolish(product.status) }}
         </p>
-        <p class="mt-1 justify-end text-gray-500 dark:text-gray-400">
-          {{ product.odometer.toLocaleString("pl-PL") }} {{ product.odometer_type }}
+        <p v-if="'odometer' in product" class="mt-1 justify-end text-gray-500 dark:text-gray-400">
+          {{ product.odometer.toLocaleString("pl-PL") }} {{ getOdometerType() }}
         </p>
       </div>
     </div>
@@ -43,11 +43,24 @@
 
 <script setup lang="ts">
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import type { IProduct } from "@/interfaces/product";
 import { statusToPolish } from "@/utils/status";
+import type { IMotorcycle } from "@/interfaces/motorcycle";
+import type { IMower } from "@/interfaces/mower";
+import type { IPart } from "@/interfaces/parts";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const props = defineProps({
-  product: { type: Object as () => IProduct, required: true },
-  selectedStatus: { type: Object as () => ProductStatusEnum, required: true },
+  product: { type: Object as () => IMotorcycle | IMower | IPart, required: true },
+  productType: { type: Object as () => ProductTypeEnum, required: true },
 });
+
+function getOdometerType() {
+  if (props.productType === ProductTypeEnum.MOTORCYCLE) {
+    return "Mil";
+  } else if (props.productType === ProductTypeEnum.MOWER) {
+    return "Godzin";
+  } else {
+    return "";
+  }
+}
 </script>
