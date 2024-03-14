@@ -73,7 +73,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductListComponent from "@/components/ProductListComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import NewDomainWarningModal from "@/components/NewDomainWarningModal.vue";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { ProductListTypeEnum, ProductTypeEnum } from "@/enums/productTypeEnum";
 
 const route = useRoute();
 
@@ -116,7 +116,7 @@ function checkDomain() {
 
 function changeStatus() {
   router.push({
-    name: props.productType,
+    name: route.name as ProductListTypeEnum,
     params: {
       productType: props.productType,
     },
@@ -151,13 +151,13 @@ function getProductList(page: number) {
 }
 
 function getProductUrl(productId: string) {
-  router.push({ name: "productDetails", params: { id: productId } });
+  router.push({ name: props.productType, params: { productType: props.productType, id: productId } });
 }
 
 function navigateToNextPage() {
   if (productListResponse.has_next_page) {
     router.push({
-      name: props.productType,
+      name: route.name as ProductListTypeEnum,
       params: {
         productType: props.productType,
       },
@@ -172,7 +172,7 @@ function navigateToNextPage() {
 function navigateToPreviousPage() {
   if (productListResponse.page > 1) {
     router.push({
-      name: props.productType,
+      name: route.name as ProductListTypeEnum,
       params: {
         productType: props.productType,
       },
