@@ -125,6 +125,7 @@ import type { IVehicle } from '@/interfaces/vehicle'
 import type { IMotorcycleWithContent } from '@/interfaces/motorcycle'
 import type { IMowerWithContent } from '@/interfaces/mower'
 import type { IPartWithContent } from '@/interfaces/parts'
+import { ProductTypeEnum } from '@/enums/productTypeEnum'
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -139,9 +140,13 @@ mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
 });
 
+const props = defineProps<{
+  productType: ProductTypeEnum;
+}>();
+
 if (typeof productId === "string") {
   mainStore
-    .getProduct(productId)
+    .getMotorcycle(productId)
     .then((response) => {
       product = response;
     })

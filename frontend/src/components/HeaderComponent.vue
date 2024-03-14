@@ -123,7 +123,7 @@ import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from "@heroicons/vue/24/outl
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { ref } from "vue";
-import { ProductListTypeEnum, ProductTypeEnum } from '@/enums/productTypeEnum'
+import { RouteNameEnum } from '@/enums/routeNameEnum'
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
@@ -134,13 +134,13 @@ let tabs = [
     name: "Motocykle",
     description: "Motocykle",
     icon: ArrowLongRightIcon,
-    page: ProductListTypeEnum.MOTORCYCLE,
+    page: RouteNameEnum.MOTORCYCLE_LIST,
   },
   {
     name: "Traktory Ogrodowe",
     description: "Traktory",
     icon: ArrowLongRightIcon,
-    page: ProductListTypeEnum.MOWER,
+    page: RouteNameEnum.MOWER_LIST,
   },
   {
     name: "Kontakt",
