@@ -48,7 +48,7 @@ export const ProductSchema = [
   },
   {
     name: "price",
-    title: "Cena",
+    title: "Cena (zł)",
     fieldType: "number",
     required: false,
   },
