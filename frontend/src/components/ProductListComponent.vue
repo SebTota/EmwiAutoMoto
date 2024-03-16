@@ -44,13 +44,11 @@
 <script setup lang="ts">
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { statusToPolish } from "@/utils/status";
-import type { IMotorcycle } from "@/interfaces/motorcycle";
-import type { IMower } from "@/interfaces/mower";
-import type { IPart } from "@/interfaces/parts";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import type { IProduct } from "@/interfaces/product";
 
 const props = defineProps({
-  product: { type: Object as () => IMotorcycle | IMower | IPart, required: true },
+  product: { type: Object as () => IProduct, required: true },
   productType: { type: Object as () => ProductTypeEnum, required: true },
 });
 
