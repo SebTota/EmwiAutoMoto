@@ -80,9 +80,6 @@ class AbstractCRUDProduct(ABC):
         for key, value in update_dict.items():
             setattr(db_obj, key, value)
 
-        db.commit()
-        db.refresh(db_obj)
-
         for media_obj in db_obj.media:
             # TODO: Make sure we remove any actually deleted items from object storage
             db.delete(media_obj)
@@ -101,7 +98,8 @@ class AbstractCRUDProduct(ABC):
                 i += 1
 
             db.bulk_save_objects(media_objs)
-            db.commit()
+
+        db.commit()
 
         return self.get(db, db_obj.id)
 
