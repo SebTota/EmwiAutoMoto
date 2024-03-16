@@ -168,8 +168,8 @@ import { RouteNameEnum } from "@/enums/routeNameEnum";
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
 const { isLoggedIn, isAdmin, user } = storeToRefs(mainState);
-const adminDropdownOpen = ref(true);
-const mobileMenuOpen = ref(true);
+const adminDropdownOpen = ref(false);
+const mobileMenuOpen = ref(false);
 
 onMounted(() => {
   document.addEventListener("click", closeAllDropDowns);
