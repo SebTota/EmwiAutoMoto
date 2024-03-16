@@ -109,7 +109,6 @@
 <script setup lang="ts">
 import { ref } from "vue";
 import router from "@/router";
-import { ProductColor } from "@/enums/productColor";
 import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
@@ -119,12 +118,11 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
-import { createMotorcycle, type IMotorcycleCreate, MotorcycleSchema } from "@/interfaces/motorcycle";
-import { createMower, type IMowerCreate, MowerSchema } from "@/interfaces/mower";
-import { type IProductCreate, type IProductWithContent, ProductSchema } from "@/interfaces/product";
+import { createMotorcycle, MotorcycleSchema } from "@/interfaces/motorcycle";
+import { createMower, MowerSchema } from "@/interfaces/mower";
+import { type IProductWithContent, ProductSchema } from "@/interfaces/product";
 import { createPart } from "@/interfaces/parts";
 
-const colors: string[] = Object.values(ProductColor);
 const route = useRoute();
 const mainStore = useMainStore();
 const loadingRequest = ref(true);
@@ -134,9 +132,6 @@ const youtubeLinkError = ref("");
 const youtubeLink = ref("");
 
 let product: any = {};
-const price = ref();
-const status = ref();
-const description = ref();
 const media = ref<IMedia[]>([]);
 
 const productId: any = route.params.id;
