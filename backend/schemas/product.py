@@ -14,7 +14,7 @@ class ProductBase(BaseModel):
     title: str
     subtitle: str
     price: Optional[int] = None
-    description: Optional[str] = None
+    description: str = None
     status: ProductStatus
 
 
@@ -33,7 +33,7 @@ class ProductCreate(BaseModel):
     title: str
     subtitle: str
     price: Optional[int] = None
-    description: Optional[str] = None
+    description: str = None
     status: ProductStatus
     media: List[MediaCreate]
 

@@ -8,7 +8,7 @@ export interface IProduct {
   title: string;
   subtitle: string;
   price: number | null;
-  description: string | null;
+  description: string;
   status: ProductStatusEnum;
   thumbnail_url: string;
   medium_thumbnail_url: string;

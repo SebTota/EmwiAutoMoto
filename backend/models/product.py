@@ -25,7 +25,7 @@ class Product(Base):
     title: str = Column(String, nullable=False)
     subtitle: str = Column(String, nullable=False)
     price: Optional[int] = Column(Integer, nullable=True)
-    description: Optional[str] = Column(Text, nullable=True)
+    description: Optional[str] = Column(Text, nullable=False)
     status: ProductStatus = Column(Enum(ProductStatus), nullable=False)
     thumbnail_url: str = Column(String, nullable=False)
     medium_thumbnail_url: str = Column(String, nullable=False)
