@@ -111,7 +111,10 @@
             </div>
 
             <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
-              <router-link class="w-full" :to="{ name: getProductEditRouteName(), params: { id: productId } }">
+              <router-link
+                class="w-full"
+                :to="{ name: getProductEditRouteName(props.productType), params: { id: productId } }"
+              >
                 <button
                   type="button"
                   class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
@@ -136,7 +139,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { RouteNameEnum } from "@/enums/routeNameEnum";
+import { getProductEditRouteName, getProductListRouteName } from "@/enums/routeNameEnum";
 import type { IProductWithContent } from "@/interfaces/product";
 
 const route = useRoute();
@@ -180,17 +183,23 @@ function getCurrentHref() {
 }
 
 function getGoBackLink() {
-  return { name: RouteNameEnum.MOTORCYCLE_LIST } as const;
-}
+  try {
+    const previousRoute = window.history.state.back;
+    if (previousRoute) {
+      const url = new URL(window.location.origin + previousRoute);
 
-function getProductEditRouteName() {
-  switch (props.productType) {
-    case ProductTypeEnum.MOTORCYCLE:
-      return RouteNameEnum.EDIT_MOTORCYCLE;
-    case ProductTypeEnum.MOWER:
-      return RouteNameEnum.EDIT_MOWER;
-    case ProductTypeEnum.PART:
-      return RouteNameEnum.EDIT_PART;
+      if (!(url.pathname.endsWith("edytuj") || url.pathname.endsWith("nowy"))) {
+        const query: Record<string, string> = {};
+        for (const [key, value] of url.searchParams) {
+          query[key] = value;
+        }
+        return { name: getProductListRouteName(props.productType), query };
+      }
+    }
+    return { name: getProductListRouteName(props.productType) } as const;
+  } catch (error) {
+    console.log("Error when trying to get the previous route", error);
+    return { name: getProductListRouteName(props.productType) } as const;
   }
 }
 </script>

@@ -87,9 +87,9 @@ export const api = {
     return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${id}`, config);
   },
   async getMower(id: string, token: string | null = null) {
-    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
-    const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
-    return client.get<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`, config);
+    // const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
+    // const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
+    return client.get<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`);
   },
   async getPart(id: string, token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;

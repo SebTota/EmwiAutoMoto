@@ -117,7 +117,7 @@ import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
-import { RouteNameEnum } from "@/enums/routeNameEnum";
+import { getProductDetailsRouteName, RouteNameEnum } from "@/enums/routeNameEnum";
 import { createMotorcycle, MotorcycleSchema } from "@/interfaces/motorcycle";
 import { createMower, MowerSchema } from "@/interfaces/mower";
 import { type IProductWithContent, ProductSchema } from "@/interfaces/product";
@@ -159,10 +159,6 @@ async function onStartUp() {
   }
 }
 onStartUp();
-
-function showError() {
-  return error.value && error.value.length > 0;
-}
 
 function getNonTextareaFields() {
   switch (props.productType) {
@@ -246,7 +242,7 @@ async function updateProduct() {
     loadingRequest.value = true;
     await mainStore.updateProduct(props.productType, productId, product);
     await router.push({
-      name: getProductDetailsRouteName(),
+      name: getProductDetailsRouteName(props.productType),
       params: { id: productId },
     });
   } catch (err: any) {
@@ -254,17 +250,6 @@ async function updateProduct() {
     error.value = "Nie udało się zaktualizować produktu.";
   } finally {
     loadingRequest.value = false;
-  }
-}
-
-function getProductDetailsRouteName() {
-  switch (props.productType) {
-    case ProductTypeEnum.MOTORCYCLE:
-      return RouteNameEnum.MOTORCYCLE_DETAILS;
-    case ProductTypeEnum.MOWER:
-      return RouteNameEnum.MOWER_DETAILS;
-    case ProductTypeEnum.PART:
-      return RouteNameEnum.PART_DETAILS;
   }
 }
 
@@ -334,5 +319,9 @@ function extractYouTubeVideoIdFromLink(url: string): string {
   } else {
     throw Error("Failed to extract YouTube video id from link.");
   }
+}
+
+function showError() {
+  return error.value && error.value.length > 0;
 }
 </script>
