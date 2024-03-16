@@ -87,9 +87,9 @@ export const api = {
     return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${id}`, config);
   },
   async getMower(id: string, token: string | null = null) {
-    // const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
-    // const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
-    return client.get<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`);
+    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
+    const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
+    return client.get<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`, config);
   },
   async getPart(id: string, token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
@@ -106,7 +106,11 @@ export const api = {
     return client.post<IPartWithContent>(`${apiUrl}/api/v1/products/parts`, product, authHeaders(token));
   },
   async updateMotorcycle(token: string, productId: string, product: IProductCreate) {
-    return client.put<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${productId}`, product, authHeaders(token));
+    return client.put<IMotorcycleWithContent>(
+      `${apiUrl}/api/v1/products/motorcycles/${productId}`,
+      product,
+      authHeaders(token)
+    );
   },
   async updateMower(token: string, productId: string, product: IProductCreate) {
     return client.put<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${productId}`, product, authHeaders(token));
