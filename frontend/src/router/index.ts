@@ -24,7 +24,7 @@ const router = createRouter({
       props: { productType: ProductTypeEnum.MOWER },
     },
     {
-      path: "/produkt/nowy",
+      path: "/motocykle/nowy",
       name: "newProduct",
       component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
@@ -36,6 +36,10 @@ const router = createRouter({
             next({ name: "login" });
           }
         });
+      },
+      props: {
+        productType: ProductTypeEnum.MOTORCYCLE,
+        isNewProduct: true,
       },
     },
     {
