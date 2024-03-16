@@ -1,17 +1,17 @@
 from typing import List
 
-from backend.schemas.product import ProductBase, ProductCreate, ProductList
+from backend.schemas.product import ProductBase, ProductCreate, ProductList, ProductReadNoMedia, ProductReadWithMedia
 
 
 class PartBase(ProductBase):
     pass
 
 
-class PartReadWithMedia(ProductBase):
+class PartReadWithMedia(ProductReadWithMedia):
     pass
 
 
-class PartReadNoMedia(ProductBase):
+class PartReadNoMedia(ProductReadNoMedia):
     pass
 
 
