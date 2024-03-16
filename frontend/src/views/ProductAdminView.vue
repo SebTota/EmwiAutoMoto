@@ -150,6 +150,7 @@ async function onStartUp() {
     }
     try {
       product = await mainStore.getProduct(props.productType, productId);
+      media.value = product.media;
       loadingRequest.value = false;
     } catch (err: any) {
       console.error("Failed to fetch product.", err);
@@ -198,6 +199,8 @@ function submit() {
 
   if (props.isNewProduct) {
     createProduct();
+  } else if (productId) {
+    updateProduct();
   }
 }
 
@@ -234,36 +237,36 @@ async function createProduct() {
   }
 }
 
-//
-// async function updateProduct() {
-//   const product: IProductCreate = {
-//     type: type.value,
-//     year: year.value,
-//     make: make.value,
-//     model: model.value,
-//     vin: vin.value,
-//     odometer: odometer.value,
-//     odometer_type: odometer_type.value,
-//     color: color.value,
-//     price: price.value ? price.value : null,
-//     description: description.value,
-//     status: status.value,
-//     media: media.value,
-//   };
-//
-//   try {
-//     loadingRequest.value = true;
-//     await mainStore.updateProducts(productId, product);
-//     await router.push({
-//       name: "productDetails",
-//       params: { id: productId },
-//     });
-//   } catch (err: any) {
-//     error.value = "Failed to update product.";
-//   } finally {
-//     loadingRequest.value = false;
-//   }
-// }
+async function updateProduct() {
+  product.media = media.value;
+  console.log("Updating product...", product);
+  error.value = "";
+
+  try {
+    loadingRequest.value = true;
+    await mainStore.updateProduct(props.productType, productId, product);
+    await router.push({
+      name: getProductDetailsRouteName(),
+      params: { id: productId },
+    });
+  } catch (err: any) {
+    console.error(err);
+    error.value = "Nie udało się zaktualizować produktu.";
+  } finally {
+    loadingRequest.value = false;
+  }
+}
+
+function getProductDetailsRouteName() {
+  switch (props.productType) {
+    case ProductTypeEnum.MOTORCYCLE:
+      return RouteNameEnum.MOTORCYCLE_DETAILS;
+    case ProductTypeEnum.MOWER:
+      return RouteNameEnum.MOWER_DETAILS;
+    case ProductTypeEnum.PART:
+      return RouteNameEnum.PART_DETAILS;
+  }
+}
 
 async function newFileUpload(files: FileList) {
   error.value = "";

@@ -244,11 +244,26 @@ export const useMainStore = defineStore("mainState", {
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async updateMotorcycle(productId: string, product: IProductCreate): Promise<IProductWithContent> {
+    async updateProduct(type: ProductTypeEnum, productId: string, product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.updateMotorcycle(this.token.access_token, productId, product);
-          return response.data;
+          switch (type) {
+            case ProductTypeEnum.MOTORCYCLE: {
+              const response = await api.updateMotorcycle(this.token.access_token, productId, product);
+              return response.data;
+            }
+            case ProductTypeEnum.MOWER: {
+              const response = await api.updateMower(this.token.access_token, productId, product);
+              return response.data;
+            }
+            case ProductTypeEnum.PART: {
+              const response = await api.updatePart(this.token.access_token, productId, product);
+              return response.data;
+            }
+            default: {
+              throw Error("Invalid product type.");
+            }
+          }
         } catch (error) {
           console.error(error);
           this.actionCheckApiError(error);

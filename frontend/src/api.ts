@@ -100,11 +100,13 @@ export const api = {
     return client.post<IPartWithContent>(`${apiUrl}/api/v1/products/parts`, product, authHeaders(token));
   },
   async updateMotorcycle(token: string, productId: string, product: IProductCreate) {
-    return client.put<IMotorcycleWithContent>(
-      `${apiUrl}/api/v1/products/motorcycles/${productId}`,
-      product,
-      authHeaders(token)
-    );
+    return client.put<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${productId}`, product, authHeaders(token));
+  },
+  async updateMower(token: string, productId: string, product: IProductCreate) {
+    return client.put<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${productId}`, product, authHeaders(token));
+  },
+  async updatePart(token: string, productId: string, product: IProductCreate) {
+    return client.put<IPartWithContent>(`${apiUrl}/api/v1/products/parts/${productId}`, product, authHeaders(token));
   },
   async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();

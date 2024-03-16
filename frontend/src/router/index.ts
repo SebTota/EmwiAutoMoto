@@ -88,7 +88,7 @@ const router = createRouter({
     },
     {
       path: "/motocykle/:id/edytuj",
-      name: "productEdit",
+      name: RouteNameEnum.EDIT_MOTORCYCLE,
       component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
         const mainState = useMainStore();
@@ -102,6 +102,44 @@ const router = createRouter({
       },
       props: {
         productType: ProductTypeEnum.MOTORCYCLE,
+        isNewProduct: false,
+      },
+    },
+    {
+      path: "/traktory-ogrodowe/:id/edytuj",
+      name: RouteNameEnum.EDIT_MOWER,
+      component: () => import("../views/ProductAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({ name: "login" });
+          }
+        });
+      },
+      props: {
+        productType: ProductTypeEnum.MOWER,
+        isNewProduct: false,
+      },
+    },
+    {
+      path: "/czesci-i-akcesoria/:id/edytuj",
+      name: RouteNameEnum.EDIT_PART,
+      component: () => import("../views/ProductAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({ name: "login" });
+          }
+        });
+      },
+      props: {
+        productType: ProductTypeEnum.PART,
         isNewProduct: false,
       },
     },

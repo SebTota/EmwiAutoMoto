@@ -111,7 +111,7 @@
             </div>
 
             <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
-              <router-link class="w-full" :to="{ name: 'productEdit', params: { id: productId } }">
+              <router-link class="w-full" :to="{ name: getProductEditRouteName(), params: { id: productId } }">
                 <button
                   type="button"
                   class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
@@ -181,5 +181,16 @@ function getCurrentHref() {
 
 function getGoBackLink() {
   return { name: RouteNameEnum.MOTORCYCLE_LIST } as const;
+}
+
+function getProductEditRouteName() {
+  switch (props.productType) {
+    case ProductTypeEnum.MOTORCYCLE:
+      return RouteNameEnum.EDIT_MOTORCYCLE;
+    case ProductTypeEnum.MOWER:
+      return RouteNameEnum.EDIT_MOWER;
+    case ProductTypeEnum.PART:
+      return RouteNameEnum.EDIT_PART;
+  }
 }
 </script>
