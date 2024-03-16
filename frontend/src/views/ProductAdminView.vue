@@ -119,9 +119,8 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
-import { VehicleSchema } from "@/interfaces/vehicle";
-import { createMotorcycle, type IMotorcycleCreate } from "@/interfaces/motorcycle";
-import { createMower, type IMowerCreate } from "@/interfaces/mower";
+import { createMotorcycle, type IMotorcycleCreate, MotorcycleSchema } from "@/interfaces/motorcycle";
+import { createMower, type IMowerCreate, MowerSchema } from "@/interfaces/mower";
 import { type IProductCreate, type IProductWithContent, ProductSchema } from "@/interfaces/product";
 import { createPart } from "@/interfaces/parts";
 
@@ -140,22 +139,22 @@ const status = ref();
 const description = ref();
 const media = ref<IMedia[]>([]);
 
+const productId: any = route.params.id;
 const props = defineProps({
   productType: { type: Object as () => ProductTypeEnum, required: true },
   isNewProduct: { type: Boolean, required: true },
-  productId: { type: String, required: false },
 });
 
 async function onStartUp() {
   if (props.isNewProduct) {
     loadingRequest.value = false;
   } else {
-    if (!props.productId) {
+    if (!productId) {
       console.error("Product id is required for fetching existing product.");
       return;
     }
     try {
-      product = await mainStore.getProduct(props.productType, props.productId);
+      product = await mainStore.getProduct(props.productType, productId);
       loadingRequest.value = false;
     } catch (err: any) {
       console.error("Failed to fetch product.", err);
@@ -170,18 +169,28 @@ function showError() {
 }
 
 function getNonTextareaFields() {
-  if (props.productType === ProductTypeEnum.MOTORCYCLE || props.productType === ProductTypeEnum.MOWER) {
-    return VehicleSchema.filter((field) => field.fieldType !== "textarea");
-  } else {
-    return ProductSchema.filter((field) => field.fieldType !== "textarea");
+  switch (props.productType) {
+    case ProductTypeEnum.MOTORCYCLE:
+      return MotorcycleSchema.filter((field) => field.fieldType !== "textarea");
+    case ProductTypeEnum.MOWER:
+      return MowerSchema.filter((field) => field.fieldType !== "textarea");
+    case ProductTypeEnum.PART:
+      return ProductSchema.filter((field) => field.fieldType !== "textarea");
+    default:
+      return [];
   }
 }
 
 function getTextareaFields() {
-  if (props.productType === ProductTypeEnum.MOTORCYCLE || props.productType === ProductTypeEnum.MOWER) {
-    return VehicleSchema.filter((field) => field.fieldType === "textarea");
-  } else {
-    return ProductSchema.filter((field) => field.fieldType === "textarea");
+  switch (props.productType) {
+    case ProductTypeEnum.MOTORCYCLE:
+      return MotorcycleSchema.filter((field) => field.fieldType === "textarea");
+    case ProductTypeEnum.MOWER:
+      return MowerSchema.filter((field) => field.fieldType === "textarea");
+    case ProductTypeEnum.PART:
+      return ProductSchema.filter((field) => field.fieldType === "textarea");
+    default:
+      return [];
   }
 }
 
