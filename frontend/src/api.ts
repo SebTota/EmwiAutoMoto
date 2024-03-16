@@ -120,9 +120,9 @@ export const api = {
   },
   async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();
-    Array.from(files).forEach((file, index) => {
-      formData.append("files", file);
-    });
+    for (let i = 0; i < files.length; i++) {
+      formData.append("files", files[i]);
+    }
     return client.post<[IMedia]>(`${apiUrl}/api/v1/products/images`, formData, authHeaders(token));
   },
 };

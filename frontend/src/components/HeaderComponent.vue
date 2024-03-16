@@ -167,7 +167,7 @@ import { RouteNameEnum } from "@/enums/routeNameEnum";
 
 const mainState = useMainStore();
 const mainStateLoaded = ref(false);
-const { isLoggedIn, isAdmin, user } = storeToRefs(mainState);
+const { isLoggedIn, isAdmin } = storeToRefs(mainState);
 const adminDropdownOpen = ref(false);
 const mobileMenuOpen = ref(false);
 
@@ -267,8 +267,10 @@ function closeAllDropDowns(event: Event) {
 
   const clickedElement = event.target as Node;
 
-  if ((adminDropdownButton && adminDropdownButton.contains(clickedElement)) ||
-    (mobileAdminMenuButton && mobileAdminMenuButton.contains(clickedElement))) {
+  if (
+    (adminDropdownButton && adminDropdownButton.contains(clickedElement)) ||
+    (mobileAdminMenuButton && mobileAdminMenuButton.contains(clickedElement))
+  ) {
     return;
   }
 

@@ -249,7 +249,11 @@ export const useMainStore = defineStore("mainState", {
         throw Error("User can not perform this action. Not signed in.");
       }
     },
-    async updateProduct(type: ProductTypeEnum, productId: string, product: IProductCreate): Promise<IProductWithContent> {
+    async updateProduct(
+      type: ProductTypeEnum,
+      productId: string,
+      product: IProductCreate
+    ): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
           switch (type) {
