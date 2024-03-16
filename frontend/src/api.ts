@@ -105,6 +105,12 @@ export const api = {
   async createMotorcycle(token: string, product: IProductCreate) {
     return client.post<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles`, product, authHeaders(token));
   },
+  async createMower(token: string, product: IProductCreate) {
+    return client.post<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers`, product, authHeaders(token));
+  },
+  async createPart(token: string, product: IProductCreate) {
+    return client.post<IPartWithContent>(`${apiUrl}/api/v1/products/parts`, product, authHeaders(token));
+  },
   async updateMotorcycle(token: string, productId: string, product: IProductCreate) {
     return client.put<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${productId}`, product, authHeaders(token));
   },

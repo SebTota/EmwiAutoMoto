@@ -1,8 +1,11 @@
 export enum RouteNameEnum {
+  NEW_MOTORCYCLE = "New Motorcycle",
+  NEW_MOWER = "New Mower",
+  NEW_PART = "New Parts",
   MOTORCYCLE_LIST = "Motorcycle List",
   MOWER_LIST = "Mower List",
-  PARTS_LIST = "Parts List",
+  PART_LIST = "Parts List",
   MOTORCYCLE_DETAILS = "Motorcycle Details",
   MOWER_DETAILS = "Mower Details",
-  PARTS_DETAILS = "Parts Details",
+  PART_DETAILS = "Parts Details",
 }

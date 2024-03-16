@@ -120,7 +120,10 @@ import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryCo
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
 import { VehicleSchema } from "@/interfaces/vehicle";
-import type { IMotorcycleCreate } from "@/interfaces/motorcycle";
+import { createMotorcycle, type IMotorcycleCreate } from "@/interfaces/motorcycle";
+import { createMower, type IMowerCreate } from "@/interfaces/mower";
+import { type IProductCreate, type IProductWithContent, ProductSchema } from "@/interfaces/product";
+import { createPart } from "@/interfaces/parts";
 
 const colors: string[] = Object.values(ProductColor);
 const route = useRoute();
@@ -167,11 +170,19 @@ function showError() {
 }
 
 function getNonTextareaFields() {
-  return VehicleSchema.filter((field) => field.fieldType !== "textarea");
+  if (props.productType === ProductTypeEnum.MOTORCYCLE || props.productType === ProductTypeEnum.MOWER) {
+    return VehicleSchema.filter((field) => field.fieldType !== "textarea");
+  } else {
+    return ProductSchema.filter((field) => field.fieldType !== "textarea");
+  }
 }
 
 function getTextareaFields() {
-  return VehicleSchema.filter((field) => field.fieldType === "textarea");
+  if (props.productType === ProductTypeEnum.MOTORCYCLE || props.productType === ProductTypeEnum.MOWER) {
+    return VehicleSchema.filter((field) => field.fieldType === "textarea");
+  } else {
+    return ProductSchema.filter((field) => field.fieldType === "textarea");
+  }
 }
 
 const updateField = (fieldName: string, value: string | number) => {
@@ -179,7 +190,6 @@ const updateField = (fieldName: string, value: string | number) => {
 };
 
 function submit() {
-  // TODO: Trim values on input fields
   error.value = "";
 
   if (props.isNewProduct) {
@@ -191,33 +201,27 @@ async function createProduct() {
   console.log("Creating new product...", product);
   error.value = "";
 
-  if (props.productType === ProductTypeEnum.MOTORCYCLE) {
-    await createMotorcycle();
-  }
-}
-
-async function createMotorcycle() {
-  const productCreate: IMotorcycleCreate = {
-    title: `${product.year} ${product.make}`,
-    subtitle: product.model,
-    year: product.year,
-    make: product.make,
-    model: product.model,
-    vin: product.vin,
-    odometer: product.odometer,
-    color: product.color,
-    price: product.price ? product.price : null,
-    description: product.description,
-    status: product.status,
-    media: media.value,
-  };
   try {
     loadingRequest.value = true;
-    const createdProduct: any = await mainStore.createMotorcycle(productCreate);
-    await router.push({
-      name: RouteNameEnum.MOTORCYCLE_DETAILS,
-      params: { id: createdProduct.id },
-    });
+    if (props.productType === ProductTypeEnum.MOTORCYCLE) {
+      const createdProduct: IProductWithContent = await createMotorcycle(product, media.value);
+      await router.push({
+        name: RouteNameEnum.MOTORCYCLE_DETAILS,
+        params: { id: createdProduct.id },
+      });
+    } else if (props.productType === ProductTypeEnum.MOWER) {
+      const createdProduct: IProductWithContent = await createMower(product, media.value);
+      await router.push({
+        name: RouteNameEnum.MOWER_DETAILS,
+        params: { id: createdProduct.id },
+      });
+    } else if (props.productType === ProductTypeEnum.PART) {
+      const createdProduct: IProductWithContent = await createPart(product, media.value);
+      await router.push({
+        name: RouteNameEnum.PART_DETAILS,
+        params: { id: createdProduct.id },
+      });
+    }
   } catch (err: any) {
     console.error(err);
     error.value = "Nie udało się utworzyć produktu.";

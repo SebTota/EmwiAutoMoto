@@ -157,8 +157,8 @@ function getProductUrl(productId: string) {
     routeNameEnum = RouteNameEnum.MOTORCYCLE_DETAILS;
   } else if (props.productType === ProductTypeEnum.MOWER) {
     routeNameEnum = RouteNameEnum.MOWER_DETAILS;
-  } else if (props.productType === ProductTypeEnum.PARTS) {
-    routeNameEnum = RouteNameEnum.PARTS_DETAILS;
+  } else if (props.productType === ProductTypeEnum.PART) {
+    routeNameEnum = RouteNameEnum.PART_DETAILS;
   }
   router.push({ name: routeNameEnum, params: { productType: props.productType, id: productId } });
 }

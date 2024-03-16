@@ -186,7 +186,7 @@ export const useMainStore = defineStore("mainState", {
         } else if (type === ProductTypeEnum.MOWER) {
           const response = await api.getMowers(page, status, token);
           return response.data;
-        } else if (type === ProductTypeEnum.PARTS) {
+        } else if (type === ProductTypeEnum.PART) {
           const response = await api.getParts(page, status, token);
           return response.data;
         } else {
@@ -205,7 +205,7 @@ export const useMainStore = defineStore("mainState", {
         } else if (type === ProductTypeEnum.MOWER) {
           const response = await api.getMower(id);
           return response.data;
-        } else if (type === ProductTypeEnum.PARTS) {
+        } else if (type === ProductTypeEnum.PART) {
           const response = await api.getPart(id);
           return response.data;
         } else {
@@ -216,15 +216,25 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product details.");
       }
     },
-    async createMotorcycle(product: IProductCreate): Promise<IProductWithContent> {
+    async createProduct(type: ProductTypeEnum, product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {
-          const response = await api.createMotorcycle(this.token.access_token, product);
-          return response.data;
+          if (type === ProductTypeEnum.MOTORCYCLE) {
+            const response = await api.createMotorcycle(this.token.access_token, product);
+            return response.data;
+          } else if (type === ProductTypeEnum.MOWER) {
+            const response = await api.createMower(this.token.access_token, product);
+            return response.data;
+          } else if (type === ProductTypeEnum.PART) {
+            const response = await api.createPart(this.token.access_token, product);
+            return response.data;
+          } else {
+            throw Error("Invalid product type.");
+          }
         } catch (error) {
           console.error(error);
           this.actionCheckApiError(error);
-          throw Error("Failed to create motorcycle.");
+          throw Error("Failed to create product.");
         }
       } else {
         this.actionLogoutAndNavigateToLogin();

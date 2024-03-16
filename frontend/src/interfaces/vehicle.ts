@@ -1,7 +1,7 @@
 import type { IMedia } from "@/interfaces/media";
 import type { IProduct, IProductCreate, IProductList } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
-import { ProductColor } from '@/enums/productColor'
+import { ProductColor } from "@/enums/productColor";
 
 export interface IVehicle extends IProduct {
   year: number;
@@ -54,7 +54,7 @@ export const VehicleSchema = [
     name: "price",
     title: "Cena",
     fieldType: "number",
-    required: true,
+    required: false,
   },
   {
     name: "description",

@@ -25,7 +25,7 @@ const router = createRouter({
     },
     {
       path: "/motocykle/nowy",
-      name: "newProduct",
+      name: RouteNameEnum.NEW_MOTORCYCLE,
       component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
         const mainState = useMainStore();
@@ -39,6 +39,44 @@ const router = createRouter({
       },
       props: {
         productType: ProductTypeEnum.MOTORCYCLE,
+        isNewProduct: true,
+      },
+    },
+    {
+      path: "/traktory-ogrodowe/nowy",
+      name: RouteNameEnum.NEW_MOWER,
+      component: () => import("../views/ProductAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({ name: "login" });
+          }
+        });
+      },
+      props: {
+        productType: ProductTypeEnum.MOWER,
+        isNewProduct: true,
+      },
+    },
+    {
+      path: "/czesci/nowy",
+      name: RouteNameEnum.NEW_PART,
+      component: () => import("../views/ProductAdminView.vue"),
+      beforeEnter: (to, from, next) => {
+        const mainState = useMainStore();
+        mainState.actionCheckLoggedIn().then(() => {
+          if (mainState.isLoggedIn) {
+            next();
+          } else {
+            next({ name: "login" });
+          }
+        });
+      },
+      props: {
+        productType: ProductTypeEnum.PART,
         isNewProduct: true,
       },
     },
