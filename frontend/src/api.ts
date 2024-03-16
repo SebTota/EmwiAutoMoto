@@ -7,8 +7,8 @@ import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IMedia } from "@/interfaces/media";
 import type { IMotorcycleList, IMotorcycleWithContent } from "@/interfaces/motorcycle";
-import type { IMowerList, IMowerWithContent } from '@/interfaces/mower'
-import type { IPartList, IPartWithContent } from '@/interfaces/parts'
+import type { IMowerList, IMowerWithContent } from "@/interfaces/mower";
+import type { IPartList, IPartWithContent } from "@/interfaces/parts";
 
 const client = axios.create({ baseURL: apiUrl });
 
@@ -66,29 +66,17 @@ export const api = {
   async getMe(token: string) {
     return client.get<IUser>(`${apiUrl}/api/v1/users/me`, authHeaders(token));
   },
-  async getMotorcycles(
-    page: number,
-    status: ProductStatusEnum[],
-    token: string | null = null
-  ) {
+  async getMotorcycles(page: number, status: ProductStatusEnum[], token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, createSearchParamsForGetProductsRequest(page, status));
     return client.get<IMotorcycleList>(`${apiUrl}/api/v1/products/motorcycles`, config);
   },
-  async getMowers(
-    page: number,
-    status: ProductStatusEnum[],
-    token: string | null = null
-  ) {
+  async getMowers(page: number, status: ProductStatusEnum[], token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, createSearchParamsForGetProductsRequest(page, status));
     return client.get<IMowerList>(`${apiUrl}/api/v1/products/mowers`, config);
   },
-  async getParts(
-    page: number,
-    status: ProductStatusEnum[],
-    token: string | null = null
-  ) {
+  async getParts(page: number, status: ProductStatusEnum[], token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, createSearchParamsForGetProductsRequest(page, status));
     return client.get<IPartList>(`${apiUrl}/api/v1/products/parts`, config);
@@ -112,7 +100,11 @@ export const api = {
     return client.post<IPartWithContent>(`${apiUrl}/api/v1/products/parts`, product, authHeaders(token));
   },
   async updateMotorcycle(token: string, productId: string, product: IProductCreate) {
-    return client.put<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${productId}`, product, authHeaders(token));
+    return client.put<IMotorcycleWithContent>(
+      `${apiUrl}/api/v1/products/motorcycles/${productId}`,
+      product,
+      authHeaders(token)
+    );
   },
   async uploadProductImages(token: string, files: FileList) {
     const formData = new FormData();

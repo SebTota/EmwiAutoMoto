@@ -8,9 +8,9 @@ import axios from "axios";
 import type { IProductCreate, IProductList, IProductWithContent } from "@/interfaces/product";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import type { IMotorcycleWithContent } from '@/interfaces/motorcycle'
-import type { IMowerWithContent } from '@/interfaces/mower'
-import type { IPartWithContent } from '@/interfaces/parts'
+import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
+import type { IMowerWithContent } from "@/interfaces/mower";
+import type { IPartWithContent } from "@/interfaces/parts";
 
 export interface MainState {
   token: IToken | null;
@@ -92,10 +92,10 @@ export const useMainStore = defineStore("mainState", {
           this.isAdmin = response.data.is_superuser;
         } catch (error) {
           console.error("Failed to retrieve signed in user information.", error);
-          this.actionRemoveLogIn()
+          this.actionRemoveLogIn();
         }
       } else if (!this.token) {
-        this.actionRemoveLogIn()
+        this.actionRemoveLogIn();
       }
     },
     actionLogoutAndNavigateToLogin() {
@@ -197,7 +197,10 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product list.");
       }
     },
-    async getProduct(type: ProductTypeEnum, id: string): Promise<IMotorcycleWithContent | IMowerWithContent | IPartWithContent> {
+    async getProduct(
+      type: ProductTypeEnum,
+      id: string
+    ): Promise<IMotorcycleWithContent | IMowerWithContent | IPartWithContent> {
       try {
         if (type === ProductTypeEnum.MOTORCYCLE) {
           const response = await api.getMotorcycle(id);
