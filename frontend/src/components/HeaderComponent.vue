@@ -188,9 +188,15 @@ let tabs = [
   },
   {
     name: "Traktory Ogrodowe",
-    description: "Traktory",
+    description: "Traktory Ogrodowe",
     icon: ArrowLongRightIcon,
     page: RouteNameEnum.MOWER_LIST,
+  },
+  {
+    name: "Części i Akcesoria",
+    description: "Części i Akcesoria",
+    icon: ArrowLongRightIcon,
+    page: RouteNameEnum.PART_LIST,
   },
   {
     name: "Kontakt",

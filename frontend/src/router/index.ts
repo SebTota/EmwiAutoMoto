@@ -24,6 +24,12 @@ const router = createRouter({
       props: { productType: ProductTypeEnum.MOWER },
     },
     {
+      path: "/czesci-i-akcesoria",
+      name: RouteNameEnum.PART_LIST,
+      component: () => import("../views/ProductListView.vue"),
+      props: { productType: ProductTypeEnum.PART },
+    },
+    {
       path: "/motocykle/nowy",
       name: RouteNameEnum.NEW_MOTORCYCLE,
       component: () => import("../views/ProductAdminView.vue"),
@@ -62,7 +68,7 @@ const router = createRouter({
       },
     },
     {
-      path: "/czesci/nowy",
+      path: "/czesci-i-akcesoria/nowy",
       name: RouteNameEnum.NEW_PART,
       component: () => import("../views/ProductAdminView.vue"),
       beforeEnter: (to, from, next) => {
@@ -94,6 +100,10 @@ const router = createRouter({
           }
         });
       },
+      props: {
+        productType: ProductTypeEnum.MOTORCYCLE,
+        isNewProduct: false,
+      },
     },
     {
       path: "/motocykle/:id",
@@ -106,6 +116,12 @@ const router = createRouter({
       name: RouteNameEnum.MOWER_DETAILS,
       component: () => import("../views/ProductDetailView.vue"),
       props: { productType: ProductTypeEnum.MOWER },
+    },
+    {
+      path: "/czesci-i-akcesoria/:id",
+      name: RouteNameEnum.PART_DETAILS,
+      component: () => import("../views/ProductDetailView.vue"),
+      props: { productType: ProductTypeEnum.PART },
     },
     {
       path: "/kontakt",
