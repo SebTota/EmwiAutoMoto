@@ -76,7 +76,7 @@
                 <div v-if="product && 'color' in product" class="py-2 sm:grid sm:grid-cols-3 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Kolor</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {{ colorToPolish(product.color) }}
+                    {{ product.color }}
                   </dd>
                 </div>
 
@@ -131,16 +131,13 @@
 import { ref } from "vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
-import { colorToPolish } from "@/utils/colors";
 import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
-import type { IMowerWithContent } from "@/interfaces/mower";
-import type { IPartWithContent } from "@/interfaces/parts";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
+import type { IProductWithContent } from "@/interfaces/product";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -149,7 +146,7 @@ const { isLoggedIn } = storeToRefs(mainStore);
 const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
-let product: IMotorcycleWithContent | IMowerWithContent | IPartWithContent;
+let product: IProductWithContent;
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
