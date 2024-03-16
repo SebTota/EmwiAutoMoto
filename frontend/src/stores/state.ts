@@ -201,15 +201,20 @@ export const useMainStore = defineStore("mainState", {
       type: ProductTypeEnum,
       id: string
     ): Promise<IMotorcycleWithContent | IMowerWithContent | IPartWithContent> {
+      let _access_token: string | null = null;
+      if (this.token && this.tokenIsValid()) {
+        _access_token = this.token.access_token;
+      }
+
       try {
         if (type === ProductTypeEnum.MOTORCYCLE) {
-          const response = await api.getMotorcycle(id);
+          const response = await api.getMotorcycle(id, _access_token);
           return response.data;
         } else if (type === ProductTypeEnum.MOWER) {
-          const response = await api.getMower(id);
+          const response = await api.getMower(id, _access_token);
           return response.data;
         } else if (type === ProductTypeEnum.PART) {
-          const response = await api.getPart(id);
+          const response = await api.getPart(id, _access_token);
           return response.data;
         } else {
           throw Error("Invalid product type.");
