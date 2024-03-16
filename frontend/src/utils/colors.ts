@@ -28,30 +28,3 @@ export function getCssClassFromColor(color: string): string {
       return "";
   }
 }
-
-export function colorToPolish(color: string) {
-  switch (color.toLowerCase().trim()) {
-    case ProductColor.White:
-      return "Biały";
-    case ProductColor.Silver:
-      return "Srebrny";
-    case ProductColor.Black:
-      return "Czarny";
-    case ProductColor.Red:
-      return "Czerwony";
-    case ProductColor.DarkRed:
-      return "Ciemno czerwony";
-    case ProductColor.Violet:
-      return "Fioletowy";
-    case ProductColor.Blue:
-      return "Niebieski";
-    case ProductColor.LightBlue:
-      return "Jasno niebieski";
-    case ProductColor.Green:
-      return "Zielony";
-    case ProductColor.LightGreen:
-      return "Jasno zielony";
-    case ProductColor.Yellow:
-      return "Żółty";
-  }
-}
