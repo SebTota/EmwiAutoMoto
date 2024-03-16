@@ -7,7 +7,8 @@ import { handleDates } from "@/utils/dates";
 import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IMedia } from "@/interfaces/media";
 import type { IMotorcycleList, IMotorcycleWithContent } from "@/interfaces/motorcycle";
-import type { IMowerList } from "@/interfaces/mower";
+import type { IMowerList, IMowerWithContent } from '@/interfaces/mower'
+import type { IPartList, IPartWithContent } from '@/interfaces/parts'
 
 const client = axios.create({ baseURL: apiUrl });
 
@@ -90,19 +91,19 @@ export const api = {
   ) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, createSearchParamsForGetProductsRequest(page, status));
-    return client.get<IMowerList>(`${apiUrl}/api/v1/products/parts`, config);
+    return client.get<IPartList>(`${apiUrl}/api/v1/products/parts`, config);
   },
   async getMotorcycle(id: string) {
     return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${id}`);
   },
   async getMower(id: string) {
-    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`);
+    return client.get<IMowerWithContent>(`${apiUrl}/api/v1/products/mowers/${id}`);
   },
   async getPart(id: string) {
-    return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/parts/${id}`);
+    return client.get<IPartWithContent>(`${apiUrl}/api/v1/products/parts/${id}`);
   },
   async createMotorcycle(token: string, product: IProductCreate) {
-    return client.post<IMotorcycleWithContent>(`${apiUrl}/api/v1/motorcycles/products`, product, authHeaders(token));
+    return client.post<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles`, product, authHeaders(token));
   },
   async updateMotorcycle(token: string, productId: string, product: IProductCreate) {
     return client.put<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${productId}`, product, authHeaders(token));
@@ -112,6 +113,6 @@ export const api = {
     Array.from(files).forEach((file, index) => {
       formData.append("files", file);
     });
-    return client.post<[IMedia]>(`${apiUrl}/api/v1/products/image`, formData, authHeaders(token));
+    return client.post<[IMedia]>(`${apiUrl}/api/v1/products/images`, formData, authHeaders(token));
   },
 };
