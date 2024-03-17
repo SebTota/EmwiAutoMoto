@@ -122,7 +122,7 @@ import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
 import { createMotorcycle, MotorcycleSchema, updateMotorcycle } from "@/interfaces/motorcycle";
 import { createMower, MowerSchema, updateMower } from "@/interfaces/mower";
-import { type IProductWithContent } from "@/interfaces/product";
+import type { IProductWithContent } from "@/interfaces/product";
 import { createPart, PartSchema, updatePart } from "@/interfaces/part";
 
 const route = useRoute();

@@ -138,8 +138,8 @@ import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { getProductEditRouteName, getProductListRouteName, RouteNameEnum } from '@/enums/routeNameEnum'
+import type { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { getProductEditRouteName, getProductListRouteName, RouteNameEnum } from "@/enums/routeNameEnum";
 import type { IProductWithContent } from "@/interfaces/product";
 
 const route = useRoute();
