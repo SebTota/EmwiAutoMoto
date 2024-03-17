@@ -10,7 +10,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
 import type { IMowerWithContent } from "@/interfaces/mower";
-import type { IPartWithContent } from "@/interfaces/parts";
+import type { IPartWithContent } from "@/interfaces/part";
 
 export interface MainState {
   token: IToken | null;

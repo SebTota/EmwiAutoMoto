@@ -81,7 +81,7 @@
                 </div>
 
                 <!-- Display description -->
-                <div v-if="product.description" class="py-2 sm:gap-4">
+                <div v-if="product.description && product.description.length > 0" class="py-2 sm:gap-4">
                   <dt class="text-sm font-medium leading-6 text-gray-900">Opis</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 whitespace-pre-line">
                     {{ product.description }}

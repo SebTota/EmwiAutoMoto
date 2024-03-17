@@ -5,7 +5,9 @@
       <form @submit.prevent="submit">
         <div class="sm:overflow-hidden sm:rounded-md">
           <div class="space-y-6 bg-white py-5 sm:p-6">
-            <p class="block text-xl font-medium text-gray-700">Informacje o produkcie: {{ productNameToSingular(props.productType) }}</p>
+            <p class="block text-xl font-medium text-gray-700">
+              Informacje o produkcie: {{ productNameToSingular(props.productType) }}
+            </p>
             <div class="grid grid-cols-6 gap-6">
               <div
                 v-for="fieldSchema in getNonTextareaFields()"
@@ -118,10 +120,10 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
-import { createMotorcycle, MotorcycleSchema, updateMotorcycle } from '@/interfaces/motorcycle'
-import { createMower, MowerSchema, updateMower } from '@/interfaces/mower'
-import { type IProductWithContent, ProductSchema } from "@/interfaces/product";
-import { createPart, updatePart } from '@/interfaces/parts'
+import { createMotorcycle, MotorcycleSchema, updateMotorcycle } from "@/interfaces/motorcycle";
+import { createMower, MowerSchema, updateMower } from "@/interfaces/mower";
+import { type IProductWithContent } from "@/interfaces/product";
+import { createPart, PartSchema, updatePart } from "@/interfaces/part";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -167,7 +169,7 @@ function getNonTextareaFields() {
     case ProductTypeEnum.MOWER:
       return MowerSchema.filter((field) => field.fieldType !== "textarea");
     case ProductTypeEnum.PART:
-      return ProductSchema.filter((field) => field.fieldType !== "textarea");
+      return PartSchema.filter((field) => field.fieldType !== "textarea");
     default:
       return [];
   }
@@ -180,7 +182,7 @@ function getTextareaFields() {
     case ProductTypeEnum.MOWER:
       return MowerSchema.filter((field) => field.fieldType === "textarea");
     case ProductTypeEnum.PART:
-      return ProductSchema.filter((field) => field.fieldType === "textarea");
+      return PartSchema.filter((field) => field.fieldType === "textarea");
     default:
       return [];
   }

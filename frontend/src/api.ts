@@ -8,7 +8,7 @@ import type { ProductStatusEnum } from "@/enums/productStatusEnum";
 import type { IMedia } from "@/interfaces/media";
 import type { IMotorcycleList, IMotorcycleWithContent } from "@/interfaces/motorcycle";
 import type { IMowerList, IMowerWithContent } from "@/interfaces/mower";
-import type { IPartList, IPartWithContent } from "@/interfaces/parts";
+import type { IPartList, IPartWithContent } from "@/interfaces/part";
 
 const client = axios.create({ baseURL: apiUrl });
 
