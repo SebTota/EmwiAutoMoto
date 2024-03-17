@@ -5,7 +5,7 @@
       <form @submit.prevent="submit">
         <div class="sm:overflow-hidden sm:rounded-md">
           <div class="space-y-6 bg-white py-5 sm:p-6">
-            <p class="block text-xl font-medium text-gray-700">Informacje o produkcie</p>
+            <p class="block text-xl font-medium text-gray-700">Informacje o produkcie: {{ productNameToSingular(props.productType) }}</p>
             <div class="grid grid-cols-6 gap-6">
               <div
                 v-for="fieldSchema in getNonTextareaFields()"
@@ -113,15 +113,15 @@ import PhotoHandlerComponent from "@/components/PhotoHandlerComponent.vue";
 import { useRoute } from "vue-router";
 import { useMainStore } from "@/stores/state";
 import type { IMedia } from "@/interfaces/media";
-import { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { productNameToSingular, ProductTypeEnum } from "@/enums/productTypeEnum";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import DraggableMediaGalleryComponent from "@/components/DraggableMediaGalleryComponent.vue";
 import { MediaTypeEnum } from "@/enums/mediaTypeEnum";
-import { getProductDetailsRouteName, RouteNameEnum } from "@/enums/routeNameEnum";
-import { createMotorcycle, MotorcycleSchema } from "@/interfaces/motorcycle";
-import { createMower, MowerSchema } from "@/interfaces/mower";
+import { RouteNameEnum } from "@/enums/routeNameEnum";
+import { createMotorcycle, MotorcycleSchema, updateMotorcycle } from '@/interfaces/motorcycle'
+import { createMower, MowerSchema, updateMower } from '@/interfaces/mower'
 import { type IProductWithContent, ProductSchema } from "@/interfaces/product";
-import { createPart } from "@/interfaces/parts";
+import { createPart, updatePart } from '@/interfaces/parts'
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -193,6 +193,7 @@ const updateField = (fieldName: string, value: string | number) => {
 function submit() {
   error.value = "";
 
+  product.media = media.value;
   if (props.isNewProduct) {
     createProduct();
   } else if (productId) {
@@ -202,24 +203,23 @@ function submit() {
 
 async function createProduct() {
   console.log("Creating new product...", product);
-  error.value = "";
 
   try {
     loadingRequest.value = true;
     if (props.productType === ProductTypeEnum.MOTORCYCLE) {
-      const createdProduct: IProductWithContent = await createMotorcycle(product, media.value);
+      const createdProduct: IProductWithContent = await createMotorcycle(product);
       await router.push({
         name: RouteNameEnum.MOTORCYCLE_DETAILS,
         params: { id: createdProduct.id },
       });
     } else if (props.productType === ProductTypeEnum.MOWER) {
-      const createdProduct: IProductWithContent = await createMower(product, media.value);
+      const createdProduct: IProductWithContent = await createMower(product);
       await router.push({
         name: RouteNameEnum.MOWER_DETAILS,
         params: { id: createdProduct.id },
       });
     } else if (props.productType === ProductTypeEnum.PART) {
-      const createdProduct: IProductWithContent = await createPart(product, media.value);
+      const createdProduct: IProductWithContent = await createPart(product);
       await router.push({
         name: RouteNameEnum.PART_DETAILS,
         params: { id: createdProduct.id },
@@ -234,17 +234,29 @@ async function createProduct() {
 }
 
 async function updateProduct() {
-  product.media = media.value;
   console.log("Updating product...", product);
-  error.value = "";
 
   try {
     loadingRequest.value = true;
-    await mainStore.updateProduct(props.productType, productId, product);
-    await router.push({
-      name: getProductDetailsRouteName(props.productType),
-      params: { id: productId },
-    });
+    if (props.productType === ProductTypeEnum.MOTORCYCLE) {
+      await updateMotorcycle(productId, product);
+      await router.push({
+        name: RouteNameEnum.MOTORCYCLE_DETAILS,
+        params: { id: productId },
+      });
+    } else if (props.productType === ProductTypeEnum.MOWER) {
+      await updateMower(productId, product);
+      await router.push({
+        name: RouteNameEnum.MOWER_DETAILS,
+        params: { id: productId },
+      });
+    } else if (props.productType === ProductTypeEnum.PART) {
+      await updatePart(productId, product);
+      await router.push({
+        name: RouteNameEnum.PART_DETAILS,
+        params: { id: productId },
+      });
+    }
   } catch (err: any) {
     console.error(err);
     error.value = "Nie udało się zaktualizować produktu.";

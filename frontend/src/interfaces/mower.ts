@@ -39,7 +39,7 @@ export const MowerSchema = [
   },
   {
     name: "price",
-    title: "Cena",
+    title: "Cena (zł)",
     fieldType: "number",
     required: false,
   },
@@ -95,7 +95,7 @@ export const MowerSchema = [
   },
 ];
 
-export async function createMower(product: any, media: IMedia[]): Promise<IProductWithContent> {
+export async function createMower(product: any): Promise<IProductWithContent> {
   const productCreate: IMowerCreate = {
     title: `${product.year} ${product.make}`,
     subtitle: product.model,
@@ -108,7 +108,25 @@ export async function createMower(product: any, media: IMedia[]): Promise<IProdu
     price: product.price ? product.price : null,
     description: product.description,
     status: product.status,
-    media: media,
+    media: product.media,
   };
   return await useMainStore().createProduct(ProductTypeEnum.MOWER, productCreate);
+}
+
+export async function updateMower(productId: string, product: any): Promise<IProductWithContent> {
+  const productCreate: IMowerCreate = {
+    title: `${product.year} ${product.make}`,
+    subtitle: product.model,
+    year: product.year,
+    make: product.make,
+    model: product.model,
+    vin: product.vin,
+    odometer: product.odometer,
+    color: product.color,
+    price: product.price ? product.price : null,
+    description: product.description,
+    status: product.status,
+    media: product.media,
+  };
+  return await useMainStore().updateProduct(ProductTypeEnum.MOWER, productId, productCreate);
 }

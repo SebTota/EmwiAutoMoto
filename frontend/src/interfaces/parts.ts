@@ -15,14 +15,26 @@ export interface IPartList extends IProductList {
   products: IPart[];
 }
 
-export async function createPart(product: any, media: IMedia[]): Promise<IProductWithContent> {
+export async function createPart(product: any): Promise<IProductWithContent> {
   const productCreate: IPartCreate = {
     title: product.title,
     subtitle: product.subtitle,
     price: product.price ? product.price : null,
     description: product.description,
     status: product.status,
-    media: media,
+    media: product.media,
   };
   return await useMainStore().createProduct(ProductTypeEnum.PART, productCreate);
+}
+
+export async function updatePart(productId: string, product: any): Promise<IProductWithContent> {
+  const productCreate: IPartCreate = {
+    title: product.title,
+    subtitle: product.subtitle,
+    price: product.price ? product.price : null,
+    description: product.description,
+    status: product.status,
+    media: product.media,
+  };
+  return await useMainStore().updateProduct(ProductTypeEnum.PART, productId, productCreate);
 }
