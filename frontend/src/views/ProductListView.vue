@@ -33,6 +33,11 @@
       <LoadingSpinner v-if="loadingRequest" class="pt-4" />
 
       <div v-if="!loadingRequest && productListResponse">
+        <div v-if="!productListResponse.products.length" class="pt-4">
+          <div class="bg-yellow-100 border border-yellow-400 text-yellow-700 px-4 py-3 rounded relative" role="alert">
+            <span class="block sm:inline">W tej chwili brakuje produktów do pokazania. Sprawdź ponownie później.</span>
+          </div>
+        </div>
         <div class="mt-4 grid gap-y-10 gap-x-6 grid-cols-1 md:grid-cols-2 xl:grid-cols-3 xl:gap-x-8">
           <div
             v-for="product in productListResponse.products"
