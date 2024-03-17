@@ -1,6 +1,7 @@
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 
 export enum RouteNameEnum {
+  CONTACT = "Contact",
   MOTORCYCLE_LIST = "Motorcycle List",
   MOWER_LIST = "Mower List",
   PART_LIST = "Parts List",

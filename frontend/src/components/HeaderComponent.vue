@@ -107,14 +107,14 @@
                 <component :is="item.icon" class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
                 <span class="ml-3 text-base font-medium">{{ item.name }}</span>
               </router-link>
-              <div v-if="mainStateLoaded && isAdmin">
+              <div v-if="mainStateLoaded && isAdmin" class="w-full">
                 <button
                   @click="toggleAdminDropdown"
                   id="mobile-admin-dropdown-button"
-                  class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
+                  class="-m-3 w-full flex items-center rounded-md p-3 hover:bg-gray-100 dark:hover:bg-gray-700"
                 >
                   <ArrowLongRightIcon class="h-6 w-6 flex-shrink-0" aria-hidden="true" />
-                  <span class="ml-3 text-base font-medium">Nowy Produkt</span>
+                  <span class="w-full ml-3 text-base font-medium text-left">Nowy Produkt</span>
                 </button>
                 <div v-if="adminDropdownOpen" class="space-y-1 px-2 pt-2 pb-3">
                   <router-link
@@ -202,7 +202,7 @@ let tabs = [
     name: "Kontakt",
     description: "Kontakt",
     icon: ArrowLongRightIcon,
-    page: "contact",
+    page: RouteNameEnum.CONTACT,
   },
 ];
 
@@ -228,9 +228,6 @@ const adminTabs = [
 ];
 
 mainState.actionCheckLoggedIn().then(() => {
-  if (mainState.isAdmin) {
-    tabs = [tabs[0], tabs[1], tabs[2]];
-  }
   mainStateLoaded.value = true;
 });
 

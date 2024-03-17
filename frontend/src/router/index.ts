@@ -163,7 +163,7 @@ const router = createRouter({
     },
     {
       path: "/kontakt",
-      name: "contact",
+      name: RouteNameEnum.CONTACT,
       component: () => import("../views/ContactPageView.vue"),
     },
     {
