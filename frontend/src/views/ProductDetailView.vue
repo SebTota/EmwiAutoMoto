@@ -63,12 +63,12 @@
 
                 <!-- Display odometer -->
                 <div
-                  v-if="product && 'odometer' in product && 'odometer_type' in product"
+                  v-if="product && 'odometer' in product"
                   class="py-2 sm:grid sm:grid-cols-3 sm:gap-4"
                 >
                   <dt class="text-sm font-medium leading-6 text-gray-900">Przebieg</dt>
                   <dd class="mt-1 text-sm leading-6 text-gray-700 sm:col-span-2 sm:mt-0">
-                    {{ product.odometer.toLocaleString("pl-PL") }} {{ product.odometer_type }}
+                    {{ product.odometer.toLocaleString("pl-PL") }} {{ getOdometerType() }}
                   </dd>
                 </div>
 
@@ -138,9 +138,11 @@ import { storeToRefs } from "pinia";
 import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
-import type { ProductTypeEnum } from "@/enums/productTypeEnum";
+import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import { getProductEditRouteName, getProductListRouteName, RouteNameEnum } from "@/enums/routeNameEnum";
-import type { IProductWithContent } from "@/interfaces/product";
+import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
+import type { IMowerWithContent } from "@/interfaces/mower";
+import type { IPartWithContent } from "@/interfaces/part";
 
 const route = useRoute();
 const mainStore = useMainStore();
@@ -149,7 +151,7 @@ const { isLoggedIn } = storeToRefs(mainStore);
 const loadingRequest = ref(true);
 const mainStateLoaded = ref(false);
 const productId: any = route.params.id;
-let product: IProductWithContent;
+let product: IMotorcycleWithContent | IMowerWithContent | IPartWithContent;
 
 mainStore.actionCheckLoggedIn().then(() => {
   mainStateLoaded.value = true;
@@ -176,6 +178,16 @@ if (typeof productId === "string") {
 
 function isAdmin() {
   return mainStateLoaded.value && isLoggedIn.value;
+}
+
+function getOdometerType() {
+  if (props.productType === ProductTypeEnum.MOTORCYCLE) {
+    return "Mil";
+  } else if (props.productType === ProductTypeEnum.MOWER) {
+    return "Godzin";
+  } else {
+    return "";
+  }
 }
 
 function getCurrentHref() {
