@@ -59,7 +59,7 @@ export async function createPart(product: any): Promise<IProductWithContent> {
   const productCreate: IPartCreate = {
     title: product.title,
     subtitle: product.subtitle ? product.subtitle : "",
-    price: product.price,
+    price: product.price ? product.price : null,
     description: product.description ? product.subtitle : "",
     status: product.status,
     media: product.media,
@@ -71,7 +71,7 @@ export async function updatePart(productId: string, product: any): Promise<IProd
   const productCreate: IPartCreate = {
     title: product.title,
     subtitle: product.subtitle ? product.subtitle : "",
-    price: product.price,
+    price: product.price ? product.price : null,
     description: product.description ? product.subtitle : "",
     status: product.status,
     media: product.media,
