@@ -220,8 +220,8 @@ const adminTabs = [
     page: RouteNameEnum.NEW_MOWER,
   },
   {
-    name: "Nowa Część",
-    description: "Nowa Część",
+    name: "Nowa Część lub Akcesorium",
+    description: "Nowa Część lub Akcesorium",
     icon: ArrowLongRightIcon,
     page: RouteNameEnum.NEW_PART,
   },
