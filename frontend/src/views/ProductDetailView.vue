@@ -95,7 +95,7 @@
             <div>
               <router-link
                 :to="{
-                  name: 'contact',
+                  name: RouteNameEnum.CONTACT,
                   query: {
                     productRef: encodeURIComponent(getCurrentHref()),
                   },
@@ -139,7 +139,7 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { getProductEditRouteName, getProductListRouteName } from "@/enums/routeNameEnum";
+import { getProductEditRouteName, getProductListRouteName, RouteNameEnum } from '@/enums/routeNameEnum'
 import type { IProductWithContent } from "@/interfaces/product";
 
 const route = useRoute();
