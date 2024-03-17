@@ -80,6 +80,9 @@ import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import NewDomainWarningModal from "@/components/NewDomainWarningModal.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
 import { RouteNameEnum } from "@/enums/routeNameEnum";
+import type { IMotorcycleList } from '@/interfaces/motorcycle'
+import type { IMowerList } from '@/interfaces/mower'
+import type { IPartList } from '@/interfaces/part'
 
 const route = useRoute();
 
@@ -98,7 +101,7 @@ const loadingRequest = ref(true);
 const hasNextPage = ref(false);
 const hasPrevPage = ref(false);
 
-let productListResponse: IProductList;
+let productListResponse: IMotorcycleList | IMowerList | IPartList;
 let errorMessage = ref("");
 
 const mainStore = useMainStore();

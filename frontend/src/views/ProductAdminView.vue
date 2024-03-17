@@ -22,10 +22,10 @@
                     :name="fieldSchema.name"
                     :required="fieldSchema.required"
                     :value="product[fieldSchema.name]"
-                    @input="updateField(fieldSchema.name, $event.target.value)"
+                    @input="updateField(fieldSchema.name, $event)"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   >
-                    <option v-for="selectField in fieldSchema.options" :key="selectField" :value="selectField.value">
+                    <option v-for="selectField in fieldSchema.options" :key="selectField.value" :value="selectField.value">
                       {{ selectField.label }}
                     </option>
                   </select>
@@ -36,7 +36,7 @@
                     :name="fieldSchema.name"
                     :required="fieldSchema.required"
                     :value="product[fieldSchema.name]"
-                    @input="updateField(fieldSchema.name, $event.target.value)"
+                    @input="updateField(fieldSchema.name, $event)"
                     class="mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                   />
                 </template>
@@ -56,7 +56,7 @@
                   :name="fieldSchema.name"
                   :required="fieldSchema.required"
                   :value="product[fieldSchema.name]"
-                  @input="updateField(fieldSchema.name, $event.target.value)"
+                  @input="updateField(fieldSchema.name, $event)"
                   rows="8"
                   class="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 sm:text-sm"
                 ></textarea>
@@ -188,7 +188,8 @@ function getTextareaFields() {
   }
 }
 
-const updateField = (fieldName: string, value: string | number) => {
+const updateField = (fieldName: string, event: Event) => {
+  const value = (event.target as HTMLInputElement).value;
   product[fieldName] = typeof value === "string" ? value.trim() : value;
 };
 
