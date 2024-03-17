@@ -1,8 +1,7 @@
 import type { IProduct, IProductCreate, IProductList, IProductWithContent } from "@/interfaces/product";
-import type { IMedia } from "@/interfaces/media";
 import { useMainStore } from "@/stores/state";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { ProductStatusEnum } from '@/enums/productStatusEnum'
+import { ProductStatusEnum } from "@/enums/productStatusEnum";
 
 export interface IPart extends IProduct {}
 
@@ -60,7 +59,7 @@ export async function createPart(product: any): Promise<IProductWithContent> {
   const productCreate: IPartCreate = {
     title: product.title,
     subtitle: product.subtitle ? product.subtitle : "",
-    price: product.price ? product.price : null,
+    price: product.price,
     description: product.description ? product.subtitle : "",
     status: product.status,
     media: product.media,
@@ -72,7 +71,7 @@ export async function updatePart(productId: string, product: any): Promise<IProd
   const productCreate: IPartCreate = {
     title: product.title,
     subtitle: product.subtitle ? product.subtitle : "",
-    price: product.price ? product.price : null,
+    price: product.price,
     description: product.description ? product.subtitle : "",
     status: product.status,
     media: product.media,

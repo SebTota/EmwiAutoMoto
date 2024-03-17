@@ -47,7 +47,7 @@ export const MotorcycleSchema = [
     name: "description",
     title: "Opis",
     fieldType: "textarea",
-    required: true,
+    required: false,
   },
   {
     name: "status",
@@ -105,8 +105,8 @@ export async function createMotorcycle(product: any): Promise<IProductWithConten
     vin: product.vin,
     odometer: product.odometer,
     color: product.color,
-    price: product.price ? product.price : null,
-    description: product.description,
+    price: product.price,
+    description: product.description ? product.description : "",
     status: product.status,
     media: product.media,
   };
@@ -123,8 +123,8 @@ export async function updateMotorcycle(productId: string, product: any): Promise
     vin: product.vin,
     odometer: product.odometer,
     color: product.color,
-    price: product.price ? product.price : null,
-    description: product.description,
+    price: product.price,
+    description: product.description ? product.description : "",
     status: product.status,
     media: product.media,
   };
