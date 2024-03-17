@@ -69,4 +69,6 @@ All frontend deployments are automatically handled by GitHub Action, and deploy 
 1. SSH into the server
 2. `cd MotorcycleStore`
 3. `git pull`
-4. `sudo systemctl restart emwiautomoto.service`
+4. `source backend/.venv/bin/activate`
+5. `pip install -r backend/requirements.txt`
+6. `sudo systemctl restart emwiautomoto.service`
