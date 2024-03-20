@@ -55,15 +55,6 @@ def get_current_user_if_signed_in(
     return user
 
 
-def get_current_active_superuser_if_signed_in(
-        db: Session = Depends(get_db),
-        current_user: models.User = Depends(get_current_user_if_signed_in),
-) -> Optional[models.User]:
-    if not current_user or not current_user.is_superuser:
-        return None
-    return current_user
-
-
 def get_current_user(
         db: Session = Depends(get_db),
         token: str = Depends(reusable_oauth2)
@@ -87,7 +78,6 @@ def get_current_user(
 
 
 def get_current_active_superuser(
-        db: Session = Depends(get_db),
         current_user: models.User = Depends(get_current_user),
 ) -> models.User:
     if not current_user.is_superuser:
@@ -98,7 +88,6 @@ def get_current_active_superuser(
 
 
 def get_current_active_superuser_no_exception(
-        db: Session = Depends(get_db),
         current_user: models.User = Depends(get_current_user_if_signed_in),
 ) -> Optional[models.User]:
     if not current_user or not current_user.is_superuser:
