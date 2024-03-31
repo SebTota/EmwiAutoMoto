@@ -77,21 +77,8 @@ export const MowerSchema = [
   {
     name: "color",
     title: "Kolor",
-    fieldType: "select",
+    fieldType: "text",
     required: true,
-    options: [
-      { value: ProductColor.White, label: ProductColor.White },
-      { value: ProductColor.Silver, label: ProductColor.Silver },
-      { value: ProductColor.Black, label: ProductColor.Black },
-      { value: ProductColor.Red, label: ProductColor.Red },
-      { value: ProductColor.DarkRed, label: ProductColor.DarkRed },
-      { value: ProductColor.Violet, label: ProductColor.Violet },
-      { value: ProductColor.Blue, label: ProductColor.Blue },
-      { value: ProductColor.LightBlue, label: ProductColor.LightBlue },
-      { value: ProductColor.Green, label: ProductColor.Green },
-      { value: ProductColor.LightGreen, label: ProductColor.LightGreen },
-      { value: ProductColor.Yellow, label: ProductColor.Yellow },
-    ],
   },
 ];
 
