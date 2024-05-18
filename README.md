@@ -3,6 +3,41 @@
 This is a website for the EMWI Auto Moto company. 
 
 ## Prod Setup
+
+### Postgres Setup
+1. Install Postgres
+2. Access the postgres shell
+```bash
+sudo -u postgres psql
+```
+3. Update the postgres password
+```sql
+ALTER USER postgres PASSWORD 'newPassword';
+```
+
+4. Create the EmwiAutoMoto user
+```sql
+CREATE USER emwiautomotoreadwrite WITH PASSWORD 'password';
+```
+
+5. Create the EmwiAutoMoto database and grant access to the EmwiAutoMoto user
+```sql
+CREATE DATABASE emwiautomoto OWNER postgres;
+GRANT ALL PRIVILEGES ON DATABASE emwiautomoto TO emwiautomotoreadwrite;
+```
+
+6. Exit the postgres shell and user
+```sql
+\q
+exit
+```
+
+7. Update the `pg_hba.conf` file to allow access from all ips
+```bash
+sudo nano /etc/postgresql/12/main/pg_hba.conf
+```
+
+### Service Setup
 1. Create a file in `/etc/emwiautomoto.env` to store the application environment variables.
 
 File content:
@@ -26,7 +61,7 @@ BUCKET_STORAGE_SECRET_ACCESS_KEY=secretAccessKey
 ```bash
 /root/prod_logs/output/output.log
 /root/prod_logs/error/error.log
-````
+```
 
 3. Download SSL Certs and place them in:
 ```bash
@@ -55,8 +90,8 @@ WantedBy=multi-user.target
 
 If you add this file, OR make any changes to this file, you must run the following command:
 ```bash
-systemctl daemon-reload
-systemctl restart emwiautomoto
+sudo systemctl daemon-reload
+sudo systemctl restart emwiautomoto
 ```
 
 ## Prod Deployments
@@ -72,3 +107,28 @@ All frontend deployments are automatically handled by GitHub Action, and deploy 
 4. `source backend/.venv/bin/activate`
 5. `pip install -r backend/requirements.txt`
 6. `sudo systemctl restart emwiautomoto.service`
+
+## Issues in Prod
+
+### Access log files
+Use the command:
+```bash
+sudo journalctl -u emwiautomoto -r
+```
+to get log files from the service in reverse, meaning the most recent logs will be first.
+
+### Can't access host on port 443
+
+Oracle by default blocks all ports on its hosts apart from 22. This means that even if you have the port open on the
+network configuration page, you still need to open the port within the host itself. 
+
+Sometimes, the config can get reset on reboot. Run the following commands to fix the issue:
+
+```bash
+sudo iptables -A INPUT -p tcp --dport 443 -j ACCEPT
+sudo iptables -I INPUT -j ACCEPT
+
+sudo su
+iptables-save > /etc/iptables/rules.v4
+exit
+```
