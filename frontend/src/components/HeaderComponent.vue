@@ -3,7 +3,7 @@
     <div class="mx-auto sm:px-5">
       <div class="flex items-center justify-between border-gray-100 py-3 pb-6 lg:justify-start lg:space-x-10">
         <div class="flex justify-start flex-1">
-          <router-link :to="{ name: 'home' }"
+          <router-link :to="{ name: RouteNameEnum.HOME }"
             ><span class="sr-only">EMWI Auto Moto</span>
             <img class="h-7 w-auto block sm:hidden" src="/logo-no-border.png" alt="Company Logo" />
             <img class="h-14 w-auto hidden sm:block" src="/logo-stacked.png" alt="Company Logo"
@@ -58,7 +58,7 @@
         </nav>
         <div class="hidden items-center justify-end lg:flex lg:flex-1 w-0">
           <div v-if="mainStateLoaded && !isLoggedIn">
-            <router-link :to="{ name: 'login' }" class="whitespace-nowrap text-base font-medium">
+            <router-link :to="{ name: RouteNameEnum.LOGIN }" class="whitespace-nowrap text-base font-medium">
               Zaloguj się
             </router-link>
           </div>
@@ -137,7 +137,7 @@
             <div v-if="mainStateLoaded && !isLoggedIn">
               <router-link
                 @click="toggleMobileMenu"
-                :to="{ name: 'login' }"
+                :to="{ name: RouteNameEnum.LOGIN }"
                 class="group relative flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
               >
                 Zaloguj się
@@ -159,7 +159,7 @@
   </div>
 </template>
 <script setup lang="ts">
-import { Bars3Icon, XMarkIcon, ArrowLongRightIcon } from "@heroicons/vue/24/outline";
+import { ArrowLongRightIcon, Bars3Icon, XMarkIcon } from "@heroicons/vue/24/outline";
 import { useMainStore } from "@/stores/state";
 import { storeToRefs } from "pinia";
 import { onMounted, onUnmounted, ref } from "vue";
@@ -180,6 +180,12 @@ onUnmounted(() => {
 });
 
 let tabs = [
+  {
+    name: "Strona Główna",
+    description: "Strona Główna",
+    icon: ArrowLongRightIcon,
+    page: RouteNameEnum.HOME,
+  },
   {
     name: "Motocykle",
     description: "Motocykle",

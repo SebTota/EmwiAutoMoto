@@ -7,8 +7,13 @@ const router = createRouter({
   history: createWebHistory(),
   routes: [
     {
+      path: "/",
+      name: RouteNameEnum.HOME,
+      component: () => import("../views/Home.vue"),
+    },
+    {
       path: "/login",
-      name: "login",
+      name: RouteNameEnum.LOGIN,
       component: () => import("../views/LoginView.vue"),
     },
     {
@@ -39,7 +44,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -58,7 +63,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -77,7 +82,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -96,7 +101,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -115,7 +120,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -134,7 +139,7 @@ const router = createRouter({
           if (mainState.isLoggedIn) {
             next();
           } else {
-            next({ name: "login" });
+            next({ name: RouteNameEnum.LOGIN });
           }
         });
       },
@@ -165,11 +170,6 @@ const router = createRouter({
       path: "/kontakt",
       name: RouteNameEnum.CONTACT,
       component: () => import("../views/ContactPageView.vue"),
-    },
-    {
-      path: "/",
-      name: "home",
-      component: () => import("../views/Home.vue"),
     },
     {
       path: "/:pathMatch(.*)*",
