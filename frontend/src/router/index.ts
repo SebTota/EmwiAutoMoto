@@ -169,7 +169,7 @@ const router = createRouter({
     {
       path: "/",
       name: "home",
-      redirect: "/motocykle",
+      component: () => import("../views/Home.vue"),
     },
     {
       path: "/:pathMatch(.*)*",
