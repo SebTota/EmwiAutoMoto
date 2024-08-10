@@ -24,7 +24,10 @@
             v-for="item in tabs"
             :key="item.name"
             :to="{ name: item.page }"
-            class="-m-3 flex items-center rounded-md p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
+            class="-m-3 flex items-center p-3 hover:bg-gray-50 dark:hover:bg-gray-800"
+            :class="{
+              'border-b-2 border-indigo-600': $route.name === item.page,
+            }"
           >
             <a class="text-base font-medium">{{ item.name }}</a>
           </router-link>
