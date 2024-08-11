@@ -1,15 +1,23 @@
 <template>
   <div class="relative bg-white dark:text-grey-900 dark:bg-gray-900">
     <div class="mx-auto sm:px-5">
-      <div class="flex items-center justify-between border-gray-100 py-3 pb-6 lg:justify-start lg:space-x-10">
+      <div class="flex items-center justify-between border-gray-100 py-3 pb-6 xl:justify-start xl:space-x-10">
         <div class="flex justify-start flex-1">
-          <router-link :to="{ name: RouteNameEnum.HOME }"
-            ><span class="sr-only">EMWI Auto Moto</span>
-            <img class="h-7 w-auto block sm:hidden" src="/logo-no-border.png" alt="Company Logo" />
-            <img class="h-14 w-auto hidden sm:block" src="/logo-stacked.png" alt="Company Logo"
-          /></router-link>
+          <router-link :to="{ name: RouteNameEnum.HOME }">
+            <span class="sr-only">EMWI Auto Moto</span>
+            <picture class="block sm:hidden">
+              <source srcset="/logo-no-border.avif" type="image/avif" />
+              <source srcset="/logo-no-border.webp" type="image/webp" />
+              <img class="h-7 w-auto" src="/logo-no-border.png" alt="logo" />
+            </picture>
+            <picture class="hidden sm:block">
+              <source class="h-14 w-auto" srcset="/logo-stacked.avif" type="image/avif" />
+              <source class="h-14 w-auto" srcset="/logo-stacked.webp" type="image/webp" />
+              <img class="h-14 w-auto" src="/logo-stacked.png" alt="logo" />
+            </picture>
+          </router-link>
         </div>
-        <div class="-my-2 -mr-2 lg:hidden">
+        <div class="-my-2 -mr-2 xl:hidden">
           <button
             @click="toggleMobileMenu"
             id="mobile-menu-button"
@@ -19,7 +27,7 @@
             <Bars3Icon class="h-6 w-6" aria-hidden="true" />
           </button>
         </div>
-        <nav class="hidden space-x-4 lg:space-x-10 lg:flex">
+        <nav class="hidden space-x-6 xl:flex">
           <router-link
             v-for="item in tabs"
             :key="item.name"
@@ -59,7 +67,7 @@
             </div>
           </div>
         </nav>
-        <div class="hidden items-center justify-end lg:flex lg:flex-1 w-0">
+        <div class="hidden items-center justify-end xl:flex xl:flex-1 w-0">
           <div v-if="mainStateLoaded && !isLoggedIn">
             <router-link :to="{ name: RouteNameEnum.LOGIN }" class="whitespace-nowrap text-base font-medium">
               Zaloguj się
@@ -78,7 +86,7 @@
     <div
       v-if="mobileMenuOpen"
       id="mobile-menu"
-      class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition lg:hidden"
+      class="z-10 absolute inset-x-0 top-0 origin-top-right transform p-2 transition xl:hidden"
     >
       <div
         class="divide-y-2 divide-gray-50 rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 bg-white dark:text-gray-400 dark:bg-gray-800"
