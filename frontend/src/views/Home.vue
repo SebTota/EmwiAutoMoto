@@ -118,9 +118,9 @@
       </div>
 
       <!-- Links to more reviews -->
-      <div class="mt-12 text-center">
+      <div class="mt-6 text-center">
         <p class="text-gray-700 text-lg font-semibold">Zobacz, co mówią inni:</p>
-        <div class="flex flex-col sm:flex-row justify-center mt-6 space-y-4 sm:space-y-0 sm:space-x-6">
+        <div class="flex flex-col sm:flex-row justify-center mt-4 space-y-4 sm:space-y-0 sm:space-x-6">
           <a
             href="https://maps.app.goo.gl/WreqLtBbyH5Cay1H9"
             target="_blank"
@@ -147,6 +147,24 @@
           </a>
         </div>
       </div>
+
+      <div class="mt-6 text-center">
+        <p class="text-gray-700 text-lg font-semibold">Kupowałeś już u nas?</p>
+        <div class="flex flex-col sm:flex-row justify-center mt-4 space-y-4 sm:space-y-0 sm:space-x-6">
+          <a
+            href="https://search.google.com/local/writereview?placeid=ChIJry_4rSUnFkcRc6l0NyK8a0o"
+            target="_blank"
+            class="inline-flex items-center justify-center px-4 py-2 bg-indigo-600 text-white font-semibold rounded-full shadow-md hover:bg-indigo-500 transition"
+          >
+            <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 24 24">
+              <path
+                d="M12 0C5.4 0 0 5.4 0 12c0 5.5 3.7 10.1 8.7 11.5.6.1.8-.3.8-.6V19c-3.5.8-4.2-1.4-4.2-1.4-.5-1.2-1.2-1.5-1.2-1.5-.9-.7.1-.7.1-.7 1 0 1.6 1 1.6 1 .9 1.6 2.3 1.1 2.9.9.1-.7.3-1.1.6-1.4-2.8-.3-5.8-1.4-5.8-6.3 0-1.4.5-2.5 1.2-3.4-.1-.3-.5-1.4.1-2.9 0 0 1-.3 3.5 1.3 1-.3 2.1-.5 3.2-.5 1.1 0 2.2.2 3.2.5 2.5-1.6 3.5-1.3 3.5-1.3.6 1.5.2 2.6.1 2.9.8.9 1.2 2 1.2 3.4 0 4.9-3 6-5.9 6.3.4.4.7 1 .7 2v2.9c0 .3.2.7.8.6C20.3 22.1 24 17.5 24 12 24 5.4 18.6 0 12 0z"
+              />
+            </svg>
+            Napisz opinię na Google
+          </a>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -165,4 +183,5 @@
   </section>
 </template>
 
-<script setup lang="ts"></script>
+<script setup lang="ts">
+</script>
