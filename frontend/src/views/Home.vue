@@ -27,7 +27,7 @@
           class="bg-white p-6 shadow-md rounded-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
           <img
-            src="https://emwiautomotofilesr2.sebtota.com/488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg"
+            src="https://emwiautomotofilesr2.sebtota.com/900-900-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg"
             alt="Motorcycles"
             class="w-full h-48 object-cover rounded-lg"
           />
@@ -41,7 +41,7 @@
           class="bg-white p-6 shadow-md rounded-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
           <img
-            src="https://emwiautomotofilesr2.sebtota.com/9a9f30a1-c4d3-40c2-b0a9-722a08452bc1.jpeg"
+            src="https://emwiautomotofilesr2.sebtota.com/900-900-9a9f30a1-c4d3-40c2-b0a9-722a08452bc1.jpeg"
             alt="Ride-on Mowers"
             class="w-full h-48 object-cover rounded-lg"
           />
@@ -55,7 +55,7 @@
           class="bg-white p-6 shadow-md rounded-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
           <img
-            src="https://emwiautomotofilesr2.sebtota.com/c20d2970-781e-4917-9865-aa10e573ad38.jpg"
+            src="https://emwiautomotofilesr2.sebtota.com/400-400-c20d2970-781e-4917-9865-aa10e573ad38.jpg"
             alt="Parts & Accessories"
             class="w-full h-48 object-cover rounded-lg"
           />
