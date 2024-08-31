@@ -41,7 +41,7 @@ def generate_motorcycle_images(
             file.file.close()
             raise HTTPException(status_code=500, detail='Failed to process image.')
 
-    with concurrent.futures.ThreadPoolExecutor() as executor:
+    with concurrent.futures.ThreadPoolExecutor(max_workers=4) as executor:
         image_results = list(executor.map(process_single_image, files))
 
     return image_results
