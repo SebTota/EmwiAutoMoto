@@ -103,21 +103,21 @@
               >
                 <button
                   type="button"
-                  class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  class="max-w-xs w-full flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                 >
                   Skontaktuj się z nami
                 </button>
               </router-link>
             </div>
 
-            <div v-if="isAdmin()" class="mt-2 flex sm:flex-col1">
+            <div v-if="isAdmin()" class="mt-2">
               <router-link
                 class="w-full"
                 :to="{ name: getProductEditRouteName(props.productType), params: { id: productId } }"
               >
                 <button
                   type="button"
-                  class="max-w-xs flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500 sm:w-full"
+                  class="max-w-xs w-full flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
                 >
                   Edytuj
                 </button>
