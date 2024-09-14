@@ -1,5 +1,7 @@
 from typing import Optional, List
 
+from pydantic import BaseModel
+
 from backend.schemas.media import MediaRead
 from backend.schemas.product import ProductBase, ProductCreate, ProductList
 
@@ -35,3 +37,9 @@ class VehicleCreate(ProductCreate):
 
 class VehicleList(ProductList):
     pass
+
+
+class VehicleAIRecommendation(BaseModel):
+    make: str
+    model: str
+    description: str
