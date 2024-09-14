@@ -1,0 +1,1 @@
+from .ai_description_service import get_ai_description_for_vehicle

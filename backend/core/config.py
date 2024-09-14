@@ -1,5 +1,5 @@
 import os
-from urllib.parse import quote
+
 
 class Settings:
     API_V1_STR: str = '/api/v1'
@@ -19,6 +19,8 @@ class Settings:
     BUCKET_ENDPOINT_URL: str = os.getenv('BUCKET_STORAGE_ENDPOINT_URL')
     BUCKET_ACCESS_KEY_ID: str = os.getenv('BUCKET_STORAGE_ACCESS_KEY')
     BUCKET_SECRET_ACCESS_KEY: str = os.getenv('BUCKET_STORAGE_SECRET_ACCESS_KEY')
+
+    ANTHROPIC_API_KEY: str = os.getenv("ANTHROPIC_API_KEY")
 
 
 settings = Settings()
