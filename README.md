@@ -2,6 +2,43 @@
 
 This is a website for the EMWI Auto Moto company. 
 
+## Running Locally
+
+### Backend
+
+#### Load env variables
+Set the required environment variables for the program to run. If you have access to a .env file, run the following 
+command to load the vars before running the program.
+```bash
+export $(grep -v '^#' .env | xargs)
+```
+
+#### Start the FastAPI Backend
+Navigate to the root of the project in the `/MotorcycleStore` directory and run the following command:
+
+```bash
+uvicorn backend.app:app --host 0.0.0.0 --port 8080 --reload
+```
+
+### Frontend
+
+#### Set backend target
+By default, the backend target for the website will be the localhost environment. 
+
+If instead you wish to point the environment at the prod backend, modify
+the `/frontend/.env.development` file so that `VITE_APP_DOMAIN` points to the prod endpoint as such:
+
+```
+VITE_APP_DOMAIN='https://emwiautomotoapi.sebtota.com'
+```
+
+#### Build/host the frontend locally with hot-reloading
+Navigate to the `/MotorcycleStore/frontend` directory and run the following command:
+
+```bash
+npm run dev
+```
+
 ## Prod Setup
 
 ### Postgres Setup
@@ -141,7 +178,10 @@ After a successful backup, a success ping will be sent to https://www.cronitor.c
 backup job.
 
 #### Edit Database Backup Cron Job
-To edit the crontab responsible for running these backups, run the following command: `sudo crontab -u postgres -e`
+To edit the crontab responsible for running these backups, run the following command: 
+```bash
+sudo crontab -u postgres -e
+```
 
 #### Restore from Backup
 In the case that you must restore the database from a backup file, follow the steps below:
@@ -149,4 +189,7 @@ In the case that you must restore the database from a backup file, follow the st
 1. Download the database backup file locally on the host
 2. Connect to the host on which the database resides on
 3. Create a new Database called `EmwiAutoMoto`
-4. Run the following command: `psql -U postgres -d EmwiAutoMoto -f ./YYYY-MM-DD_EmwiAutoMoto_YYYY-MM-DD_HH-MM-SS.sql`
+4. Run the following command: 
+    ```bash 
+    psql -U postgres -d EmwiAutoMoto -f ./YYYY-MM-DD_EmwiAutoMoto_YYYY-MM-DD_HH-MM-SS.sql
+    ```
