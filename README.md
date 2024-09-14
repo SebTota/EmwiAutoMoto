@@ -132,3 +132,21 @@ sudo su
 iptables-save > /etc/iptables/rules.v4
 exit
 ```
+
+### Database Backups
+
+All database backups are done on the `postgres` user. This user should have read access to the database being backed up.
+
+After a successful backup, a success ping will be sent to https://www.cronitor.com to manage alerting of a failed
+backup job.
+
+#### Edit Database Backup Cron Job
+To edit the crontab responsible for running these backups, run the following command: `sudo crontab -u postgres -e`
+
+#### Restore from Backup
+In the case that you must restore the database from a backup file, follow the steps below:
+
+1. Download the database backup file locally on the host
+2. Connect to the host on which the database resides on
+3. Create a new Database called `EmwiAutoMoto`
+4. Run the following command: `psql -U postgres -d EmwiAutoMoto -f ./YYYY-MM-DD_EmwiAutoMoto_YYYY-MM-DD_HH-MM-SS.sql`
