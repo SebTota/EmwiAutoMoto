@@ -41,6 +41,13 @@ export function getProductEditRouteName(type: ProductTypeEnum) {
   }
 }
 
+export function getProductDetailSuggestionRouteName(type: ProductTypeEnum) {
+  switch (type) {
+    case ProductTypeEnum.MOTORCYCLE:
+      return RouteNameEnum.MOTORCYCLE_DETAIL_SUGGESTIONS;
+  }
+}
+
 export function getProductListRouteName(type: ProductTypeEnum) {
   switch (type) {
     case ProductTypeEnum.MOTORCYCLE:

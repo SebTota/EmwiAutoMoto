@@ -123,6 +123,21 @@
                 </button>
               </router-link>
             </div>
+
+            <div v-if="isAdmin() && productType === ProductTypeEnum.MOTORCYCLE" class="mt-2">
+              <router-link
+                class="w-full"
+                :to="{ name: getProductDetailSuggestionRouteName(props.productType), params: { id: productId } }"
+              >
+                <button
+                  type="button"
+                  class="max-w-xs w-full flex-1 bg-indigo-600 border border-transparent rounded-md py-3 px-8 flex items-center justify-center text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-offset-gray-50 focus:ring-indigo-500"
+                >
+                  Zobacz sugestię AI
+                </button>
+              </router-link>
+            </div>
+
           </form>
         </div>
       </div>
@@ -139,7 +154,12 @@ import { ProductStatusEnum } from "@/enums/productStatusEnum";
 import ProductGalleryComponent from "@/components/ProductGalleryComponent.vue";
 import LoadingSpinner from "@/components/LoadingSpinner.vue";
 import { ProductTypeEnum } from "@/enums/productTypeEnum";
-import { getProductEditRouteName, getProductListRouteName, RouteNameEnum } from "@/enums/routeNameEnum";
+import {
+  getProductDetailSuggestionRouteName,
+  getProductEditRouteName,
+  getProductListRouteName,
+  RouteNameEnum
+} from "@/enums/routeNameEnum";
 import type { IMotorcycleWithContent } from "@/interfaces/motorcycle";
 import type { IMowerWithContent } from "@/interfaces/mower";
 import type { IPartWithContent } from "@/interfaces/part";
