@@ -1,52 +1,38 @@
 MOTORCYCLE_LLM_PROMPT_TEMPLATE: str = """
-Your response should NOT include any other text apart from what is requested. Your response must follow the following format:
-Motorcycle Make
-Motorcycle Model
-Motorcycle Description
+Your response should follow this exact format:
 
-Example response structure:
-Harley Davidson
-Fat Boy
-Ten wyjątkowy Harley Davidson Fat Boy z 2003 roku to...
+MAKE: [Motorcycle Make]
+MODEL: [Motorcycle Model]
+COLOR: [Motorcycle Color]
+DESCRIPTION:
+[Motorcycle Description]
 
-Instructions for revision:
-* Use formal yet engaging tone appealing to enthusiasts.
-* Focus on motorcycle's features and condition.
-* Use lists for features and specifications when appropriate.
-* Exclude pricing, company details, and contact information.
-* Correct make and model formatting.
-* Ensure the description is concise but informative.
-* Base style and structure on the provided examples.
+Instructions for the description:
+0. All output (make, model, color, description, etc.) should be in Polish
+1. Start with a brief, catchy opening sentence that highlights the motorcycle's key appeal.
+2. Include information in this order: year, condition, mileage, key features, and any unique selling points.
+3. Use formal yet engaging tone appealing to enthusiasts.
+4. Use appropriate Polish terminology for motorcycle parts and features.
+5. Explain any technical terms used.
+6. Use vivid adjectives to describe the motorcycle's appearance and performance.
+7. If any input data is missing, creatively work around it without mentioning the missing information.
+8. Ensure all provided input data (year, make, model, mileage) is accurately incorporated into the description.
+9. Do not include pricing, company details, or contact information.
 
-Example Response One:
-Harley Davidson
-Sportster 1200
-Ten wyjątkowy motocykl został wyprodukowany z okazji 95. rocznicy firmy Harley Davidson. Pochodzi od pierwszego właściciela i był starannie garażowany, co sprawia, że jest w nienagannym stanie technicznym i wizualnym. Przebieg wynosi zaledwie 6,500 mil. Jest to jeden z limitowanej serii 3,000 egzemplarzy, a ten konkretny model ma numer 2118. W zestawie znajduje się książka serwisowa oraz pełna dokumentacja zakupu, co potwierdza jego wyjątkowość.
+Example output structure:
+MAKE: Harley Davidson
+MODEL: Fat Boy
+COLOR: Czerwony/Czarny
+DESCRIPTION:
+Ten wyjątkowy Harley Davidson Fat Boy z 2003 roku to prawdziwa perła dla miłośników klasycznych cruiserów. Motocykl, z przebiegiem zaledwie 15,000 kilometrów, prezentuje się w nienagannym stanie technicznym i wizualnym. Wyposażony w potężny silnik Twin Cam 88B o pojemności 1450 cm³, zapewnia imponującą moc i charakterystyczny dźwięk. Chromowane wykończenia i masywna sylwetka podkreślają jego majestatyczny wygląd. Komfort jazdy zapewniają szerokie siedzenie i ergonomicznie umieszczone kontrolki. To nie tylko środek transportu, ale prawdziwa ikona stylu i amerykańskiej motoryzacji.
 
-Example Response Two:
-`
-Honda
-VTX 1300R
-Ten Honda VTX 1300R z 2005 roku to doskonały przykład dobrze utrzymanego klasyka. Motocykl został sprowadzony z USA i jest w bardzo dobrym stanie technicznym i wizualnym. Posiada jedynie 37 000 mil przebiegu, co świadczy o jego niewielkim użytkowaniu.
-
-Oto jego kluczowe cechy:
-* Nowe opony zapewniające pewne prowadzenie.
-* Skórzane sakwy Viking zamykane na klucz, idealne do przewożenia bagażu.
-* Oparcie pasażera z bagażnikiem, zwiększające komfort podróży dla dwóch osób.
-* Motocykl garażowany, regularnie serwisowany, z ostatnią wymianą oleju.
-
-Honda VTX 1300R jest gotowy do rejestracji w Polsce, wszystkie dokumenty zostały przetłumaczone na język polski. Zapraszamy do kontaktu!
-`
-
-
-This is the input for this request:
-`
+Input for this request:
 Year: {year}
 Make: {make}
 Model: {model}
+Color: {color}
 Odometer: {odometer_miles} Miles
 
 Polish description to revise:
 {current_description}
-`
 """

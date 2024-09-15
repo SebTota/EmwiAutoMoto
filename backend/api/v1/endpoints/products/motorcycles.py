@@ -1,3 +1,5 @@
+from typing import Optional
+
 from fastapi import Depends, HTTPException
 from sqlalchemy.orm import Session
 
@@ -6,7 +8,7 @@ from backend.api.v1.endpoints.products.products import AbstractProductAPI
 from backend.db.init_db import get_db
 from backend.models import Motorcycle, User
 from backend.schemas import MotorcycleCreate, MotorcycleReadNoMedia, MotorcycleReadWithMedia, MotorcycleList, \
-    VehicleAIRecommendation
+    VehicleDetailRecommendation
 from backend.services import get_ai_description_for_vehicle
 from backend.utils import deps
 
@@ -23,7 +25,7 @@ class MotorcycleAPI(AbstractProductAPI):
             schema_product_list=MotorcycleList
         )
 
-        @router.get("/{id}/ai-recommendation", response_model=VehicleAIRecommendation)
+        @router.get("/{id}/product-detail-recommendation", response_model=MotorcycleReadWithMedia)
         def get_ai_recommendation(
                 id: str,
                 db: Session = Depends(get_db),
@@ -32,12 +34,25 @@ class MotorcycleAPI(AbstractProductAPI):
             """
             Get AI recommendation for Motorcycle entry
             """
-            item = crud.motorcycle.get_with_media(db, id)
+            db_item: Optional[Motorcycle] = crud.motorcycle.get_with_media(db, id)
 
-            if not item:
+            if not db_item:
                 raise HTTPException(status_code=404, detail="No product found with this ID")
 
-            return get_ai_description_for_vehicle(item)
+            # Create Schema copy of DB item, so we are not updating the DB item with temp changes
+            item: MotorcycleReadWithMedia = MotorcycleReadWithMedia(**db_item.__dict__)
+
+            # Generate recommendations
+            suggestion: VehicleDetailRecommendation = get_ai_description_for_vehicle(item)
+            item.make = suggestion.make
+            item.model = suggestion.model
+            item.color = suggestion.color
+            item.description = suggestion.description
+
+            item.title = f"{item.year} {suggestion.make}"
+            item.subtitle = suggestion.model
+
+            return item
 
         return router
 

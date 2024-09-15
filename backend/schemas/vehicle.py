@@ -39,7 +39,8 @@ class VehicleList(ProductList):
     pass
 
 
-class VehicleAIRecommendation(BaseModel):
+class VehicleDetailRecommendation(BaseModel):
     make: str
     model: str
+    color: str
     description: str
