@@ -8,9 +8,9 @@ DESCRIPTION:
 [Motorcycle Description]
 
 Instructions for the description:
-0. All output (make, model, color, description, etc.) should be in Polish
+0. All written text should be in Polish, but the keys (MAKE, MODEL, COLOR, DESCRIPTION, etc.) should be in English
 1. Start with a brief, catchy opening sentence that highlights the motorcycle's key appeal.
-2. Include information in this order: year, condition, mileage, key features, and any unique selling points.
+2. Include information in this order: year, condition, mileage (in Miles, not KM), key features, and any unique selling points.
 3. Use formal yet engaging tone appealing to enthusiasts.
 4. Use appropriate Polish terminology for motorcycle parts and features.
 5. Explain any technical terms used.
