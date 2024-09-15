@@ -86,6 +86,14 @@ export const api = {
     const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
     return client.get<IMotorcycleWithContent>(`${apiUrl}/api/v1/products/motorcycles/${id}`, config);
   },
+  async getMotorcycleDetailRecommendation(id: string, token: string | null = null) {
+    const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
+    const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());
+    return client.get<IMotorcycleWithContent>(
+      `${apiUrl}/api/v1/products/motorcycles/${id}/product-detail-recommendation`,
+      config
+    );
+  },
   async getMower(id: string, token: string | null = null) {
     const auth: { headers: { Authorization: string } } | null = token ? authHeaders(token) : null;
     const config = configFromAuthHeadersAndParams(auth, new URLSearchParams());

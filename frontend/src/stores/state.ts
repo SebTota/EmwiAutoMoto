@@ -224,6 +224,27 @@ export const useMainStore = defineStore("mainState", {
         throw Error("Failed to retrieve product details.");
       }
     },
+    async getProductDetailRecommendation(
+      type: ProductTypeEnum,
+      id: string
+    ): Promise<IMotorcycleWithContent | IMowerWithContent | IPartWithContent> {
+      let _access_token: string | null = null;
+      if (this.token && this.tokenIsValid()) {
+        _access_token = this.token.access_token;
+      }
+
+      try {
+        if (type === ProductTypeEnum.MOTORCYCLE) {
+          const response = await api.getMotorcycleDetailRecommendation(id, _access_token);
+          return response.data;
+        } else {
+          throw Error("Invalid or unsupported product type.");
+        }
+      } catch (error) {
+        console.error(error);
+        throw Error("Failed to retrieve suggested product details.");
+      }
+    },
     async createProduct(type: ProductTypeEnum, product: IProductCreate): Promise<IProductWithContent> {
       if (this.token && this.tokenIsValid()) {
         try {

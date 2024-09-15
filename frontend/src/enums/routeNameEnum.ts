@@ -16,6 +16,7 @@ export enum RouteNameEnum {
   EDIT_MOTORCYCLE = "Edit Motorcycle",
   EDIT_MOWER = "Edit Mower",
   EDIT_PART = "Edit Part",
+  MOTORCYCLE_DETAIL_SUGGESTIONS = "Motorcycle Detail Suggestion",
 }
 
 export function getProductDetailsRouteName(type: ProductTypeEnum) {
