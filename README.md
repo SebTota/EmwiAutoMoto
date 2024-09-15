@@ -174,7 +174,7 @@ exit
 
 All database backups are done on the `postgres` user. This user should have read access to the database being backed up.
 
-After a successful backup, a success ping will be sent to https://www.cronitor.com to manage alerting of a failed
+After a successful backup, a success ping will be sent to https://www.cronitor.io to manage alerting of a failed
 backup job.
 
 #### Edit Database Backup Cron Job
