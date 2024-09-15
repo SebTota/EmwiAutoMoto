@@ -13,7 +13,7 @@ from backend.schemas import VehicleBase, VehicleDetailRecommendation
 class AnthropicClient:
     def __init__(self):
         self.client = anthropic.Anthropic(api_key=Settings.ANTHROPIC_API_KEY)
-        self.model = "claude-3-haiku-20240307"  # claude-3-haiku-20240307, claude-3-5-sonnet-20240620
+        self.model = "claude-3-5-sonnet-20240620"  # claude-3-haiku-20240307, claude-3-5-sonnet-20240620
         self.system_prompt = "You are an assistant that improves motorcycle descriptions for an online motorcycle store"
 
     def get_ai_description(self, vehicle: VehicleBase) -> VehicleDetailRecommendation:
