@@ -4,7 +4,7 @@
     <!-- Background image -->
     <div
       class="absolute inset-0 bg-cover bg-center"
-      style="background-image: url('https://emwiautomotofilesr2.sebtota.com/488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg')"
+      style="background-image: url('https://emwiautomotofilesr2.sebtota.com/1500-1500-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg')"
     ></div>
 
     <!-- Overlay for darkening the background -->
