@@ -11,6 +11,7 @@
             @click="modalOpen = true"
           >
             <img
+              loading="lazy"
               :src="media_obj.medium_thumbnail_url"
               class="w-full h-full object-center object-cover sm:rounded-lg"
               alt="Product Image"
