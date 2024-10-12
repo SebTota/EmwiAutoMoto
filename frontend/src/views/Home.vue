@@ -3,8 +3,12 @@
   <section class="relative text-white text-center py-32 md:py-40 lg:py-60 bg-cover bg-center">
     <!-- Background image -->
     <div
-      class="absolute inset-0 bg-cover bg-center"
+      class="hidden lg:block absolute inset-0 bg-cover bg-center"
       style="background-image: url('https://emwiautomotofilesr2.sebtota.com/1500-1500-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg')"
+    ></div>
+    <div
+      class="block lg:hidden absolute inset-0 bg-cover bg-center"
+      style="background-image: url('https://emwiautomotofilesr2.sebtota.com/900-900-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg')"
     ></div>
 
     <!-- Overlay for darkening the background -->
@@ -27,7 +31,7 @@
           class="bg-white p-6 shadow-md rounded-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
           <img
-            src="https://emwiautomotofilesr2.sebtota.com/900-900-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg"
+            src="https://emwiautomotofilesr2.sebtota.com/400-400-488be40b-6b9c-4b1c-a03e-749e9007fc15.jpg"
             alt="Motorcycles"
             class="w-full h-48 object-cover rounded-lg"
           />
@@ -41,7 +45,7 @@
           class="bg-white p-6 shadow-md rounded-lg transform transition duration-300 hover:scale-105 hover:shadow-xl cursor-pointer"
         >
           <img
-            src="https://emwiautomotofilesr2.sebtota.com/900-900-9a9f30a1-c4d3-40c2-b0a9-722a08452bc1.jpeg"
+            src="https://emwiautomotofilesr2.sebtota.com/400-400-9a9f30a1-c4d3-40c2-b0a9-722a08452bc1.jpeg"
             alt="Ride-on Mowers"
             class="w-full h-48 object-cover rounded-lg"
           />
