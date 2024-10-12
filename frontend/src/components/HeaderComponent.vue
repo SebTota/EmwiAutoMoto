@@ -5,15 +5,13 @@
         <div class="flex justify-start flex-1">
           <router-link :to="{ name: RouteNameEnum.HOME }">
             <span class="sr-only">EMWI Auto Moto</span>
-            <picture class="block sm:hidden">
-              <source srcset="/logo-no-border.avif" type="image/avif" />
-              <source srcset="/logo-no-border.webp" type="image/webp" />
-              <img class="h-7 w-auto" src="/logo-no-border.png" alt="logo" />
+            <picture class="block lg:hidden">
+              <source srcset="/logo-horizontal.avif" type="image/avif" />
+              <img class="h-7 w-auto" src="/logo-horizontal.jpeg" alt="EMWI Auto-Moto logo" />
             </picture>
-            <picture class="hidden sm:block">
-              <source class="h-14 w-auto" srcset="/logo-stacked.avif" type="image/avif" />
-              <source class="h-14 w-auto" srcset="/logo-stacked.webp" type="image/webp" />
-              <img class="h-14 w-auto" src="/logo-stacked.png" alt="logo" />
+            <picture class="hidden lg:block">
+              <source srcset="/logo-stacked.avif" type="image/avif" />
+              <img class="h-14 w-auto" src="/logo-stacked.jpg" alt="EMWI Auto-Moto logo" />
             </picture>
           </router-link>
         </div>
@@ -94,7 +92,7 @@
         <div class="px-5 py-5">
           <div class="flex items-center justify-between">
             <div>
-              <img class="h-8 w-auto" src="/logo-no-border.png" alt="EMWI Auto Moto" />
+              <img class="h-8 w-auto" src="/motorcycle-logo.svg" alt="EMWI Auto Moto" />
             </div>
             <div class="-mr-2">
               <button
